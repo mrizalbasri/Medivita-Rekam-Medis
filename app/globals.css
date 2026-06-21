@@ -1,21 +1,21 @@
 @import "tailwindcss";
 
 :root {
-  --background: #f4f7f6;
-  --foreground: #142420;
+  --background: #f4f8fa;
+  --foreground: #0a2835;
 
   /* Medivita — "Kartu Kesehatan yang Jalan" design tokens */
-  --color-paper: #f4f7f6;
-  --color-primary: #0b5b52;
-  --color-primary-dark: #073c36;
-  --color-primary-soft: #e2efec;
-  --color-accent: #e8833a;
-  --color-accent-soft: #fceadb;
-  --color-alert: #c1432c;
-  --color-alert-soft: #fbe7e2;
-  --color-ink: #142420;
-  --color-ink-soft: #51635e;
-  --color-line: #d8e0dd;
+  --color-paper: #f4f8fa;
+  --color-primary: #1e77b0;
+  --color-primary-dark: #0a2835;
+  --color-primary-soft: #e1f0f7;
+  --color-accent: #63b676;
+  --color-accent-soft: #eaf5ec;
+  --color-alert: #d32f2f;
+  --color-alert-soft: #fdebec;
+  --color-ink: #0a2835;
+  --color-ink-soft: #475e6b;
+  --color-line: #e2eaf0;
 }
 
 @theme inline {
