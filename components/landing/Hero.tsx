@@ -41,15 +41,15 @@ export function Hero() {
 
           <div className="flex flex-col gap-3 pt-2 sm:flex-row">
             <a
-              href="#mulai"
-              className="flex items-center justify-center gap-2 rounded-xl bg-primary px-6 py-3.5 font-semibold text-white shadow-[0_10px_28px_rgba(11,91,82,0.28)] transition-transform active:scale-95"
+              href="/daftar"
+              className="flex items-center justify-center gap-2 rounded-xl bg-primary px-6 py-3.5 font-semibold text-white shadow-[0_10px_28px_rgba(30,119,176,0.3)] transition-all hover:opacity-90 active:scale-95 cursor-pointer"
             >
               Daftar sebagai Pasien
               <ScanIcon className="h-4 w-4" />
             </a>
             <a
-              href="#petugas"
-              className="flex items-center justify-center gap-2 rounded-xl border border-primary/25 px-6 py-3.5 font-semibold text-primary transition-colors hover:bg-primary-soft"
+              href="/login"
+              className="flex items-center justify-center gap-2 rounded-xl border border-primary/30 px-6 py-3.5 font-semibold text-primary transition-colors hover:bg-primary-soft active:scale-95 cursor-pointer"
             >
               Masuk sebagai Petugas Faskes
             </a>
