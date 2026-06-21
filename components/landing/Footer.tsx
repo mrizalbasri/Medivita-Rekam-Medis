@@ -32,14 +32,14 @@ export function Footer() {
           </p>
           <div className="mt-4 flex gap-2">
             <a
-              href="#"
+              href="/"
               aria-label="Website"
               className="flex h-9 w-9 items-center justify-center rounded-full border border-line text-ink-soft transition-colors hover:border-primary hover:text-primary"
             >
               <GlobeIcon className="h-4 w-4" />
             </a>
             <a
-              href="#"
+              href="mailto:hello@medivita.id"
               aria-label="Email"
               className="flex h-9 w-9 items-center justify-center rounded-full border border-line text-ink-soft transition-colors hover:border-primary hover:text-primary"
             >
@@ -53,9 +53,9 @@ export function Footer() {
             Platform
           </h4>
           <ul className="mt-3 space-y-2 text-sm text-ink-soft">
-            <li><a href="#mulai" className="hover:text-primary">Daftar Pasien</a></li>
-            <li><a href="#petugas" className="hover:text-primary">Portal Petugas</a></li>
-            <li><a href="#mitra" className="hover:text-primary">Faskes Mitra</a></li>
+            <li><a href="/daftar" className="hover:text-primary transition-colors">Daftar Pasien</a></li>
+            <li><a href="/login" className="hover:text-primary transition-colors">Portal Petugas</a></li>
+            <li><a href="#mitra" className="hover:text-primary transition-colors">Faskes Mitra</a></li>
           </ul>
         </div>
 
@@ -64,9 +64,9 @@ export function Footer() {
             Dukungan
           </h4>
           <ul className="mt-3 space-y-2 text-sm text-ink-soft">
-            <li><a href="#cara-kerja" className="hover:text-primary">Cara Kerja</a></li>
-            <li><a href="#keunggulan" className="hover:text-primary">Keamanan Data</a></li>
-            <li><a href="#" className="hover:text-primary">Hubungi Tim</a></li>
+            <li><a href="#cara-kerja" className="hover:text-primary transition-colors">Cara Kerja</a></li>
+            <li><a href="#keunggulan" className="hover:text-primary transition-colors">Keamanan Data</a></li>
+            <li><a href="mailto:hello@medivita.id" className="hover:text-primary transition-colors">Hubungi Tim</a></li>
           </ul>
         </div>
 
