@@ -73,7 +73,7 @@ export function Navbar() {
         {/* Desktop actions */}
         <div className="hidden items-center gap-3 md:flex">
           <a
-            href="/daftar"
+            href="/login"
             className="flex items-center gap-2 rounded-xl border border-primary/30 px-4 py-2.5 text-sm font-semibold text-primary transition-colors hover:bg-primary-soft active:scale-95"
           >
             Masuk Petugas
@@ -115,7 +115,7 @@ export function Navbar() {
             ))}
             <div className="mt-2 flex flex-col gap-2 border-t border-line pt-3">
               <a
-                href="/daftar"
+                href="/login"
                 onClick={() => setOpen(false)}
                 className="flex items-center justify-center gap-2 rounded-xl border border-primary/30 px-4 py-3 text-sm font-semibold text-primary hover:bg-primary-soft"
               >

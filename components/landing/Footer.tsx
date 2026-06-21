@@ -54,7 +54,7 @@ export function Footer() {
           </h4>
           <ul className="mt-3 space-y-2 text-sm text-ink-soft">
             <li><a href="/daftar" className="hover:text-primary transition-colors">Daftar Pasien</a></li>
-            <li><a href="/daftar" className="hover:text-primary transition-colors">Portal Petugas</a></li>
+            <li><a href="/login" className="hover:text-primary transition-colors">Portal Petugas</a></li>
             <li><a href="#mitra" className="hover:text-primary transition-colors">Faskes Mitra</a></li>
           </ul>
         </div>
