@@ -1,14 +1,20 @@
-import { GlobeIcon, MailIcon, ScanIcon } from "./icons";
+import Image from "next/image";
+import { GlobeIcon, MailIcon } from "./icons";
 
 export function Footer() {
   return (
     <footer className="border-t border-line bg-primary-soft/30">
       <div className="mx-auto grid max-w-[1280px] grid-cols-1 gap-10 px-4 py-12 md:grid-cols-12 md:px-10">
         <div className="col-span-12 md:col-span-5">
-          <div className="flex items-center gap-2.5">
-            <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary text-white">
-              <ScanIcon className="h-5 w-5" />
-            </span>
+          <div className="flex items-center gap-3">
+            <div className="relative h-9 w-9 overflow-hidden rounded-lg">
+              <Image
+                src="/logo.webp"
+                alt="Medivita Logo"
+                fill
+                className="object-cover object-top scale-[1.3] -translate-y-[8%]"
+              />
+            </div>
             <span className="font-display text-base font-semibold text-primary-dark">
               Rekam Medis Jalan
             </span>
