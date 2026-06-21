@@ -30,9 +30,10 @@ export function Navbar() {
     <header className="sticky top-0 z-50 w-full border-b border-line bg-paper/90 backdrop-blur-sm">
       <div className="mx-auto flex max-w-[1280px] items-center justify-between px-4 py-3 md:px-10">
 
-        {/* Logo only — no text */}
-        <a href="#" aria-label="Medivita — Rekam Medis Jalan" className="flex items-center">
-          <div className="relative h-12 w-36 overflow-hidden">
+        {/* Logo + tagline */}
+        <a href="#" aria-label="Medivita — Rekam Medis Jalan" className="flex items-center gap-3">
+          {/* Logo tanpa kotak, transparent bg */}
+          <div className="relative h-10 w-32 flex-shrink-0">
             <Image
               src="/logo.webp"
               alt="Medivita Logo"
@@ -40,6 +41,18 @@ export function Navbar() {
               className="object-contain object-left"
               priority
             />
+          </div>
+          {/* Divider + tagline */}
+          <div className="hidden sm:flex items-center gap-3">
+            <span className="h-7 w-px bg-line" aria-hidden />
+            <div className="flex flex-col leading-tight">
+              <span className="text-[11px] font-medium uppercase tracking-widest text-ink-soft">
+                Rekam Medis
+              </span>
+              <span className="text-[13px] font-bold tracking-tight text-primary-dark">
+                Jalan
+              </span>
+            </div>
           </div>
         </a>
 
