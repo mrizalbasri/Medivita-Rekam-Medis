@@ -31,25 +31,25 @@ export function Navbar() {
       <div className="mx-auto flex max-w-[1280px] items-center justify-between px-4 py-3 md:px-10">
 
         {/* Logo + tagline */}
-        <a href="#" aria-label="Medivita — Rekam Medis Jalan" className="flex items-center gap-3">
-          {/* Logo tanpa kotak, transparent bg */}
-          <div className="relative h-10 w-32 flex-shrink-0">
+        <a href="#" aria-label="Medivita — Rekam Medis Jalan" className="flex items-center gap-2.5">
+          {/* Logo */}
+          <div className="relative h-12 w-28 sm:h-14 sm:w-32 flex-shrink-0">
             <Image
               src="/logo.webp"
               alt="Medivita Logo"
               fill
-              className="object-contain object-left"
+              className="object-contain object-left scale-110 origin-left"
               priority
             />
           </div>
           {/* Divider + tagline */}
-          <div className="hidden sm:flex items-center gap-3">
-            <span className="h-7 w-px bg-line" aria-hidden />
-            <div className="flex flex-col leading-tight">
-              <span className="text-[11px] font-medium uppercase tracking-widest text-ink-soft">
+          <div className="hidden sm:flex items-center gap-2.5">
+            <span className="h-8 w-[1.5px] bg-line/80" aria-hidden />
+            <div className="flex flex-col leading-tight mt-0.5">
+              <span className="text-[10px] font-bold uppercase tracking-[0.15em] text-ink-soft">
                 Rekam Medis
               </span>
-              <span className="text-[13px] font-bold tracking-tight text-primary-dark">
+              <span className="text-[15px] font-bold tracking-tight text-primary-dark">
                 Jalan
               </span>
             </div>

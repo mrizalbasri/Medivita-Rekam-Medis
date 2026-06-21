@@ -17,20 +17,10 @@ export function Hero() {
             AES-256 &middot; Akses Dikontrol Pasien
           </span>
 
-          <h1 className="font-display text-[2.35rem] font-semibold leading-[1.08] tracking-tight text-primary-dark md:text-[3.4rem]">
+          <h1 className="font-display text-[2.4rem] font-bold leading-[1.1] tracking-tight text-primary-dark md:text-[3.6rem] md:leading-[1.05]">
             Riwayat medis Anda,
             <br />
-            <span className="relative inline-block">
-              yang ikut kemana Anda pergi.
-              <svg
-                className="absolute -bottom-1.5 left-0 w-full text-accent"
-                viewBox="0 0 320 8"
-                preserveAspectRatio="none"
-                aria-hidden
-              >
-                <path d="M0 5 C 80 0, 240 0, 320 5" stroke="currentColor" strokeWidth="3" fill="none" strokeLinecap="round" />
-              </svg>
-            </span>
+            yang ikut kemana Anda pergi.
           </h1>
 
           <p className="max-w-[520px] text-base leading-relaxed text-ink-soft md:text-lg">
