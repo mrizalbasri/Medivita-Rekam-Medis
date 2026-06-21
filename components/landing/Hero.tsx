@@ -32,7 +32,7 @@ export function Hero() {
           <div className="flex flex-col gap-3 pt-2 sm:flex-row animate-fade-in-up [animation-delay:200ms]">
             <a
               href="/daftar"
-              className="flex items-center justify-center gap-2 rounded-xl bg-primary px-6 py-3.5 font-semibold text-white shadow-[0_10px_28px_rgba(30,119,176,0.3)] transition-all hover:shadow-[0_10px_28px_rgba(30,119,176,0.5)] hover:-translate-y-0.5 active:scale-95 cursor-pointer"
+              className="flex items-center justify-center gap-2 rounded-xl bg-primary px-6 py-3.5 font-semibold text-white shadow-[0_10px_28px_rgba(38,130,179,0.3)] transition-all hover:shadow-[0_10px_28px_rgba(38,130,179,0.5)] hover:-translate-y-0.5 active:scale-95 cursor-pointer"
             >
               Daftar sebagai Pasien
               <ScanIcon className="h-4 w-4" />
@@ -63,7 +63,7 @@ export function Hero() {
 
         {/* Signature visual: a health "boarding pass" — torn stub, rubber stamp, ECG route */}
         <div className="col-span-12 md:col-span-5 animate-fade-in-up [animation-delay:400ms]">
-          <div className="relative mx-auto max-w-[420px] rounded-2xl bg-white shadow-[0_20px_48px_rgba(30,119,176,0.16)] animate-float">
+          <div className="relative mx-auto max-w-[420px] rounded-2xl bg-white shadow-[0_20px_48px_rgba(38,130,179,0.16)] animate-float">
             <div className="flex">
               {/* main stub */}
               <div className="flex-1 p-5">
