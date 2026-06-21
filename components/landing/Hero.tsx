@@ -63,7 +63,7 @@ export function Hero() {
 
         {/* Signature visual: a health "boarding pass" — torn stub, rubber stamp, ECG route */}
         <div className="col-span-12 md:col-span-5">
-          <div className="relative mx-auto max-w-[420px] rotate-[-1.2deg] rounded-2xl bg-white shadow-[0_20px_48px_rgba(11,91,82,0.16)]">
+          <div className="relative mx-auto max-w-[420px] rounded-2xl bg-white shadow-[0_20px_48px_rgba(11,91,82,0.16)]">
             <div className="flex">
               {/* main stub */}
               <div className="flex-1 p-5">
@@ -144,8 +144,8 @@ export function Hero() {
                   fill="none"
                   stroke="currentColor"
                   strokeWidth="2"
-                  strokeDasharray="4 4"
                   strokeLinecap="round"
+                  strokeLinejoin="round"
                 />
               </svg>
               <FacilityStop icon={<PuskesmasIcon className="h-4 w-4" />} label="Puskesmas" />
