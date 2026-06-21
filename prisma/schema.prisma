@@ -9,11 +9,80 @@ datasource db {
 }
 
 model User {
-  id           String   @id @default(cuid())
+  id           String         @id @default(cuid())
   name         String
-  email        String   @unique
+  email        String         @unique
   passwordHash String
-  role         String   @default("user")
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
+  role         String         @default("user") // "pasien", "petugas", "admin"
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @updatedAt
+  pasien       Pasien?
+  petugas      PetugasFaskes?
+}
+
+model Pasien {
+  id                   String             @id @default(cuid())
+  userId               String             @unique
+  user                 User               @relation(fields: [userId], references: [id], onDelete: Cascade)
+  nik                  String             @unique
+  birthDate            DateTime
+  gender               String             // "L" | "P"
+  encryptedMedicalData String             // Enkripsi AES-256-GCM (golongan darah, alergi, penyakit kronis, obat rutin)
+  qrToken              String             @unique
+  kodeCadangan         String             // PIN 6-digit untuk fallback
+  createdAt            DateTime           @default(now())
+  updatedAt            DateTime           @updatedAt
+  kunjungan            RiwayatKunjungan[]
+  tokenAkses           TokenAkses[]
+  logAkses             LogAkses[]
+}
+
+model PetugasFaskes {
+  id           String             @id @default(cuid())
+  userId       String             @unique
+  user         User               @relation(fields: [userId], references: [id], onDelete: Cascade)
+  licenseNo    String             @unique // Nomor STR/Lisensi Petugas Medis
+  faskesName   String             // Nama Instansi (misal: RSUD Sentosa)
+  faskesType   String             // Tipe Instansi (misal: RUMAH_SAKIT, PUSKESMAS, KLINIK)
+  createdAt    DateTime           @default(now())
+  updatedAt    DateTime           @updatedAt
+  kunjungan            RiwayatKunjungan[]
+  tokenAkses           TokenAkses[]
+  logAkses             LogAkses[]
+}
+
+model RiwayatKunjungan {
+  id           String        @id @default(cuid())
+  pasienId     String
+  pasien       Pasien        @relation(fields: [pasienId], references: [id], onDelete: Cascade)
+  petugasId    String
+  petugas      PetugasFaskes @relation(fields: [petugasId], references: [id], onDelete: Cascade)
+  tanggal      DateTime      @default(now())
+  keluhan      String
+  diagnosis    String
+  tindakan     String?
+  resepObat    String?
+  createdAt    DateTime      @default(now())
+}
+
+model TokenAkses {
+  id        String        @id @default(cuid())
+  pasienId  String
+  pasien    Pasien        @relation(fields: [pasienId], references: [id], onDelete: Cascade)
+  petugasId String
+  petugas   PetugasFaskes @relation(fields: [petugasId], references: [id], onDelete: Cascade)
+  token     String        @unique
+  expiresAt DateTime
+  isRevoked Boolean       @default(false)
+  createdAt DateTime      @default(now())
+}
+
+model LogAkses {
+  id        String        @id @default(cuid())
+  pasienId  String
+  pasien    Pasien        @relation(fields: [pasienId], references: [id], onDelete: Cascade)
+  petugasId String
+  petugas   PetugasFaskes @relation(fields: [petugasId], references: [id], onDelete: Cascade)
+  aksi      String        // misal: "READ_MEDIS", "CREATE_KUNJUNGAN", "REVOKE_AKSES"
+  createdAt DateTime      @default(now())
 }
