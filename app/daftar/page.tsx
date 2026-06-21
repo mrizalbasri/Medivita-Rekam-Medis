@@ -43,15 +43,15 @@ export default function DaftarPasien() {
         
         {/* Left Column - Information */}
         <div className="flex w-full flex-col lg:w-[45%] lg:pt-8">
-          <h1 className="mb-4 font-display text-4xl font-semibold leading-tight text-primary-dark md:text-[2.75rem] opacity-0 animate-fade-in-up">
+          <h1 className="mb-4 font-display text-4xl font-semibold leading-tight text-primary-dark md:text-[2.75rem] animate-fade-in-up">
             Paspor Kesehatan Digital
           </h1>
-          <p className="mb-10 text-base leading-relaxed text-ink-soft md:text-lg opacity-0 animate-fade-in-up [animation-delay:100ms]">
+          <p className="mb-10 text-base leading-relaxed text-ink-soft md:text-lg animate-fade-in-up [animation-delay:100ms]">
             Simpan riwayat medis Anda dengan aman. Setelah terdaftar, kode QR unik akan dibuat untuk akses layanan kesehatan instan.
           </p>
 
           <div className="flex flex-col gap-5">
-            <div className="flex items-start gap-4 rounded-2xl border border-line bg-white p-5 shadow-sm transition-all hover:-translate-y-1 hover:border-primary/40 hover:shadow-md cursor-pointer opacity-0 animate-fade-in-up [animation-delay:200ms]">
+            <div className="flex items-start gap-4 rounded-2xl border border-line bg-white p-5 shadow-sm transition-all hover:-translate-y-1 hover:border-primary/40 hover:shadow-md cursor-pointer animate-fade-in-up [animation-delay:200ms]">
               <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-lg bg-primary-soft text-primary">
                 <ShieldCheckIcon className="h-5 w-5" />
               </div>
@@ -63,7 +63,7 @@ export default function DaftarPasien() {
               </div>
             </div>
 
-            <div className="flex items-start gap-4 rounded-2xl border border-line bg-white p-5 shadow-sm transition-all hover:-translate-y-1 hover:border-accent/40 hover:shadow-md cursor-pointer opacity-0 animate-fade-in-up [animation-delay:300ms]">
+            <div className="flex items-start gap-4 rounded-2xl border border-line bg-white p-5 shadow-sm transition-all hover:-translate-y-1 hover:border-accent/40 hover:shadow-md cursor-pointer animate-fade-in-up [animation-delay:300ms]">
               <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-lg bg-accent-soft text-accent">
                 <QrIcon className="h-5 w-5" />
               </div>
@@ -78,7 +78,7 @@ export default function DaftarPasien() {
         </div>
 
         {/* Right Column - Form */}
-        <div className="w-full lg:w-[55%] opacity-0 animate-fade-in-up [animation-delay:400ms]">
+        <div className="w-full lg:w-[55%] animate-fade-in-up [animation-delay:400ms]">
           <div className="rounded-[24px] border border-line bg-white p-6 shadow-sm sm:p-10">
             <div className="mb-8 border-b border-line pb-6">
               <h2 className="font-display text-2xl font-semibold text-ink">Profil Pasien</h2>
