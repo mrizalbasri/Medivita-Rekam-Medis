@@ -173,7 +173,7 @@ export default function DaftarPasien() {
                 </button>
                 <button
                   type="button"
-                  className="flex items-center gap-2 rounded-xl bg-gradient-to-r from-primary to-primary-dark px-6 py-2.5 text-sm font-semibold text-white transition-all hover:shadow-[0_4px_20px_rgba(2,132,199,0.4)] hover:opacity-90 active:scale-95"
+                  className="flex items-center gap-2 rounded-xl bg-primary px-6 py-2.5 text-sm font-semibold text-white transition-all hover:shadow-[0_4px_20px_rgba(30,119,176,0.4)] hover:opacity-90 active:scale-95"
                 >
                   Buat QR
                   <QrIcon className="h-4 w-4" />
