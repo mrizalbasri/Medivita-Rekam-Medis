@@ -144,6 +144,7 @@ export function Hero() {
                   fill="none"
                   stroke="currentColor"
                   strokeWidth="2"
+                  strokeDasharray="6 2"
                   strokeLinecap="round"
                   strokeLinejoin="round"
                 />
