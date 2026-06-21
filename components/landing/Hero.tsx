@@ -2,7 +2,6 @@ import {
   ClinicIcon,
   HospitalIcon,
   PuskesmasIcon,
-  QrIcon,
   ScanIcon,
   ShieldCheckIcon,
 } from "./icons";

@@ -1,3 +1,4 @@
+import Link from "next/link";
 import Image from "next/image";
 import { GlobeIcon, MailIcon } from "./icons";
 
@@ -13,10 +14,11 @@ export function Footer() {
                 alt="Medivita Logo"
                 fill
                 className="object-contain object-left"
+                priority
               />
             </div>
-            <span className="h-6 w-px bg-line" aria-hidden />
-            <div className="flex flex-col leading-tight">
+            <span className="h-6 w-[1.5px] bg-line/80" aria-hidden />
+            <div className="flex flex-col leading-tight mt-0.5">
               <span className="text-[10px] font-medium uppercase tracking-widest text-ink-soft">
                 Rekam Medis
               </span>
@@ -31,13 +33,13 @@ export function Footer() {
             fasilitas, dengan kendali akses penuh di tangan pasien.
           </p>
           <div className="mt-4 flex gap-2">
-            <a
+            <Link
               href="/"
               aria-label="Website"
               className="flex h-9 w-9 items-center justify-center rounded-full border border-line text-ink-soft transition-colors hover:border-primary hover:text-primary"
             >
               <GlobeIcon className="h-4 w-4" />
-            </a>
+            </Link>
             <a
               href="mailto:hello@medivita.id"
               aria-label="Email"
