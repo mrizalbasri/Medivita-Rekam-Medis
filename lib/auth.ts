@@ -33,7 +33,7 @@ export async function verifyPassword(
 
 export function signSessionToken(
   payload: SessionPayload,
-  expiresIn = "7d",
+  expiresIn: jwt.SignOptions["expiresIn"] = "7d",
 ): string {
   return jwt.sign(payload, getJwtSecret(), { expiresIn });
 }
