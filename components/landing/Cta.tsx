@@ -20,7 +20,7 @@ export function Cta() {
             <ScanIcon className="h-4 w-4" />
           </a>
           <a
-            href="/login"
+            href="/daftar"
             className="rounded-xl border border-white/25 px-6 py-3.5 font-semibold text-white transition-colors hover:bg-white/10 active:scale-95 cursor-pointer"
           >
             Saya Petugas Faskes

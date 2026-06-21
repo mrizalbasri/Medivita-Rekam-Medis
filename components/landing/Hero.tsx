@@ -38,7 +38,7 @@ export function Hero() {
               <ScanIcon className="h-4 w-4" />
             </a>
             <a
-              href="/login"
+              href="/daftar"
               className="flex items-center justify-center gap-2 rounded-xl border border-primary/30 px-6 py-3.5 font-semibold text-primary transition-colors hover:bg-primary-soft hover:border-primary/50 active:scale-95 cursor-pointer"
             >
               Masuk sebagai Petugas Faskes
