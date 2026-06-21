@@ -13,15 +13,15 @@ export function Cta() {
         </p>
         <div className="mt-7 flex flex-col items-center justify-center gap-3 sm:flex-row">
           <a
-            href="#"
-            className="flex items-center gap-2 rounded-xl bg-white px-6 py-3.5 font-semibold text-primary-dark transition-transform active:scale-95"
+            href="/daftar"
+            className="flex items-center gap-2 rounded-xl bg-white px-6 py-3.5 font-semibold text-primary-dark transition-all hover:opacity-90 active:scale-95 cursor-pointer"
           >
             Daftar sebagai Pasien
             <ScanIcon className="h-4 w-4" />
           </a>
           <a
-            href="#petugas"
-            className="rounded-xl border border-white/25 px-6 py-3.5 font-semibold text-white transition-colors hover:bg-white/10"
+            href="/login"
+            className="rounded-xl border border-white/25 px-6 py-3.5 font-semibold text-white transition-colors hover:bg-white/10 active:scale-95 cursor-pointer"
           >
             Saya Petugas Faskes
           </a>

@@ -17,20 +17,10 @@ export function Hero() {
             AES-256 &middot; Akses Dikontrol Pasien
           </span>
 
-          <h1 className="font-display text-[2.35rem] font-semibold leading-[1.08] tracking-tight text-primary-dark md:text-[3.4rem]">
+          <h1 className="font-display text-[2.4rem] font-bold leading-[1.1] tracking-tight text-primary-dark md:text-[3.6rem] md:leading-[1.05]">
             Riwayat medis Anda,
             <br />
-            <span className="relative inline-block">
-              yang ikut kemana Anda pergi.
-              <svg
-                className="absolute -bottom-1.5 left-0 w-full text-accent"
-                viewBox="0 0 320 8"
-                preserveAspectRatio="none"
-                aria-hidden
-              >
-                <path d="M0 5 C 80 0, 240 0, 320 5" stroke="currentColor" strokeWidth="3" fill="none" strokeLinecap="round" />
-              </svg>
-            </span>
+            yang ikut kemana Anda pergi.
           </h1>
 
           <p className="max-w-[520px] text-base leading-relaxed text-ink-soft md:text-lg">
@@ -41,15 +31,15 @@ export function Hero() {
 
           <div className="flex flex-col gap-3 pt-2 sm:flex-row">
             <a
-              href="#mulai"
-              className="flex items-center justify-center gap-2 rounded-xl bg-primary px-6 py-3.5 font-semibold text-white shadow-[0_10px_28px_rgba(11,91,82,0.28)] transition-transform active:scale-95"
+              href="/daftar"
+              className="flex items-center justify-center gap-2 rounded-xl bg-primary px-6 py-3.5 font-semibold text-white shadow-[0_10px_28px_rgba(30,119,176,0.3)] transition-all hover:opacity-90 active:scale-95 cursor-pointer"
             >
               Daftar sebagai Pasien
               <ScanIcon className="h-4 w-4" />
             </a>
             <a
-              href="#petugas"
-              className="flex items-center justify-center gap-2 rounded-xl border border-primary/25 px-6 py-3.5 font-semibold text-primary transition-colors hover:bg-primary-soft"
+              href="/login"
+              className="flex items-center justify-center gap-2 rounded-xl border border-primary/30 px-6 py-3.5 font-semibold text-primary transition-colors hover:bg-primary-soft active:scale-95 cursor-pointer"
             >
               Masuk sebagai Petugas Faskes
             </a>

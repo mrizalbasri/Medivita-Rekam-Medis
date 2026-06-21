@@ -2,67 +2,85 @@
 
 import { useState } from "react";
 import Image from "next/image";
-import { BellIcon, CloseIcon, MenuIcon, ScanIcon, SettingsIcon } from "./icons";
+import { CloseIcon, MenuIcon, ScanIcon } from "./icons";
 
 const navLinks = [
-  { label: "Dashboard", href: "#dashboard", active: true },
-  { label: "Patients", href: "#patients" },
-  { label: "Healthcare Workers", href: "#healthcare-workers" },
-  { label: "Medical History", href: "#medical-history" },
+  { label: "Cara Kerja", href: "#cara-kerja" },
+  { label: "Keunggulan", href: "#keunggulan" },
+  { label: "Faskes Mitra", href: "#mitra" },
 ];
 
 export function Navbar() {
   const [open, setOpen] = useState(false);
 
+  function handleScanQR(e: React.MouseEvent) {
+    e.preventDefault();
+    alert("Fitur Scan QR akan segera hadir. Silakan daftar terlebih dahulu sebagai pasien.");
+  }
+
+  function handleScrollTo(href: string) {
+    setOpen(false);
+    const target = document.querySelector(href);
+    if (target) {
+      target.scrollIntoView({ behavior: "smooth" });
+    }
+  }
+
   return (
     <header className="sticky top-0 z-50 w-full border-b border-line bg-paper/90 backdrop-blur-sm">
-      <div className="mx-auto flex max-w-[1280px] items-center justify-between px-4 py-3.5 md:px-10">
-        <a href="#" className="flex items-center gap-3">
-          <div className="relative h-9 w-9 overflow-hidden rounded-lg">
+      <div className="mx-auto flex max-w-[1280px] items-center justify-between px-4 py-3 md:px-10">
+
+        {/* Logo + tagline */}
+        <a href="#" aria-label="Medivita — Rekam Medis Jalan" className="flex items-center gap-2.5">
+          {/* Logo */}
+          <div className="relative h-12 w-28 sm:h-14 sm:w-32 flex-shrink-0">
             <Image
               src="/logo.webp"
               alt="Medivita Logo"
               fill
-              className="object-cover object-top scale-[1.3] -translate-y-[8%]"
+              className="object-contain object-left scale-110 origin-left"
               priority
             />
           </div>
-          <span className="font-display text-lg font-bold tracking-tight text-primary-dark">
-            Rekam Medis Jalan
-          </span>
+          {/* Divider + tagline */}
+          <div className="hidden sm:flex items-center gap-2.5">
+            <span className="h-8 w-[1.5px] bg-line/80" aria-hidden />
+            <div className="flex flex-col leading-tight mt-0.5">
+              <span className="text-[10px] font-bold uppercase tracking-[0.15em] text-ink-soft">
+                Rekam Medis
+              </span>
+              <span className="text-[15px] font-bold tracking-tight text-primary-dark">
+                Jalan
+              </span>
+            </div>
+          </div>
         </a>
 
-        <nav className="hidden items-center gap-8 md:flex h-full">
+        {/* Desktop nav */}
+        <nav className="hidden items-center gap-8 md:flex">
           {navLinks.map((link) => (
             <a
               key={link.href}
               href={link.href}
-              className={`relative py-2 text-sm font-medium transition-colors ${
-                link.active
-                  ? "text-primary font-semibold after:absolute after:bottom-[-16px] after:left-0 after:h-[3px] after:w-full after:bg-primary after:rounded-full"
-                  : "text-ink-soft hover:text-primary"
-              }`}
+              onClick={(e) => { e.preventDefault(); handleScrollTo(link.href); }}
+              className="text-sm font-medium text-ink-soft transition-colors hover:text-primary cursor-pointer"
             >
               {link.label}
             </a>
           ))}
         </nav>
 
-        <div className="hidden items-center gap-4 md:flex">
-          <button
-            aria-label="Notifikasi"
-            className="rounded-full p-2 text-ink-soft transition-colors hover:bg-primary-soft hover:text-primary"
-          >
-            <BellIcon className="h-5 w-5" />
-          </button>
-          <button
-            aria-label="Pengaturan"
-            className="rounded-full p-2 text-ink-soft transition-colors hover:bg-primary-soft hover:text-primary"
-          >
-            <SettingsIcon className="h-5 w-5" />
-          </button>
+        {/* Desktop actions */}
+        <div className="hidden items-center gap-3 md:flex">
           <a
-            href="#scan"
+            href="/login"
+            className="flex items-center gap-2 rounded-xl border border-primary/30 px-4 py-2.5 text-sm font-semibold text-primary transition-colors hover:bg-primary-soft active:scale-95"
+          >
+            Masuk Petugas
+          </a>
+          <a
+            href="/daftar"
+            onClick={handleScanQR}
             className="flex items-center gap-2 rounded-xl bg-primary px-4 py-2.5 text-sm font-semibold text-white transition-transform active:scale-95 hover:opacity-90"
           >
             <ScanIcon className="h-4 w-4" />
@@ -70,6 +88,7 @@ export function Navbar() {
           </a>
         </div>
 
+        {/* Mobile menu toggle */}
         <button
           aria-label={open ? "Tutup menu" : "Buka menu"}
           aria-expanded={open}
@@ -80,6 +99,7 @@ export function Navbar() {
         </button>
       </div>
 
+      {/* Mobile dropdown */}
       {open && (
         <div className="border-t border-line bg-paper px-4 py-4 md:hidden">
           <nav className="flex flex-col gap-1">
@@ -87,33 +107,29 @@ export function Navbar() {
               <a
                 key={link.href}
                 href={link.href}
-                onClick={() => setOpen(false)}
-                className={`rounded-lg px-3 py-2.5 text-sm font-medium hover:bg-primary-soft hover:text-primary ${
-                  link.active ? "bg-primary-soft text-primary font-semibold" : "text-ink-soft"
-                }`}
+                onClick={(e) => { e.preventDefault(); handleScrollTo(link.href); }}
+                className="rounded-lg px-3 py-2.5 text-sm font-medium text-ink-soft hover:bg-primary-soft hover:text-primary cursor-pointer"
               >
                 {link.label}
               </a>
             ))}
-            <div className="mt-2 flex items-center justify-between border-t border-line pt-2 px-3">
-              <span className="text-sm text-ink-soft">Aksi Cepat</span>
-              <div className="flex gap-2">
-                <button aria-label="Notifikasi" className="rounded-full p-2 text-ink-soft hover:bg-primary-soft">
-                  <BellIcon className="h-5 w-5" />
-                </button>
-                <button aria-label="Pengaturan" className="rounded-full p-2 text-ink-soft hover:bg-primary-soft">
-                  <SettingsIcon className="h-5 w-5" />
-                </button>
-              </div>
+            <div className="mt-2 flex flex-col gap-2 border-t border-line pt-3">
+              <a
+                href="/login"
+                onClick={() => setOpen(false)}
+                className="flex items-center justify-center gap-2 rounded-xl border border-primary/30 px-4 py-3 text-sm font-semibold text-primary hover:bg-primary-soft"
+              >
+                Masuk Petugas
+              </a>
+              <a
+                href="/daftar"
+                onClick={(e) => { setOpen(false); handleScanQR(e); }}
+                className="flex items-center justify-center gap-2 rounded-xl bg-primary px-4 py-3 text-sm font-semibold text-white"
+              >
+                <ScanIcon className="h-4 w-4" />
+                Scan QR
+              </a>
             </div>
-            <a
-              href="#scan"
-              onClick={() => setOpen(false)}
-              className="mt-2 flex items-center justify-center gap-2 rounded-xl bg-primary px-4 py-3 text-sm font-semibold text-white"
-            >
-              <ScanIcon className="h-4 w-4" />
-              Scan QR
-            </a>
           </nav>
         </div>
       )}
