@@ -17,35 +17,35 @@ export function Hero() {
             AES-256 &middot; Akses Dikontrol Pasien
           </span>
 
-          <h1 className="font-display text-[2.4rem] font-bold leading-[1.1] tracking-tight text-primary-dark md:text-[3.6rem] md:leading-[1.05]">
+          <h1 className="font-display text-[2.4rem] font-bold leading-[1.1] tracking-tight text-primary-dark md:text-[3.6rem] md:leading-[1.05] opacity-0 animate-fade-in-up">
             Riwayat medis Anda,
             <br />
             yang ikut kemana Anda pergi.
           </h1>
 
-          <p className="max-w-[520px] text-base leading-relaxed text-ink-soft md:text-lg">
+          <p className="max-w-[520px] text-base leading-relaxed text-ink-soft md:text-lg opacity-0 animate-fade-in-up [animation-delay:100ms]">
             Pindah faskes, dirujuk, atau darurat di luar kota — golongan
             darah, alergi, penyakit kronis, dan obat rutin Anda tetap terbaca
             oleh petugas medis manapun, lewat satu kali pindai QR.
           </p>
 
-          <div className="flex flex-col gap-3 pt-2 sm:flex-row">
+          <div className="flex flex-col gap-3 pt-2 sm:flex-row opacity-0 animate-fade-in-up [animation-delay:200ms]">
             <a
               href="/daftar"
-              className="flex items-center justify-center gap-2 rounded-xl bg-primary px-6 py-3.5 font-semibold text-white shadow-[0_10px_28px_rgba(30,119,176,0.3)] transition-all hover:opacity-90 active:scale-95 cursor-pointer"
+              className="flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-primary to-primary-dark px-6 py-3.5 font-semibold text-white shadow-[0_10px_28px_rgba(2,132,199,0.3)] transition-all hover:shadow-[0_10px_28px_rgba(2,132,199,0.5)] hover:-translate-y-0.5 active:scale-95 cursor-pointer"
             >
               Daftar sebagai Pasien
               <ScanIcon className="h-4 w-4" />
             </a>
             <a
               href="/login"
-              className="flex items-center justify-center gap-2 rounded-xl border border-primary/30 px-6 py-3.5 font-semibold text-primary transition-colors hover:bg-primary-soft active:scale-95 cursor-pointer"
+              className="flex items-center justify-center gap-2 rounded-xl border border-primary/30 px-6 py-3.5 font-semibold text-primary transition-colors hover:bg-primary-soft hover:border-primary/50 active:scale-95 cursor-pointer"
             >
               Masuk sebagai Petugas Faskes
             </a>
           </div>
 
-          <dl className="mt-4 grid grid-cols-3 gap-4 border-t border-line pt-6 sm:max-w-[460px]">
+          <dl className="mt-4 grid grid-cols-3 gap-4 border-t border-line pt-6 sm:max-w-[460px] opacity-0 animate-fade-in-up [animation-delay:300ms]">
             <div>
               <dt className="font-mono text-[11px] uppercase text-ink-soft">Data esensial</dt>
               <dd className="font-display text-xl font-semibold text-primary">1 QR</dd>
@@ -62,8 +62,8 @@ export function Hero() {
         </div>
 
         {/* Signature visual: a health "boarding pass" — torn stub, rubber stamp, ECG route */}
-        <div className="col-span-12 md:col-span-5">
-          <div className="relative mx-auto max-w-[420px] rounded-2xl bg-white shadow-[0_20px_48px_rgba(11,91,82,0.16)]">
+        <div className="col-span-12 md:col-span-5 opacity-0 animate-fade-in-up [animation-delay:400ms]">
+          <div className="relative mx-auto max-w-[420px] rounded-2xl bg-white shadow-[0_20px_48px_rgba(2,132,199,0.12)] animate-float">
             <div className="flex">
               {/* main stub */}
               <div className="flex-1 p-5">
