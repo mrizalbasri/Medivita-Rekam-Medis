@@ -7,17 +7,23 @@ export function Footer() {
       <div className="mx-auto grid max-w-[1280px] grid-cols-1 gap-10 px-4 py-12 md:grid-cols-12 md:px-10">
         <div className="col-span-12 md:col-span-5">
           <div className="flex items-center gap-3">
-            <div className="relative h-9 w-9 overflow-hidden rounded-lg">
+            <div className="relative h-9 w-28 flex-shrink-0">
               <Image
                 src="/logo.webp"
                 alt="Medivita Logo"
                 fill
-                className="object-cover object-top scale-[1.3] -translate-y-[8%]"
+                className="object-contain object-left"
               />
             </div>
-            <span className="font-display text-base font-semibold text-primary-dark">
-              Rekam Medis Jalan
-            </span>
+            <span className="h-6 w-px bg-line" aria-hidden />
+            <div className="flex flex-col leading-tight">
+              <span className="text-[10px] font-medium uppercase tracking-widest text-ink-soft">
+                Rekam Medis
+              </span>
+              <span className="text-[12px] font-bold tracking-tight text-primary-dark">
+                Jalan
+              </span>
+            </div>
           </div>
           <p className="mt-3 max-w-[360px] text-sm leading-relaxed text-ink-soft">
             Prototipe untuk PekanIT 2026 (subtema Kesehatan & Kesejahteraan
