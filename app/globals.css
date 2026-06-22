@@ -1,8 +1,8 @@
 @import "tailwindcss";
 
 :root {
-  --background: #f4f8fa;
-  --foreground: #0a2835;
+  --background: #f2f8f8;
+  --foreground: #1a3347;
 }
 
 @theme {
@@ -12,23 +12,49 @@
   --font-display: var(--font-display);
   --font-mono: var(--font-mono);
 
-  --color-paper: #f4f8fa;
-  --color-primary: #1e77b0;
-  --color-primary-dark: #0a2835;
-  --color-primary-soft: #e1f0f7;
-  --color-accent: #63b676;
-  --color-accent-soft: #eaf5ec;
+  /* ── Brand colours extracted from Medivita logo ── */
+  --color-paper: #f2f8f8;           /* off-white dengan tint teal lembut  */
+
+  /* Primary — biru logo (kiri) */
+  --color-primary: #2b5ba8;
+  --color-primary-dark: #1a3a6e;
+  --color-primary-soft: #ddeaf9;
+
+  /* Teal — titik tengah gradient logo */
+  --color-teal: #2aacab;
+  --color-teal-dark: #1b8786;
+  --color-teal-soft: #d4f0ef;
+
+  /* Accent — hijau ECG logo (kanan) */
+  --color-accent: #5db870;
+  --color-accent-dark: #3d9652;
+  --color-accent-soft: #e2f5e7;
+
+  /* Text */
+  --color-ink: #1a3347;
+  --color-ink-soft: #4a6070;
+
+  /* UI chrome */
+  --color-line: #d8eaea;
   --color-alert: #d32f2f;
   --color-alert-soft: #fdebec;
-  --color-ink: #0a2835;
-  --color-ink-soft: #475e6b;
-  --color-line: #e2eaf0;
 }
 
 body {
   background: var(--color-paper);
   color: var(--color-ink);
   font-family: var(--font-sans), Arial, Helvetica, sans-serif;
+}
+
+/* ── Brand gradient utility (blue → teal → green) ── */
+.brand-gradient {
+  background: linear-gradient(135deg, #2b5ba8 0%, #2aacab 55%, #5db870 100%);
+}
+.brand-gradient-text {
+  background: linear-gradient(135deg, #2b5ba8 0%, #2aacab 55%, #5db870 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
 @keyframes dash-travel {
@@ -44,3 +70,4 @@ body {
     animation: none;
   }
 }
+
