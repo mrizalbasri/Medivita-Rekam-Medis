@@ -17,7 +17,6 @@ const registerSchema = z.object({
     .email("Format email tidak valid")
     .transform((value) => value.toLowerCase().trim()),
   password: z.string().min(8, "Password minimal 8 karakter").max(128),
-  role: z.string().trim().min(1).max(30).optional(),
 });
 
 export async function POST(request: Request) {
@@ -35,7 +34,7 @@ export async function POST(request: Request) {
       );
     }
 
-    const { name, email, password, role } = parsed.data;
+    const { name, email, password } = parsed.data;
 
     const existingUser = await prisma.user.findUnique({
       where: { email },
@@ -56,7 +55,7 @@ export async function POST(request: Request) {
         name,
         email,
         passwordHash,
-        role: role ?? "user",
+        role: "user", // Tetapkan default role 'user' secara aman di server-side
       },
       select: {
         id: true,
