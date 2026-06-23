@@ -1,5 +1,17 @@
+"use client";
+
 import React from "react";
 import Link from "next/link";
+
+function LogoutIcon(props: React.SVGProps<SVGSVGElement>) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" {...props}>
+      <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+      <polyline points="16 17 21 12 16 7" />
+      <line x1="21" y1="12" x2="9" y2="12" />
+    </svg>
+  );
+}
 
 function ScanIcon(props: React.SVGProps<SVGSVGElement>) {
   return (
@@ -34,6 +46,24 @@ interface NavbarProps {
 }
 
 export function Navbar({ onScanClick, doctorInitials = "DR" }: NavbarProps) {
+  async function handleLogout() {
+    if (confirm("Apakah Anda yakin ingin keluar?")) {
+      try {
+        const res = await fetch("/api/auth/logout", {
+          method: "POST",
+        });
+        if (res.ok) {
+          window.location.href = "/";
+        } else {
+          alert("Gagal melakukan logout.");
+        }
+      } catch (err) {
+        console.error(err);
+        alert("Gagal menghubungi server.");
+      }
+    }
+  }
+
   return (
     <header className="sticky top-0 z-40 bg-white border-b border-line shadow-xs">
       <div className="mx-auto max-w-[1280px] px-6 py-4 flex items-center justify-between">
@@ -77,6 +107,13 @@ export function Navbar({ onScanClick, doctorInitials = "DR" }: NavbarProps) {
           </button>
           <button className="rounded-full p-2 text-ink-soft hover:bg-primary-soft transition-colors" aria-label="Pengaturan">
             <SettingsIcon className="h-5.5 w-5.5" />
+          </button>
+          <button 
+            onClick={handleLogout}
+            className="rounded-full p-2 text-ink-soft hover:bg-alert-soft hover:text-alert transition-colors" 
+            aria-label="Logout"
+          >
+            <LogoutIcon className="h-5 w-5" />
           </button>
           <div className="flex items-center gap-2 border-l border-line pl-3">
             <div className="h-9 w-9 rounded-full bg-primary-soft overflow-hidden flex items-center justify-center border border-line">
