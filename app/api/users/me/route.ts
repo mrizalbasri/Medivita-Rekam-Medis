@@ -24,6 +24,16 @@ export async function GET(request: Request) {
         role: true,
         createdAt: true,
         updatedAt: true,
+        pasien: {
+          select: {
+            id: true,
+          },
+        },
+        petugas: {
+          select: {
+            id: true,
+          },
+        },
       },
     });
 
