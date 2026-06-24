@@ -1,37 +1,15 @@
 "use client";
 
 import { useEffect, useState, useRef } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";`nimport { ArrowLeft, QrCode, Check } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
 
-function ArrowLeftIcon(props: React.SVGProps<SVGSVGElement>) {
-  return (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" {...props}>
-      <path d="m12 19-7-7 7-7M5 12h14" />
-    </svg>
-  );
-}
 
-function ScanIcon(props: React.SVGProps<SVGSVGElement>) {
-  return (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}>
-      <path d="M3 7V5a2 2 0 0 1 2-2h2" />
-      <path d="M17 3h2a2 2 0 0 1 2 2v2" />
-      <path d="M21 17v2a2 2 0 0 1-2 2h-2" />
-      <path d="M7 21H5a2 2 0 0 1-2-2v-2" />
-      <rect x="7" y="7" width="10" height="10" rx="1" />
-    </svg>
-  );
-}
 
-function CheckIcon(props: React.SVGProps<SVGSVGElement>) {
-  return (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" {...props}>
-      <path d="M20 6 9 17l-5-5" />
-    </svg>
-  );
-}
+
+
+
 
 export default function ScanPage() {
   const router = useRouter();
@@ -151,7 +129,7 @@ export default function ScanPage() {
       <header className="sticky top-0 z-50 w-full border-b border-line bg-white py-3.5 shadow-xs">
         <div className="mx-auto flex max-w-[1280px] items-center justify-between px-6">
           <Link href="/petugas/dashboard" className="flex items-center gap-2 text-sm font-semibold text-ink-soft hover:text-primary transition-colors">
-            <ArrowLeftIcon className="h-5 w-5" />
+            <ArrowLeft className="h-5 w-5" />
             Kembali ke Dashboard
           </Link>
           <div className="flex items-center gap-3">
@@ -167,7 +145,7 @@ export default function ScanPage() {
       <main className="mx-auto flex w-full max-w-[500px] flex-1 flex-col items-center justify-center px-6 py-12">
         <div className="w-full rounded-3xl border border-line bg-white p-6 shadow-md text-center">
           <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-2xl bg-primary-soft text-primary">
-            <ScanIcon className="h-6 w-6" />
+            <QrCode className="h-6 w-6" />
           </div>
           <h1 className="font-display text-2xl font-bold text-ink mb-1">Pindai QR Code Pasien</h1>
           <p className="text-xs text-ink-soft mb-6">
@@ -178,7 +156,7 @@ export default function ScanPage() {
           {successData ? (
             <div className="my-6 rounded-2xl bg-accent-soft border border-accent/20 p-8 text-center animate-fade-in-up">
               <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-accent text-white shadow-md">
-                <CheckIcon className="h-7 w-7" />
+                <Check className="h-7 w-7" />
               </div>
               <h3 className="font-bold text-lg text-ink">Akses Diizinkan!</h3>
               <p className="text-sm text-ink-soft mt-1">
@@ -236,3 +214,4 @@ export default function ScanPage() {
     </div>
   );
 }
+
