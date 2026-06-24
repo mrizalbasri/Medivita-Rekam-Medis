@@ -13,11 +13,6 @@ const navLinks = [
 export function Navbar() {
   const [open, setOpen] = useState(false);
 
-  function handleScanQR(e: React.MouseEvent) {
-    e.preventDefault();
-    alert("Fitur Scan QR akan segera hadir. Silakan daftar terlebih dahulu sebagai pasien.");
-  }
-
   function handleScrollTo(href: string) {
     setOpen(false);
     const target = document.querySelector(href);
@@ -79,8 +74,7 @@ export function Navbar() {
             Masuk Petugas
           </a>
           <a
-            href="/daftar"
-            onClick={handleScanQR}
+            href="/petugas/scan"
             className="flex items-center gap-2 rounded-xl bg-primary px-4 py-2.5 text-sm font-semibold text-white transition-transform active:scale-95 hover:opacity-90"
           >
             <ScanIcon className="h-4 w-4" />
@@ -122,8 +116,8 @@ export function Navbar() {
                 Masuk Petugas
               </a>
               <a
-                href="/daftar"
-                onClick={(e) => { setOpen(false); handleScanQR(e); }}
+                href="/petugas/scan"
+                onClick={() => setOpen(false)}
                 className="flex items-center justify-center gap-2 rounded-xl bg-primary px-4 py-3 text-sm font-semibold text-white"
               >
                 <ScanIcon className="h-4 w-4" />

@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
-import { z } from "zod";
 
+import { loginSchema } from "@/lib/validations/login";
 import {
   SESSION_COOKIE_NAME,
   signSessionToken,
@@ -9,13 +9,6 @@ import {
 import { prisma } from "@/lib/prisma";
 
 export const runtime = "nodejs";
-
-const loginSchema = z.object({
-  email: z
-    .email("Format email tidak valid")
-    .transform((value) => value.toLowerCase().trim()),
-  password: z.string().min(1, "Password wajib diisi"),
-});
 
 export async function POST(request: Request) {
   try {

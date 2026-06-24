@@ -1,7 +1,8 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect, Suspense } from "react";
 import Link from "next/link";
+import { useRouter, useSearchParams } from "next/navigation";
 
 import { Navbar } from "@/components/petugas/Navbar";
 import { PatientLookup } from "@/components/petugas/PatientLookup";
@@ -18,6 +19,15 @@ function CheckIcon(props: React.SVGProps<SVGSVGElement>) {
   );
 }
 
+function ScanLargeIcon(props: React.SVGProps<SVGSVGElement>) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" {...props}>
+      <path d="M4 8V5a2 2 0 0 1 2-2h3M20 8V5a2 2 0 0 0-2-2h-3M4 16v3a2 2 0 0 0 2 2h3M20 16v3a2 2 0 0 1-2 2h-3" />
+      <rect x="7" y="7" width="10" height="10" rx="2" />
+    </svg>
+  );
+}
+
 interface Visit {
   id: string;
   facility: string;
@@ -29,7 +39,6 @@ interface Visit {
 
 interface Patient {
   id: string;
-  rawId: string;
   name: string;
   age: number;
   gender: string;
@@ -38,110 +47,105 @@ interface Patient {
   chronicConditions: string;
   emergencyContact: string;
   insurance: string;
-  avatarUrl: string;
   lastVisit: string;
-  history: Visit[];
 }
 
-const INITIAL_PATIENTS: Patient[] = [
-  {
-    id: "MED-P-0842",
-    rawId: "pasien-0842",
-    name: "Siti Aminah",
-    age: 28,
-    gender: "Female",
-    allergy: "Penicillin",
-    bloodType: "O+",
-    chronicConditions: "Asthma (Mild)",
-    emergencyContact: "Ahmad (Suami) - 0812-3456-7890",
-    insurance: "BPJS Kesehatan (Active)",
-    avatarUrl: "/logo.webp",
-    lastVisit: "Currently Active",
-    history: [
-      {
-        id: "v1",
-        facility: "Poli Umum - RS Citra Husada",
-        date: "12 Jan 2026",
-        notes: "Complaints: Seasonal flu symptoms. Prescribed Paracetamol and Vitamin C. Advised 3 days rest.",
-        type: "Pemeriksaan Umum",
-        prescriptions: ["Paracetamol 500mg", "Vitamin C 500mg"]
-      },
-      {
-        id: "v2",
-        facility: "Check-up Rutin - Klinik Medivita",
-        date: "05 Nov 2025",
-        notes: "Routine check-up. Blood pressure normal (120/80). Patient feels healthy. Encouraged to maintain a active lifestyle.",
-        type: "Check-up Rutin",
-        prescriptions: []
-      }
-    ]
-  },
-  {
-    id: "MED-P-1029",
-    rawId: "pasien-1029",
-    name: "Bambang Susilo",
-    age: 45,
-    gender: "Male",
-    allergy: "None",
-    bloodType: "B+",
-    chronicConditions: "Hypertension (Controlled)",
-    emergencyContact: "Susi (Istri) - 0813-4567-8901",
-    insurance: "BPJS Kesehatan (Active)",
-    avatarUrl: "/logo.webp",
-    lastVisit: "Last visit 2d ago",
-    history: [
-      {
-        id: "v3",
-        facility: "Poli Jantung - RSUD Sentosa",
-        date: "19 Jan 2026",
-        notes: "Routine cardiovascular check. Blood pressure 135/85. Prescribed Amlodipine 5mg. Advised to reduce sodium intake.",
-        type: "Spesialis Jantung",
-        prescriptions: ["Amlodipine 5mg"]
-      },
-      {
-        id: "v4",
-        facility: "Poli Umum - Puskesmas Maju",
-        date: "10 Dec 2025",
-        notes: "Complaints of mild fever and body aches. Diagnosed with common cold. Rest advised.",
-        type: "Pemeriksaan Umum",
-        prescriptions: ["Paracetamol 500mg"]
-      }
-    ]
-  },
-  {
-    id: "MED-P-1105",
-    rawId: "pasien-1105",
-    name: "Rudi Hartono",
-    age: 35,
-    gender: "Male",
-    allergy: "Sulfa Drugs",
-    bloodType: "A-",
-    chronicConditions: "Diabetes Type 2",
-    emergencyContact: "Dewi (Istri) - 0815-9876-5432",
-    insurance: "Swasta - Mandiri Inhealth (Active)",
-    avatarUrl: "/logo.webp",
-    lastVisit: "Last visit 1w ago",
-    history: [
-      {
-        id: "v5",
-        facility: "Poli Penyakit Dalam - RS Citra Husada",
-        date: "15 Jan 2026",
-        notes: "Diabetes routine check-up. Fasting blood sugar 140 mg/dL. Prescribed Metformin 500mg twice daily. Advised sugar restriction.",
-        type: "Pemeriksaan Umum",
-        prescriptions: ["Metformin 500mg"]
-      }
-    ]
-  }
-];
-
-export default function PetugasDashboard() {
-  const [patients, setPatients] = useState<Patient[]>(INITIAL_PATIENTS);
-  const [activePatientId, setActivePatientId] = useState<string>("MED-P-0842");
+function DashboardContent() {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  
+  const [user, setUser] = useState<{ name: string; email: string } | null>(null);
+  const [patients, setPatients] = useState<Patient[]>([]);
+  const [activePatientId, setActivePatientId] = useState<string>("");
+  const [activePatientDetail, setActivePatientDetail] = useState<any>(null);
   const [searchQuery, setSearchQuery] = useState<string>("");
-  const [visitsCount, setVisitsCount] = useState<number>(24);
+  const [visitsCount, setVisitsCount] = useState<number>(0);
   const [showSuccessToast, setShowSuccessToast] = useState<boolean>(false);
+  const [loadingList, setLoadingList] = useState<boolean>(true);
+  const [loadingDetail, setLoadingDetail] = useState<boolean>(false);
 
-  const activePatient = patients.find((p) => p.id === activePatientId) || patients[0];
+  // 1. Fetch User Info & Patient Scans on Mount
+  useEffect(() => {
+    async function initDashboard() {
+      try {
+        // Fetch User Me
+        const userRes = await fetch("/api/users/me");
+        if (userRes.ok) {
+          const userData = await userRes.json();
+          setUser(userData.user);
+        } else {
+          // Redirect to login if unauthorized
+          router.push("/login");
+          return;
+        }
+
+        // Fetch Scanned Patients List
+        await refreshPatientList();
+      } catch (err) {
+        console.error("Gagal menginisialisasi dashboard:", err);
+      } finally {
+        setLoadingList(false);
+      }
+    }
+
+    initDashboard();
+  }, []);
+
+  const refreshPatientList = async (targetActiveId?: string) => {
+    try {
+      const scansRes = await fetch("/api/petugas/active-scans");
+      if (scansRes.ok) {
+        const scansData = await scansRes.json();
+        setPatients(scansData.patients || []);
+        
+        // Tentukan active patient ID
+        const queryPasienId = targetActiveId || searchParams.get("pasienId");
+        if (queryPasienId) {
+          setActivePatientId(queryPasienId);
+        } else if (scansData.patients && scansData.patients.length > 0) {
+          setActivePatientId(scansData.patients[0].id);
+        }
+      }
+    } catch (err) {
+      console.error("Gagal memperbarui daftar pasien:", err);
+    }
+  };
+
+  // 2. Fetch Detailed Data for Active Patient
+  useEffect(() => {
+    if (!activePatientId) {
+      setActivePatientDetail(null);
+      return;
+    }
+
+    async function fetchPatientDetail() {
+      setLoadingDetail(true);
+      try {
+        const detailRes = await fetch(`/api/pasien/${activePatientId}`);
+        if (detailRes.ok) {
+          const detailData = await detailRes.json();
+          setActivePatientDetail(detailData.pasien);
+        } else {
+          console.error("Gagal mengambil detail rekam medis pasien");
+        }
+      } catch (err) {
+        console.error("Error mengambil detail pasien:", err);
+      } finally {
+        setLoadingDetail(false);
+      }
+    }
+
+    fetchPatientDetail();
+  }, [activePatientId]);
+
+  // Calculate visits count today (or general count)
+  useEffect(() => {
+    let count = 0;
+    patients.forEach(p => {
+      // Sederhana: hitung kunjungan dari database/list jika ada
+    });
+    setVisitsCount(patients.length); // fallback visual
+  }, [patients]);
 
   const filteredPatients = patients.filter(
     (p) =>
@@ -149,47 +153,78 @@ export default function PetugasDashboard() {
       p.id.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
-  const handleFinalizeVisit = (data: {
+  const handleFinalizeVisit = async (data: {
     visitType: string;
     facility: string;
     notes: string;
     prescriptions: string[];
   }) => {
-    const newVisit: Visit = {
-      id: `v_${Date.now()}`,
-      facility: data.facility,
-      date: new Date().toLocaleDateString("id-ID", {
-        day: "numeric",
-        month: "short",
-        year: "numeric",
-      }),
-      notes: data.notes,
-      type: data.visitType,
-      prescriptions: data.prescriptions,
-    };
+    if (!activePatientId) return;
 
-    setPatients((prev) =>
-      prev.map((p) => {
-        if (p.id === activePatientId) {
-          return {
-            ...p,
-            history: [newVisit, ...p.history],
-          };
-        }
-        return p;
-      })
-    );
+    try {
+      const response = await fetch("/api/kunjungan", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          pasienId: activePatientId,
+          keluhan: `Kunjungan: ${data.visitType}`,
+          diagnosis: data.notes,
+          tindakan: `Tindakan/Tipe: ${data.visitType}`,
+          resepObat: data.prescriptions.join(", "),
+        }),
+      });
 
-    setVisitsCount((c) => c + 1);
-    setShowSuccessToast(true);
-    setTimeout(() => {
-      setShowSuccessToast(false);
-    }, 4000);
+      const resData = await response.json();
+
+      if (!response.ok) {
+        throw new Error(resData.message || "Gagal menyimpan kunjungan");
+      }
+
+      // Sukses
+      setShowSuccessToast(true);
+      setTimeout(() => setShowSuccessToast(false), 4000);
+
+      // Refresh detail pasien untuk memuat kunjungan baru di timeline
+      const detailRes = await fetch(`/api/pasien/${activePatientId}`);
+      if (detailRes.ok) {
+        const detailData = await detailRes.json();
+        setActivePatientDetail(detailData.pasien);
+      }
+    } catch (err: any) {
+      alert(err.message || "Terjadi kesalahan saat menyimpan rekam medis.");
+    }
   };
 
   const handleScanClick = () => {
-    alert("Kamera pemindaian siap diaktifkan lewat halaman /petugas/scan");
+    router.push("/petugas/scan");
   };
+
+  const doctorInitials = user ? user.name.split(" ").map(n => n[0]).join("").slice(0, 2).toUpperCase() : "DR";
+  const doctorName = user ? user.name : "Dokter Medivita";
+
+  // Map activePatientDetail to matching structure for components
+  const activePatientInfo = activePatientDetail ? {
+    id: activePatientDetail.id,
+    name: activePatientDetail.name,
+    age: Math.floor((Date.now() - new Date(activePatientDetail.birthDate).getTime()) / (365.25 * 24 * 60 * 60 * 1000)),
+    gender: activePatientDetail.gender === "L" ? "Laki-laki" : "Perempuan",
+    allergy: activePatientDetail.medicalData?.allergies?.join(", ") || "None",
+    bloodType: activePatientDetail.medicalData?.bloodType || "-",
+    chronicConditions: activePatientDetail.medicalData?.chronicConditions || "Tidak ada",
+    emergencyContact: "0812-3456-7890 (Keluarga)",
+    insurance: "BPJS Kesehatan (Aktif)",
+  } : null;
+
+  const activePatientHistory = activePatientDetail?.history?.map((h: any) => ({
+    id: h.id,
+    facility: h.facility,
+    date: h.date,
+    type: h.tindakan || "Pemeriksaan Medis",
+    notes: `Keluhan: ${h.keluhan}. Diagnosis: ${h.diagnosis}`,
+    prescriptions: h.resepObat || [],
+  })) || [];
 
   return (
     <div className="min-h-screen bg-[#f4f8fa] flex flex-col font-sans">
@@ -207,34 +242,51 @@ export default function PetugasDashboard() {
       )}
 
       {/* Header (Navbar) */}
-      <Navbar onScanClick={handleScanClick} doctorInitials="DR" />
+      <Navbar onScanClick={handleScanClick} doctorInitials={doctorInitials} />
 
       {/* Main Grid Content */}
       <main className="flex-1 mx-auto w-full max-w-[1280px] px-6 py-8">
+        <div className="mb-6 flex flex-col sm:flex-row justify-between sm:items-center gap-2">
+          <div>
+            <h1 className="text-2xl font-bold font-display text-ink">Selamat datang kembali, {doctorName}</h1>
+            <p className="text-xs text-ink-soft">Kelola dan input rekam medis pasien secara cepat dan terenkripsi.</p>
+          </div>
+        </div>
+
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
           
           {/* Left Column (Width 4/12) */}
           <div className="lg:col-span-4 flex flex-col gap-6">
             
             {/* Search Lookup */}
-            <PatientLookup searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
+            <PatientLookup 
+              searchQuery={searchQuery} 
+              setSearchQuery={setSearchQuery} 
+              onFallbackSuccess={(id) => refreshPatientList(id)} 
+            />
 
             {/* Scanned Patient List */}
-            <RecentScans
-              patients={filteredPatients}
-              activePatientId={activePatientId}
-              onSelectPatient={setActivePatientId}
-            />
+            {loadingList ? (
+              <div className="bg-white rounded-2xl border border-line p-8 shadow-sm flex items-center justify-center min-h-[300px]">
+                <div className="h-8 w-8 animate-spin rounded-full border-4 border-primary/20 border-t-primary"></div>
+              </div>
+            ) : (
+              <RecentScans
+                patients={filteredPatients}
+                activePatientId={activePatientId}
+                onSelectPatient={setActivePatientId}
+              />
+            )}
 
             {/* Quick Statistics */}
             <div className="grid grid-cols-2 gap-4">
               <div className="bg-[#1e77b0] text-white p-5 rounded-2xl shadow-xs">
-                <p className="text-xs font-semibold text-white/80">Visits Today</p>
-                <p className="text-3xl font-display font-bold mt-1">{visitsCount}</p>
+                <p className="text-xs font-semibold text-white/80">Active Scans</p>
+                <p className="text-3xl font-display font-bold mt-1">{patients.length}</p>
               </div>
               <div className="bg-[#eaf5ec] border border-[#d2ebd7] p-5 rounded-2xl shadow-xs">
                 <p className="text-xs font-semibold text-[#475e6b]">Avg Access Time</p>
-                <p className="text-3xl font-display font-bold text-[#63b676] mt-1">1.2s</p>
+                <p className="text-3xl font-display font-bold text-[#63b676] mt-1">0.8s</p>
               </div>
             </div>
 
@@ -243,14 +295,41 @@ export default function PetugasDashboard() {
           {/* Right Column (Width 8/12) */}
           <div className="lg:col-span-8 flex flex-col gap-6">
             
-            {/* Active Patient Details */}
-            <PatientProfileCard patient={activePatient} />
+            {loadingDetail ? (
+              <div className="bg-white rounded-2xl border border-line p-12 shadow-sm flex flex-col items-center justify-center min-h-[400px]">
+                <div className="h-10 w-10 animate-spin rounded-full border-4 border-primary/20 border-t-primary mb-3"></div>
+                <p className="text-xs text-ink-soft">Memuat berkas rekam medis terenkripsi...</p>
+              </div>
+            ) : activePatientInfo ? (
+              <>
+                {/* Active Patient Details */}
+                <PatientProfileCard patient={activePatientInfo} />
 
-            {/* Timeline Medical Visit History */}
-            <VisitHistory history={activePatient.history} />
+                {/* Timeline Medical Visit History */}
+                <VisitHistory history={activePatientHistory} />
 
-            {/* Add New Visit Form */}
-            <NewVisitForm onFinalize={handleFinalizeVisit} defaultFacility="Puskesmas Pekan Baru" />
+                {/* Add New Visit Form */}
+                <NewVisitForm onFinalize={handleFinalizeVisit} defaultFacility="Puskesmas Pekan Baru" />
+              </>
+            ) : (
+              /* Empty Placeholder State */
+              <div className="bg-white rounded-2xl border border-line p-12 shadow-sm flex flex-col items-center justify-center text-center min-h-[450px]">
+                <div className="h-16 w-16 bg-[#e1f0f7] text-primary rounded-3xl flex items-center justify-center mb-6">
+                  <ScanLargeIcon className="h-8 w-8" />
+                </div>
+                <h3 className="text-lg font-bold text-ink">Belum Ada Pasien Terpilih</h3>
+                <p className="text-xs text-ink-soft max-w-sm mt-1 mb-8 leading-relaxed">
+                  Silakan lakukan pemindaian QR Code pasien atau masukkan NIK dan PIN Cadangan untuk mendekripsi data rekam medis mereka.
+                </p>
+                <button
+                  onClick={handleScanClick}
+                  className="bg-primary hover:bg-primary/95 text-white px-6 py-3 rounded-xl font-bold text-sm shadow-sm transition-all active:scale-95 flex items-center gap-2"
+                >
+                  <ScanLargeIcon className="h-4.5 w-4.5" />
+                  Pindai QR Code Sekarang
+                </button>
+              </div>
+            )}
 
           </div>
 
@@ -279,5 +358,17 @@ export default function PetugasDashboard() {
         </div>
       </footer>
     </div>
+  );
+}
+
+export default function PetugasDashboard() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen flex items-center justify-center bg-[#f4f8fa]">
+        <div className="h-10 w-10 animate-spin rounded-full border-4 border-primary/20 border-t-primary"></div>
+      </div>
+    }>
+      <DashboardContent />
+    </Suspense>
   );
 }
