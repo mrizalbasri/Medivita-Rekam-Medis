@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { useState } from "react";
 import Image from "next/image";
@@ -126,29 +126,55 @@ const ACTIVITY_LOGS: ActivityItem[] = [
 // ─── Page ─────────────────────────────────────────────────────────────────────
 
 export default function PengaturanPrivasiPage() {
-  const [shareData, setShareData]           = useState(true);
-  const [emailNotif, setEmailNotif]         = useState(true);
-  const [saved, setSaved]                   = useState(false);
-  const [exportProgress, setExportProgress] = useState(false);
+  const [shareData, setShareData]             = useState(true);
+  const [emailNotif, setEmailNotif]           = useState(true);
+  const [saved, setSaved]                     = useState(false);
+  const [exportProgress, setExportProgress]   = useState(false);
+  const [exportError, setExportError]         = useState<string | null>(null);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
-  const [showNotif, setShowNotif]           = useState(false);
+  const [deleteLoading, setDeleteLoading]     = useState(false);
+  const [showNotif, setShowNotif]             = useState(false);
 
   function handleSave() {
     setSaved(true);
     setTimeout(() => setSaved(false), 3000);
   }
 
-  function handleExport() {
+  async function handleExport() {
     setExportProgress(true);
-    setTimeout(() => {
+    setExportError(null);
+    try {
+      const res = await fetch("/api/privacy/export");
+      if (!res.ok) throw new Error("Gagal mengambil data");
+      const { data } = await res.json();
+      // Unduh sebagai file JSON
+      const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
+      const url  = URL.createObjectURL(blob);
+      const a    = document.createElement("a");
+      a.href     = url;
+      a.download = `medivita-rekam-medis-${new Date().toISOString().slice(0, 10)}.json`;
+      a.click();
+      URL.revokeObjectURL(url);
+    } catch {
+      setExportError("Gagal mengekspor data. Silakan coba lagi.");
+    } finally {
       setExportProgress(false);
-      alert("Data rekam medis Anda berhasil diekspor sebagai file terenkripsi.");
-    }, 2000);
+    }
   }
 
-  function confirmDelete() {
-    setShowDeleteModal(false);
-    alert("Permintaan hapus akun dikirim. Tim kami akan menghubungi Anda dalam 24 jam.");
+  async function confirmDelete() {
+    setDeleteLoading(true);
+    try {
+      const res = await fetch("/api/privacy/remove", { method: "DELETE" });
+      if (!res.ok) throw new Error();
+      // Hapus cookie & redirect ke halaman login
+      document.cookie = "session_token=; Max-Age=0; path=/";
+      window.location.href = "/login";
+    } catch {
+      setShowDeleteModal(false);
+      setDeleteLoading(false);
+      alert("Gagal menghapus akun. Silakan coba lagi.");
+    }
   }
 
   return (
@@ -222,15 +248,27 @@ export default function PengaturanPrivasiPage() {
             <div className="flex gap-3">
               <button
                 onClick={() => setShowDeleteModal(false)}
-                className="flex-1 rounded-xl border border-[#e2e8f0] py-3 text-sm font-semibold text-[#0f172a] hover:bg-[#f8fafc] transition-all"
+                disabled={deleteLoading}
+                className="flex-1 rounded-xl border border-[#e2e8f0] py-3 text-sm font-semibold text-[#0f172a] hover:bg-[#f8fafc] transition-all disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 Batal
               </button>
               <button
                 onClick={confirmDelete}
-                className="flex-1 rounded-xl bg-[#ef4444] py-3 text-sm font-semibold text-white hover:bg-[#dc2626] transition-all shadow-sm"
+                disabled={deleteLoading}
+                className="flex-1 rounded-xl bg-[#ef4444] py-3 text-sm font-semibold text-white hover:bg-[#dc2626] transition-all shadow-sm disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
               >
-                Ya, Hapus Akun
+                {deleteLoading ? (
+                  <>
+                    <svg className="animate-spin h-4 w-4 text-white" fill="none" viewBox="0 0 24 24">
+                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
+                    </svg>
+                    Memproses...
+                  </>
+                ) : (
+                  "Ya, Hapus Akun"
+                )}
               </button>
             </div>
           </div>
@@ -302,7 +340,10 @@ export default function PengaturanPrivasiPage() {
                       <div className="h-full w-[65%] rounded-full bg-gradient-to-r from-[#2B5BA8] to-[#2AACAB] animate-pulse" />
                     </div>
                   )}
-                  {!exportProgress && (
+                  {exportError && (
+                    <p className="text-xs text-[#ef4444] mt-1">{exportError}</p>
+                  )}
+                  {!exportProgress && !exportError && (
                     <p className="text-[11px] text-[#94a3b8] mt-1">Terakhir: 12 Okt 2026</p>
                   )}
                 </div>
