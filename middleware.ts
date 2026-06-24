@@ -45,16 +45,17 @@ export function middleware(request: NextRequest) {
     }
   }
 
-  // 2. Proteksi Rute Pasien
-  if (pathname.startsWith("/pasien/dashboard")) {
+  // 2. Proteksi Rute Pasien (semua path di bawah /pasien)
+  if (pathname.startsWith("/pasien")) {
     if (!token) {
-      return NextResponse.redirect(new URL("/", request.url));
+      // Tidak ada token, arahkan ke halaman login
+      return NextResponse.redirect(new URL("/login", request.url));
     }
 
     const payload = decodeJwt(token);
     if (!payload || (payload.role !== "pasien" && payload.role !== "admin")) {
-      // Sesi tidak valid atau bukan pasien/admin -> tendang ke landing page / daftar
-      const response = NextResponse.redirect(new URL("/", request.url));
+      // Sesi tidak valid atau bukan pasien/admin -> arahkan ke login
+      const response = NextResponse.redirect(new URL("/login", request.url));
       response.cookies.delete(SESSION_COOKIE_NAME); // Bersihkan token rusak
       return response;
     }
@@ -68,6 +69,6 @@ export const config = {
   matcher: [
     "/petugas/dashboard/:path*",
     "/petugas/scan/:path*",
-    "/pasien/dashboard/:path*",
+    "/pasien/:path*",
   ],
 };
