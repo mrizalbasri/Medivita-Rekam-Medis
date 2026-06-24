@@ -10,12 +10,12 @@ export default function DaftarPasien() {
       {/* Header */}
       <header className="flex w-full items-center justify-between border-b border-line bg-white px-6 py-4 md:px-12">
         <Link href="/" className="flex items-center gap-2.5">
-          <div className="relative h-12 w-28 sm:h-14 sm:w-32 flex-shrink-0">
+          <div className="relative h-10 w-16 sm:h-12 sm:w-20 flex-shrink-0 overflow-hidden">
             <Image
               src="/logo.webp"
               alt="Medivita Logo"
               fill
-              className="object-contain object-left scale-110 origin-left"
+              className="object-cover object-left"
               priority
             />
           </div>

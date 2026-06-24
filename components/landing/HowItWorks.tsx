@@ -1,62 +1,63 @@
 const steps = [
   {
     n: "01",
-    title: "Daftar & lengkapi data esensial",
+    title: "Daftar Singkat & Gratis",
     description:
-      "Isi golongan darah, alergi, penyakit kronis, dan obat rutin. Sistem membuatkan QR unik plus kode cadangan 6 digit.",
+      "Isi golongan darah, alergi obat, penyakit utama, atau obat rutin Anda. Hanya butuh waktu 5 menit.",
   },
   {
     n: "02",
-    title: "Petugas faskes memindai QR",
+    title: "Simpan di HP atau Cetak Kertas",
     description:
-      "Saat Anda berkunjung ke faskes manapun, petugas memindai QR atau memasukkan kode cadangan dari dashboard mereka.",
+      "Tidak wajib punya HP. Anda bisa mengunduh kartu QR Code dan mencetaknya di kertas biasa untuk disimpan di dompet.",
   },
   {
     n: "03",
-    title: "Data kritis tampil seketika",
+    title: "Tunjukkan QR Saat Berobat",
     description:
-      "Informasi yang berpotensi mengancam jiwa — alergi, golongan darah — ditandai mencolok agar tidak terlewat petugas.",
+      "Saat berobat ke Puskesmas atau Rumah Sakit, tunjukkan QR Code Anda untuk dipindai oleh dokter atau perawat.",
   },
   {
     n: "04",
-    title: "Riwayat tercatat, Anda diberi tahu",
+    title: "Dokter Langsung Tahu",
     description:
-      "Kunjungan baru ditambahkan ke rekam medis, lalu Anda menerima notifikasi siapa yang baru saja mengakses data Anda.",
+      "Informasi alergi dan obat rutin Anda langsung tampil di layar dokter. Pengobatan menjadi lebih cepat dan aman.",
   },
 ];
 
+
 export function HowItWorks() {
   return (
-    <section id="cara-kerja" className="bg-primary-soft/40 py-16 md:py-20">
+    <section id="cara-kerja" className="bg-gradient-to-b from-paper/60 to-paper/20 py-16 md:py-20 border-y border-line/40">
       <div className="mx-auto max-w-[1280px] px-4 md:px-10">
-        <div className="mb-10 max-w-[640px]">
-          <h2 className="font-display text-2xl font-semibold text-primary-dark md:text-3xl">
-            Empat langkah, satu kali pindai
+        <div className="mb-12 max-w-[640px] animate-fade-in-up">
+          <span className="text-xs font-bold uppercase tracking-wider text-[#2AACAB] mb-2.5 block">
+            Alur Penggunaan
+          </span>
+          <h2 className="font-display text-2xl font-semibold text-primary-dark md:text-3xl tracking-tight">
+            Empat langkah sederhana, satu kali pindai
           </h2>
-          <p className="mt-2 text-ink-soft">
+          <p className="mt-3 text-sm md:text-base leading-relaxed text-ink-soft">
             Dari pendaftaran sampai dicatat oleh faskes berikutnya — alurnya
-            dirancang singkat agar tetap dipakai saat darurat.
+            dirancang singkat agar tetap praktis digunakan bahkan saat darurat.
           </p>
         </div>
 
         <ol className="grid grid-cols-1 gap-6 md:grid-cols-4">
-          {steps.map((step, i) => (
-            <li key={step.n} className="relative">
-              <span className="font-mono text-3xl font-medium text-primary/25">
+          {steps.map((step) => (
+            <li
+              key={step.n}
+              className="group relative rounded-2xl border border-line/60 bg-white/70 p-6 backdrop-blur-xs transition-all duration-300 hover:-translate-y-1 hover:border-[#2AACAB]/30 hover:bg-white hover:shadow-[0_16px_36px_rgba(26,58,110,0.05)] animate-fade-in-up"
+            >
+              <div className="flex h-8 w-8 items-center justify-center rounded-full bg-[#2AACAB]/10 text-xs font-bold text-[#2AACAB] font-mono border border-[#2AACAB]/15 transition-colors group-hover:bg-[#2AACAB] group-hover:text-white">
                 {step.n}
-              </span>
-              <h3 className="mt-3 font-display text-base font-semibold text-ink">
+              </div>
+              <h3 className="mt-4 font-display text-base font-semibold text-ink group-hover:text-primary-dark transition-colors">
                 {step.title}
               </h3>
-              <p className="mt-1.5 text-sm leading-relaxed text-ink-soft">
+              <p className="mt-2 text-sm leading-relaxed text-ink-soft">
                 {step.description}
               </p>
-              {i < steps.length - 1 && (
-                <span
-                  aria-hidden
-                  className="absolute right-[-12px] top-3 hidden h-px w-6 border-t border-dashed border-primary/30 md:block"
-                />
-              )}
             </li>
           ))}
         </ol>
@@ -64,3 +65,4 @@ export function HowItWorks() {
     </section>
   );
 }
+
