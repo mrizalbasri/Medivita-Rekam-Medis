@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import { validateLoginField, type LoginInput } from "@/lib/validations/login";
 
 /* ─── Warna brand Medivita (dari logo) ─────────────────────────── */
@@ -472,6 +473,15 @@ export function LoginForm() {
                 </span>
               )}
             </button>
+
+            {role === "pasien" && (
+              <p className="text-center text-xs mt-4" style={{ color: C.inkSoft }}>
+                Belum terdaftar?{" "}
+                <Link href="/daftar" className="font-bold hover:underline" style={{ color: C.blue }}>
+                  Buat Kartu Rekam Medis Baru
+                </Link>
+              </p>
+            )}
           </form>
 
           {/* Divider */}
