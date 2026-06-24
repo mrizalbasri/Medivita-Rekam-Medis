@@ -76,6 +76,7 @@ export default function PatientDashboard() {
                 src="/logo.webp"
                 alt="Medivita Logo"
                 fill
+                sizes="56px"
                 className="object-cover object-left"
                 priority
               />
@@ -441,6 +442,7 @@ export default function PatientDashboard() {
                   src="/logo.webp"
                   alt="Medivita Logo"
                   fill
+                  sizes="36px"
                   className="object-cover object-top scale-[1.3] -translate-y-[8%]"
                 />
               </div>

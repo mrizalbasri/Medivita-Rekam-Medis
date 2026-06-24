@@ -211,6 +211,7 @@ export default function DaftarPasien() {
               src="/logo.webp"
               alt="Medivita Logo"
               fill
+              sizes="(max-width: 640px) 64px, 80px"
               className="object-cover object-left"
               priority
             />

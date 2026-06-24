@@ -181,7 +181,7 @@ export function LoginForm() {
         <div className="relative z-10 flex flex-col items-center gap-8 px-10 xl:px-14 text-center max-w-md">
           {/* Logo */}
           <div className="relative h-24 w-44 drop-shadow-lg">
-            <Image src="/logo.webp" alt="Medivita" fill className="object-contain brightness-0 invert" priority />
+            <Image src="/logo.webp" alt="Medivita" fill sizes="(max-width: 768px) 100vw, 176px" className="object-contain brightness-0 invert" priority />
           </div>
 
           {/* Headline */}
@@ -269,7 +269,7 @@ export function LoginForm() {
         {/* Mobile logo */}
         <div className="lg:hidden mb-8 flex flex-col items-center gap-1.5">
           <div className="relative h-14 w-32">
-            <Image src="/logo.webp" alt="Medivita" fill className="object-contain" priority />
+            <Image src="/logo.webp" alt="Medivita" fill sizes="128px" className="object-contain" priority />
           </div>
           <p className="text-xs font-semibold tracking-widest uppercase" style={{ color: role === "pasien" ? C.blue : C.tealDark }}>
             Rekam Medis Jalan

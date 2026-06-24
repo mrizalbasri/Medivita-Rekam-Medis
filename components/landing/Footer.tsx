@@ -17,6 +17,7 @@ export function Footer() {
                 src="/logo.webp"
                 alt="Medivita Logo"
                 fill
+                sizes="56px"
                 className="object-cover object-left"
                 priority
               />

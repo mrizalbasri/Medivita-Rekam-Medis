@@ -415,7 +415,7 @@ export default function ProfilMedisPage() {
         <div className="mx-auto flex max-w-[1280px] items-center justify-between px-4 py-3.5 md:px-10">
           <Link href="/" className="flex items-center gap-3">
             <div className="relative h-9 w-9 overflow-hidden rounded-lg">
-              <Image src="/logo.webp" alt="Medivita Logo" fill className="object-cover object-top scale-[1.3] -translate-y-[8%]" priority />
+              <Image src="/logo.webp" alt="Medivita Logo" fill sizes="36px" className="object-cover object-top scale-[1.3] -translate-y-[8%]" priority />
             </div>
             <span className="font-display text-lg font-bold tracking-tight text-primary-dark">Rekam Medis Jalan</span>
           </Link>

@@ -74,6 +74,7 @@ export function Navbar({ onScanClick, doctorInitials = "DR" }: NavbarProps) {
               src="/logo.webp"
               alt="Medivita Logo"
               fill
+              sizes="56px"
               className="object-cover object-left"
               priority
             />

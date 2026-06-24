@@ -32,6 +32,7 @@ export function Navbar() {
               src="/logo.webp"
               alt="Medivita Logo"
               fill
+              sizes="72px"
               className="object-cover object-left"
               priority
             />

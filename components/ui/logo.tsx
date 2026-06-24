@@ -7,6 +7,7 @@ export const MedivitaLogo = ({ className = "flex items-center gap-3" }: { classN
         src="/logo.webp"
         alt="Medivita Logo"
         fill
+        sizes="36px"
         className="object-cover object-top scale-[1.3] -translate-y-[8%]"
       />
     </div>
