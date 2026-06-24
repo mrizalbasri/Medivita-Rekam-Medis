@@ -2,6 +2,7 @@
 
 import React from "react";
 import Link from "next/link";
+import Image from "next/image";
 
 function LogoutIcon(props: React.SVGProps<SVGSVGElement>) {
   return (
@@ -67,16 +68,26 @@ export function Navbar({ onScanClick, doctorInitials = "DR" }: NavbarProps) {
   return (
     <header className="sticky top-0 z-40 bg-white border-b border-line shadow-xs">
       <div className="mx-auto max-w-[1280px] px-6 py-4 flex items-center justify-between">
-        <div className="flex items-center gap-3">
-          <Link href="/" className="relative h-10 w-10 overflow-hidden rounded-xl bg-primary-soft flex items-center justify-center">
-            <span className="font-display font-bold text-primary text-lg">M</span>
-          </Link>
-          <div>
-            <span className="font-display text-xl font-bold tracking-tight text-ink">
-              Rekam Medis Jalan
+        <Link href="/" className="flex items-center gap-2">
+          <div className="relative h-9 w-14 flex-shrink-0 overflow-hidden">
+            <Image
+              src="/logo.webp"
+              alt="Medivita Logo"
+              fill
+              className="object-cover object-left"
+              priority
+            />
+          </div>
+          <span className="h-6 w-[1px] bg-line/80" aria-hidden />
+          <div className="flex flex-col leading-tight mt-0.5">
+            <span className="text-[9px] font-bold uppercase tracking-[0.1em] text-ink-soft">
+              Rekam Medis
+            </span>
+            <span className="text-[13px] font-bold tracking-tight text-primary-dark">
+              Jalan
             </span>
           </div>
-        </div>
+        </Link>
 
         <nav className="hidden md:flex items-center gap-8">
           <Link href="#" className="text-sm font-semibold text-ink-soft hover:text-primary transition-colors">

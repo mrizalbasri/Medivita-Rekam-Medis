@@ -180,19 +180,25 @@ export default function PatientDashboard() {
       <header className="sticky top-0 z-50 w-full border-b border-line bg-paper/90 backdrop-blur-sm">
         <div className="mx-auto flex max-w-[1280px] items-center justify-between px-4 py-3.5 md:px-10">
           {/* Logo */}
-          <Link href="/" className="flex items-center gap-3">
-            <div className="relative h-9 w-9 overflow-hidden rounded-lg">
+          <Link href="/" className="flex items-center gap-2">
+            <div className="relative h-9 w-14 flex-shrink-0 overflow-hidden">
               <Image
                 src="/logo.webp"
                 alt="Medivita Logo"
                 fill
-                className="object-cover object-top scale-[1.3] -translate-y-[8%]"
+                className="object-cover object-left"
                 priority
               />
             </div>
-            <span className="font-display text-lg font-bold tracking-tight text-primary-dark">
-              Rekam Medis Jalan
-            </span>
+            <span className="h-6 w-[1px] bg-line/80" aria-hidden />
+            <div className="flex flex-col leading-tight mt-0.5">
+              <span className="text-[9px] font-bold uppercase tracking-[0.1em] text-ink-soft">
+                Rekam Medis
+              </span>
+              <span className="text-[13px] font-bold tracking-tight text-primary-dark">
+                Jalan
+              </span>
+            </div>
           </Link>
 
           {/* Navigation Links */}

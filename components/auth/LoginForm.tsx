@@ -1,7 +1,8 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import { validateLoginField, type LoginInput } from "@/lib/validations/login";
 
 /* ─── Warna brand Medivita (dari logo) ─────────────────────────── */
@@ -58,12 +59,25 @@ function FieldError({ id, msg }: { id: string; msg: string }) {
 
 /* ─── Main form component ───────────────────────────────────────── */
 export function LoginForm() {
+  const [role, setRole]       = useState<"petugas" | "pasien">("petugas");
+  const [resolvedRole, setResolvedRole] = useState<string | null>(null);
   const [form, setForm]       = useState<LoginInput>({ email: "", password: "" });
   const [touched, setTouched] = useState({ email: false, password: false });
   const [showPw, setShowPw]   = useState(false);
   const [remember, setRemember] = useState(false);
   const [status, setStatus]   = useState<"idle" | "loading" | "success" | "error">("idle");
   const [serverMsg, setServerMsg] = useState<string | null>(null);
+
+  // Sync role with query parameters (?role=pasien or ?role=petugas)
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const params = new URLSearchParams(window.location.search);
+      const r = params.get("role");
+      if (r === "pasien" || r === "petugas") {
+        setRole(r);
+      }
+    }
+  }, []);
 
   /* Derived errors — hanya muncul setelah field di-touch */
   const errors = {
@@ -113,8 +127,10 @@ export function LoginForm() {
         return;
       }
 
+      setResolvedRole(data.user.role);
       setStatus("success");
-      setTimeout(() => { window.location.href = "/petugas/dashboard"; }, 1200);
+      const targetPath = data.user.role === "pasien" ? "/pasien/dashboard" : "/petugas/dashboard";
+      setTimeout(() => { window.location.href = targetPath; }, 1200);
     } catch {
       setStatus("error");
       setServerMsg("Tidak dapat terhubung ke server. Coba lagi.");
@@ -126,11 +142,11 @@ export function LoginForm() {
     const err = errors[field];
     const ok  = touched[field] && !err && form[field];
     return {
-      border: `1.5px solid ${err ? C.alert : ok ? C.teal : C.line}`,
+      border: `1.5px solid ${err ? C.alert : ok ? (role === "pasien" ? C.blue : C.teal) : C.line}`,
       boxShadow: err
         ? `0 0 0 3px ${C.alertSoft}`
         : ok
-          ? `0 0 0 3px ${C.tealSoft}`
+          ? `0 0 0 3px ${role === "pasien" ? "#d8e5f8" : C.tealSoft}`
           : "none",
       outline: "none",
       transition: "border-color 0.2s, box-shadow 0.2s",
@@ -152,9 +168,9 @@ export function LoginForm() {
       >
         {/* Decorative blobs */}
         <div className="absolute top-[-120px] right-[-120px] h-[420px] w-[420px] rounded-full blur-[90px]"
-          style={{ background: "rgba(42,172,171,0.28)" }} />
+          style={{ background: role === "pasien" ? "rgba(43,91,168,0.28)" : "rgba(42,172,171,0.28)" }} />
         <div className="absolute bottom-[-80px] left-[-80px] h-[320px] w-[320px] rounded-full blur-[70px]"
-          style={{ background: "rgba(93,184,112,0.22)" }} />
+          style={{ background: role === "pasien" ? "rgba(42,172,171,0.22)" : "rgba(93,184,112,0.22)" }} />
         {/* Ring decorations */}
         {[520, 360, 220].map(sz => (
           <div key={sz} className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full"
@@ -172,35 +188,69 @@ export function LoginForm() {
           <div className="space-y-2.5">
             <h1 className="text-[2.6rem] font-bold tracking-tight text-white leading-tight">
               Rekam Medis<br />
-              <span style={{ color: "#88ead6" }}>Jalan</span>
+              <span style={{ color: role === "pasien" ? "#88bfea" : "#88ead6" }}>Jalan</span>
             </h1>
             <p className="text-[0.95rem] leading-relaxed" style={{ color: "rgba(255,255,255,0.65)" }}>
-              Portal resmi Petugas Fasilitas Kesehatan.<br />
-              Akses data pasien secara aman dan real-time.
+              {role === "pasien"
+                ? "Paspor Kesehatan Digital Anda. Simpan, unduh, dan kendalikan akses rekam medis secara mandiri."
+                : "Portal resmi Petugas Fasilitas Kesehatan. Akses data pasien secara aman dan real-time."}
             </p>
           </div>
 
           {/* Stats */}
           <div className="grid grid-cols-3 gap-3 w-full">
-            {[
-              { val: "256-bit", lbl: "Enkripsi" },
-              { val: "99.9%",   lbl: "Uptime" },
-              { val: "< 1s",    lbl: "Akses Data" },
-            ].map(s => (
-              <div key={s.lbl} className="rounded-2xl p-3 text-center backdrop-blur-sm"
-                style={{ background: "rgba(255,255,255,0.08)", border: "1px solid rgba(42,172,171,0.3)" }}>
-                <p className="text-lg font-bold" style={{ color: "#88ead6" }}>{s.val}</p>
-                <p className="text-[10px] uppercase tracking-wider mt-0.5" style={{ color: "rgba(255,255,255,0.5)" }}>{s.lbl}</p>
-              </div>
-            ))}
+            {role === "pasien" ? (
+              <>
+                <div className="rounded-2xl p-3 text-center backdrop-blur-sm"
+                  style={{ background: "rgba(255,255,255,0.08)", border: "1px solid rgba(255,255,255,0.15)" }}>
+                  <p className="text-lg font-bold text-white">100%</p>
+                  <p className="text-[10px] uppercase tracking-wider mt-0.5" style={{ color: "rgba(255,255,255,0.5)" }}>Kendali Data</p>
+                </div>
+                <div className="rounded-2xl p-3 text-center backdrop-blur-sm"
+                  style={{ background: "rgba(255,255,255,0.08)", border: "1px solid rgba(255,255,255,0.15)" }}>
+                  <p className="text-lg font-bold text-white">Offline</p>
+                  <p className="text-[10px] uppercase tracking-wider mt-0.5" style={{ color: "rgba(255,255,255,0.5)" }}>Kartu QR</p>
+                </div>
+                <div className="rounded-2xl p-3 text-center backdrop-blur-sm"
+                  style={{ background: "rgba(255,255,255,0.08)", border: "1px solid rgba(255,255,255,0.15)" }}>
+                  <p className="text-lg font-bold text-white">Aman</p>
+                  <p className="text-[10px] uppercase tracking-wider mt-0.5" style={{ color: "rgba(255,255,255,0.5)" }}>AES-256</p>
+                </div>
+              </>
+            ) : (
+              <>
+                <div className="rounded-2xl p-3 text-center backdrop-blur-sm"
+                  style={{ background: "rgba(255,255,255,0.08)", border: "1px solid rgba(42,172,171,0.3)" }}>
+                  <p className="text-lg font-bold" style={{ color: "#88ead6" }}>256-bit</p>
+                  <p className="text-[10px] uppercase tracking-wider mt-0.5" style={{ color: "rgba(255,255,255,0.5)" }}>Enkripsi</p>
+                </div>
+                <div className="rounded-2xl p-3 text-center backdrop-blur-sm"
+                  style={{ background: "rgba(255,255,255,0.08)", border: "1px solid rgba(42,172,171,0.3)" }}>
+                  <p className="text-lg font-bold" style={{ color: "#88ead6" }}>99.9%</p>
+                  <p className="text-[10px] uppercase tracking-wider mt-0.5" style={{ color: "rgba(255,255,255,0.5)" }}>Uptime</p>
+                </div>
+                <div className="rounded-2xl p-3 text-center backdrop-blur-sm"
+                  style={{ background: "rgba(255,255,255,0.08)", border: "1px solid rgba(42,172,171,0.3)" }}>
+                  <p className="text-lg font-bold" style={{ color: "#88ead6" }}>&lt; 1s</p>
+                  <p className="text-[10px] uppercase tracking-wider mt-0.5" style={{ color: "rgba(255,255,255,0.5)" }}>Akses Data</p>
+                </div>
+              </>
+            )}
           </div>
 
           {/* Pills */}
           <div className="flex flex-wrap justify-center gap-2">
-            {["End-to-End Terenkripsi", "Multi Faskes", "Akses Real-time"].map(f => (
+            {(role === "pasien"
+              ? ["Kedaulatan Pasien", "Bisa Dicetak Kertas", "Log Akses Transparan"]
+              : ["End-to-End Terenkripsi", "Multi Faskes", "Akses Real-time"]
+            ).map(f => (
               <span key={f} className="flex items-center gap-1.5 rounded-full px-3.5 py-1.5 text-xs font-medium backdrop-blur-sm"
-                style={{ color: "rgba(255,255,255,0.8)", background: "rgba(42,172,171,0.14)", border: "1px solid rgba(42,172,171,0.32)" }}>
-                <span className="h-1.5 w-1.5 rounded-full" style={{ background: "#88ead6" }} />
+                style={{
+                  color: "rgba(255,255,255,0.8)",
+                  background: role === "pasien" ? "rgba(43,91,168,0.14)" : "rgba(42,172,171,0.14)",
+                  border: role === "pasien" ? "1px solid rgba(43,91,168,0.32)" : "1px solid rgba(42,172,171,0.32)"
+                }}>
+                <span className="h-1.5 w-1.5 rounded-full" style={{ background: role === "pasien" ? "#88bfea" : "#88ead6" }} />
                 {f}
               </span>
             ))}
@@ -221,25 +271,56 @@ export function LoginForm() {
           <div className="relative h-14 w-32">
             <Image src="/logo.webp" alt="Medivita" fill className="object-contain" priority />
           </div>
-          <p className="text-xs font-semibold tracking-widest uppercase" style={{ color: C.tealDark }}>
+          <p className="text-xs font-semibold tracking-widest uppercase" style={{ color: role === "pasien" ? C.blue : C.tealDark }}>
             Rekam Medis Jalan
           </p>
         </div>
 
         <div className="w-full max-w-[420px]">
 
+          {/* Role Switcher Tab */}
+          <div className="flex w-full bg-white rounded-xl p-1 mb-8 shadow-sm" style={{ border: `1.5px solid ${C.line}` }}>
+            <button
+              type="button"
+              onClick={() => { setRole("petugas"); setServerMsg(null); }}
+              className="flex-1 py-2.5 text-xs font-bold rounded-lg transition-all duration-200"
+              style={{
+                background: role === "petugas" ? C.teal : "transparent",
+                color: role === "petugas" ? "#ffffff" : C.inkSoft,
+              }}
+            >
+              Petugas Faskes
+            </button>
+            <button
+              type="button"
+              onClick={() => { setRole("pasien"); setServerMsg(null); }}
+              className="flex-1 py-2.5 text-xs font-bold rounded-lg transition-all duration-200"
+              style={{
+                background: role === "pasien" ? C.blue : "transparent",
+                color: role === "pasien" ? "#ffffff" : C.inkSoft,
+              }}
+            >
+              Pasien
+            </button>
+          </div>
+
           {/* ── Badge + heading ── */}
           <div className="mb-8">
             <span className="inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-[11px] font-bold uppercase tracking-widest mb-3"
-              style={{ background: C.tealSoft, color: C.tealDark }}>
-              <span className="h-1.5 w-1.5 rounded-full animate-pulse" style={{ background: C.teal }} />
-              Portal Petugas Faskes
+              style={{
+                background: role === "pasien" ? "#d8e5f8" : C.tealSoft,
+                color: role === "pasien" ? C.blue : C.tealDark
+              }}>
+              <span className="h-1.5 w-1.5 rounded-full animate-pulse" style={{ background: role === "pasien" ? C.blue : C.teal }} />
+              {role === "pasien" ? "Portal Pasien" : "Portal Petugas Faskes"}
             </span>
-            <h2 className="text-[1.85rem] font-bold tracking-tight" style={{ color: C.ink }}>
-              Selamat Datang
+            <h2 className="text-[1.85rem] font-bold tracking-tight animate-fade-in" style={{ color: C.ink }}>
+              {role === "pasien" ? "Masuk Akun Pasien" : "Selamat Datang"}
             </h2>
             <p className="mt-1.5 text-sm" style={{ color: C.inkSoft }}>
-              Masuk menggunakan akun petugas yang sudah terdaftar.
+              {role === "pasien"
+                ? "Masuk untuk melihat QR Code dan riwayat rekam medis Anda."
+                : "Masuk menggunakan akun petugas yang sudah terdaftar."}
             </p>
           </div>
 
@@ -259,7 +340,7 @@ export function LoginForm() {
             <div>
               <label htmlFor="login-email" className="block text-sm font-semibold mb-1.5"
                 style={{ color: C.ink }}>
-                Email Petugas
+                {role === "pasien" ? "Email Pasien" : "Email Petugas"}
               </label>
               <div className="relative">
                 <span className="pointer-events-none absolute inset-y-0 left-3.5 flex items-center"
@@ -274,7 +355,7 @@ export function LoginForm() {
                   value={form.email}
                   onChange={handleChange}
                   onBlur={handleBlur}
-                  placeholder="nama@faskes.id"
+                  placeholder={role === "pasien" ? "nama@email.com" : "nama@faskes.id"}
                   aria-describedby={errors.email ? "email-err" : undefined}
                   aria-invalid={!!errors.email}
                   className="w-full rounded-xl py-3 pl-10 pr-10 text-sm bg-white"
@@ -283,7 +364,7 @@ export function LoginForm() {
                 {/* Valid checkmark */}
                 {touched.email && !errors.email && form.email && (
                   <span className="pointer-events-none absolute inset-y-0 right-3 flex items-center"
-                    style={{ color: C.teal }}>
+                    style={{ color: role === "pasien" ? C.blue : C.teal }}>
                     <Icon d={CHECK_D} />
                   </span>
                 )}
@@ -300,7 +381,7 @@ export function LoginForm() {
                 </label>
                 <a href="/lupa-password"
                   className="text-xs font-medium hover:underline underline-offset-2 transition-colors"
-                  style={{ color: C.teal }}>
+                  style={{ color: role === "pasien" ? C.blue : C.teal }}>
                   Lupa Password?
                 </a>
               </div>
@@ -345,7 +426,7 @@ export function LoginForm() {
                 checked={remember}
                 onChange={e => setRemember(e.target.checked)}
                 className="h-4 w-4 rounded cursor-pointer"
-                style={{ accentColor: C.teal }}
+                style={{ accentColor: role === "pasien" ? C.blue : C.teal }}
               />
               <span className="text-sm transition-colors group-hover:opacity-80" style={{ color: C.inkSoft }}>
                 Ingat saya di perangkat ini
@@ -359,8 +440,8 @@ export function LoginForm() {
               disabled={isLoading || isSuccess}
               className="relative w-full overflow-hidden rounded-xl py-3.5 text-sm font-semibold text-white transition-all duration-200"
               style={{
-                background: isSuccess ? C.green : BRAND_GRADIENT,
-                boxShadow: isLoading || isSuccess ? "none" : `0 4px 18px rgba(42,172,171,0.38)`,
+                background: isSuccess ? C.green : (role === "pasien" ? C.blue : BRAND_GRADIENT),
+                boxShadow: isLoading || isSuccess ? "none" : `0 4px 18px ${role === "pasien" ? "rgba(43,91,168,0.28)" : "rgba(42,172,171,0.38)"}`,
                 opacity: isLoading ? 0.82 : 1,
                 cursor: isLoading || isSuccess ? "not-allowed" : "pointer",
                 transform: "scale(1)",
@@ -382,7 +463,7 @@ export function LoginForm() {
               {isSuccess && (
                 <span className="flex items-center justify-center gap-2">
                   <Icon d={CHECK_D} size={16} />
-                  Login Berhasil! Mengalihkan…
+                  Masuk sebagai {resolvedRole === "pasien" ? "Pasien" : "Petugas"}…
                 </span>
               )}
               {isIdle && (
@@ -392,6 +473,15 @@ export function LoginForm() {
                 </span>
               )}
             </button>
+
+            {role === "pasien" && (
+              <p className="text-center text-xs mt-4" style={{ color: C.inkSoft }}>
+                Belum terdaftar?{" "}
+                <Link href="/daftar" className="font-bold hover:underline" style={{ color: C.blue }}>
+                  Buat Kartu Rekam Medis Baru
+                </Link>
+              </p>
+            )}
           </form>
 
           {/* Divider */}
@@ -408,8 +498,8 @@ export function LoginForm() {
             className="flex w-full items-center justify-center gap-2 rounded-xl py-3 text-sm font-medium transition-all duration-200 bg-white hover:opacity-90 active:scale-[0.98]"
             style={{ border: `1.5px solid ${C.line}`, color: C.inkSoft }}
             onMouseEnter={e => {
-              (e.currentTarget as HTMLAnchorElement).style.borderColor = `${C.teal}50`;
-              (e.currentTarget as HTMLAnchorElement).style.color = C.teal;
+              (e.currentTarget as HTMLAnchorElement).style.borderColor = role === "pasien" ? `${C.blue}50` : `${C.teal}50`;
+              (e.currentTarget as HTMLAnchorElement).style.color = role === "pasien" ? C.blue : C.teal;
             }}
             onMouseLeave={e => {
               (e.currentTarget as HTMLAnchorElement).style.borderColor = C.line;
@@ -425,7 +515,7 @@ export function LoginForm() {
             Butuh bantuan akun?{" "}
             <a href="mailto:support@medivita.id"
               className="font-semibold hover:underline underline-offset-2"
-              style={{ color: C.teal }}>
+              style={{ color: role === "pasien" ? C.blue : C.teal }}>
               Hubungi IT Support
             </a>
           </p>

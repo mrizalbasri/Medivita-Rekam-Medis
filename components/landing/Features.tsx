@@ -3,54 +3,70 @@ import { QrIcon, ShieldCheckIcon, UserCogIcon } from "./icons";
 const features = [
   {
     icon: ShieldCheckIcon,
-    iconBg: "bg-primary-soft text-primary",
+    iconBg: "bg-primary-soft/50 text-primary border border-primary/10",
     tag: "§ 01",
-    title: "Keamanan AES-256",
+    title: "100% Gratis",
     description:
-      "Data medis Anda dienkripsi dengan standar setara militer, AES-256-GCM, sehingga hanya pihak yang Anda izinkan yang bisa membacanya.",
+      "Layanan pendaftaran pasien dan sistem pemindaian puskesmas gratis selamanya tanpa dipungut biaya apa pun.",
+    glow: "group-hover:bg-primary/5",
+    topLine: "from-[#2B5BA8] to-[#1a3a6e]"
   },
   {
     icon: QrIcon,
-    iconBg: "bg-accent-soft text-accent",
+    iconBg: "bg-accent-soft/50 text-accent border border-accent/10",
     tag: "§ 02",
-    title: "Akses Cepat Lewat QR",
+    title: "Tidak Wajib Punya HP Canggih",
     description:
-      "Dalam keadaan darurat, petugas medis cukup memindai QR di ponsel atau kartu fisik Anda untuk melihat data kritis dalam hitungan detik.",
+      "Cukup cetak kartu QR Code Anda di kertas biasa dan bawa saat berobat. Anda tetap dilayani meskipun tidak membawa HP.",
+    glow: "group-hover:bg-accent/5",
+    topLine: "from-[#2AACAB] to-[#1b8786]"
   },
   {
     icon: UserCogIcon,
-    iconBg: "bg-alert-soft text-alert",
+    iconBg: "bg-[#fdebec]/60 text-alert border border-alert/10",
     tag: "§ 03",
-    title: "Kendali Penuh di Tangan Anda",
+    title: "Data Medis Aman & Rahasia",
     description:
-      "Anda menentukan siapa yang boleh mengakses rekam medis Anda, dan setiap akses tercatat dalam log yang bisa Anda tinjau kapan saja.",
+      "Data Anda terkunci rapat. Hanya dokter atau perawat yang sedang memeriksa Anda secara langsung yang dapat membacanya.",
+    glow: "group-hover:bg-alert/5",
+    topLine: "from-alert to-[#b71c1c]"
   },
 ];
 
 export function Features() {
   return (
-    <section id="keunggulan" className="mx-auto max-w-[1280px] px-4 py-16 md:px-10 md:py-20">
-      <div className="mb-10 max-w-[640px]">
-        <h2 className="font-display text-2xl font-semibold text-primary-dark md:text-3xl">
-          Dibangun di atas tiga prinsip
+    <section id="keunggulan" className="mx-auto max-w-[1280px] px-4 py-20 md:px-10 md:py-24">
+      <div className="mb-12 max-w-[640px] animate-fade-in-up">
+        <span className="text-xs font-bold uppercase tracking-wider text-primary mb-2.5 block">
+          Sederhana & Aman
+        </span>
+        <h2 className="font-display text-2xl font-semibold text-primary-dark md:text-3xl tracking-tight">
+          Dibuat agar mudah digunakan oleh siapa saja, di mana saja
         </h2>
-        <p className="mt-2 text-ink-soft">
-          Bukan basis data terpusat baru — Rekam Medis Jalan adalah lapisan
-          portabel yang bisa berdampingan dengan sistem faskes yang sudah ada.
+        <p className="mt-3 text-sm md:text-base leading-relaxed text-ink-soft">
+          Medivita dirancang khusus agar berfungsi optimal bahkan di wilayah dengan sinyal internet terbatas dan mudah dipahami oleh masyarakat umum.
         </p>
       </div>
 
-      <div className="grid grid-cols-1 gap-5 md:grid-cols-3">
-        {features.map(({ icon: Icon, iconBg, tag, title, description }) => (
+      <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
+        {features.map(({ icon: Icon, iconBg, tag, title, description, glow, topLine }) => (
           <div
             key={title}
-            className="group relative rounded-2xl border border-line bg-white p-6 transition-all hover:-translate-y-0.5 hover:border-primary/30 hover:shadow-[0_14px_32px_rgba(11,91,82,0.1)]"
+            className="group relative overflow-hidden rounded-2xl border border-line bg-white p-6.5 transition-all duration-300 hover:-translate-y-1.5 hover:border-primary/20 hover:shadow-[0_16px_36px_rgba(26,58,110,0.06)] animate-fade-in-up"
           >
-            <span className="absolute right-5 top-5 font-mono text-[11px] text-ink-soft/60">{tag}</span>
-            <div className={`mb-4 flex h-11 w-11 items-center justify-center rounded-xl ${iconBg}`}>
+            {/* Top glowing line decoration */}
+            <div className={`absolute top-0 left-0 h-[3px] w-0 bg-gradient-to-r ${topLine} transition-all duration-300 group-hover:w-full`} />
+            
+            {/* Subtle background glow on hover */}
+            <div className={`absolute inset-0 opacity-0 transition-opacity duration-300 pointer-events-none ${glow}`} />
+
+            <span className="absolute right-6 top-6 font-mono text-[10px] font-semibold text-ink-soft/40 uppercase tracking-widest">{tag}</span>
+            
+            <div className={`mb-5 flex h-11 w-11 items-center justify-center rounded-xl transition-transform duration-300 group-hover:scale-105 ${iconBg}`}>
               <Icon className="h-5 w-5" />
             </div>
-            <h3 className="mb-2 font-display text-lg font-semibold text-ink">{title}</h3>
+            
+            <h3 className="mb-2 font-display text-lg font-semibold text-ink transition-colors group-hover:text-primary-dark">{title}</h3>
             <p className="text-sm leading-relaxed text-ink-soft">{description}</p>
           </div>
         ))}
