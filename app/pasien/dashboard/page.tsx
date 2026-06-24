@@ -240,13 +240,13 @@ export default function PatientDashboard() {
               <BellIcon className="h-5 w-5" />
               <span className="absolute top-1.5 right-1.5 h-2 w-2 rounded-full bg-alert"></span>
             </button>
-            <button
-              onClick={() => alert("Pengaturan akun pasien...")}
-              aria-label="Settings"
+            <Link
+              href="/pasien/pengaturan-privasi"
+              aria-label="Pengaturan Privasi"
               className="rounded-full p-2 text-ink-soft hover:bg-primary-soft hover:text-primary transition-all"
             >
               <SettingsIcon className="h-5 w-5" />
-            </button>
+            </Link>
             <div className="relative h-9 w-9 overflow-hidden rounded-full border border-line shadow-sm hover:scale-105 transition-transform cursor-pointer">
               <Image
                 src="/sarah-avatar.png"
@@ -323,6 +323,13 @@ export default function PatientDashboard() {
                   <LockIcon className="h-5 w-5" />
                   <span>Access Logs</span>
                 </button>
+                <Link
+                  href="/pasien/pengaturan-privasi"
+                  className="flex w-full items-center gap-3 rounded-xl px-4 py-3 text-sm font-semibold transition-all text-ink-soft hover:bg-primary-soft/40 hover:text-primary"
+                >
+                  <SettingsIcon className="h-5 w-5" />
+                  <span>Pengaturan Privasi</span>
+                </Link>
                 <button
                   onClick={handleRevokeAccess}
                   className="flex w-full items-center gap-3 rounded-xl px-4 py-3 text-sm font-semibold text-alert hover:bg-alert-soft transition-all cursor-pointer"
