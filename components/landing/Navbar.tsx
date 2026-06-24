@@ -61,13 +61,13 @@ export function Navbar() {
         {/* Desktop actions */}
         <div className="hidden items-center gap-2 md:flex">
           <a
-            href="/pasien/dashboard"
+            href="/login?role=pasien"
             className="flex items-center gap-2 rounded-full border border-line bg-white px-4 py-2 text-sm font-medium text-ink hover:bg-paper transition-all active:scale-95"
           >
             Masuk Akun
           </a>
           <a
-            href="/petugas/scan"
+            href="/login?role=petugas"
             className="flex items-center gap-1.5 rounded-full bg-primary px-4 py-2 text-sm font-semibold text-white hover:bg-primary/90 transition-all hover:-translate-y-0.5 active:scale-95"
           >
             <ScanIcon className="h-4 w-4" />
@@ -102,14 +102,14 @@ export function Navbar() {
             ))}
             <div className="mt-3 flex flex-col gap-2 border-t border-line pt-3">
               <a
-                href="/pasien/dashboard"
+                href="/login?role=pasien"
                 onClick={() => setOpen(false)}
                 className="flex items-center justify-center gap-2 rounded-full border border-line bg-white px-4 py-2.5 text-sm font-medium text-ink transition-all active:scale-95"
               >
                 Masuk Akun
               </a>
               <a
-                href="/petugas/scan"
+                href="/login?role=petugas"
                 onClick={() => setOpen(false)}
                 className="flex items-center justify-center gap-2 rounded-full bg-primary px-4 py-2.5 text-sm font-semibold text-white hover:bg-primary/90 transition-all active:scale-95"
               >

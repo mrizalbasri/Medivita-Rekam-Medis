@@ -25,7 +25,7 @@ export function Cta() {
               <ScanIcon className="h-4 w-4" />
             </a>
             <a
-              href="/login"
+              href="/login?role=petugas"
               className="rounded-xl border border-white/20 px-6 py-3.5 font-semibold text-white transition-all hover:bg-white/10 hover:border-white/40 hover:-translate-y-0.5 active:translate-y-0 active:scale-95 cursor-pointer"
             >
               Saya Petugas Faskes

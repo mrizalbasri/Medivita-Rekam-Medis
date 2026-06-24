@@ -36,7 +36,7 @@ export function Hero() {
             <ScanIcon className="h-4 w-4" />
           </a>
           <a
-            href="/login"
+            href="/login?role=petugas"
             className="w-full sm:w-auto flex items-center justify-center gap-2 rounded-full border border-line bg-white px-6 py-3 font-semibold text-ink transition-all hover:bg-paper active:scale-95 cursor-pointer text-sm"
           >
             Portal Petugas Faskes

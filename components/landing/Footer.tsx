@@ -66,7 +66,7 @@ export function Footer() {
               </a>
             </li>
             <li>
-              <a href="/login" className="inline-flex transition-all duration-200 hover:translate-x-1 hover:text-primary">
+              <a href="/login?role=petugas" className="inline-flex transition-all duration-200 hover:translate-x-1 hover:text-primary">
                 Portal Petugas
               </a>
             </li>
