@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Image from "next/image";
 import { validateLoginField, type LoginInput } from "@/lib/validations/login";
 
@@ -58,6 +58,22 @@ function FieldError({ id, msg }: { id: string; msg: string }) {
 
 /* ─── Main form component ───────────────────────────────────────── */
 export function LoginForm() {
+  const [activePortal, setActivePortal] = useState<"petugas" | "pasien">("petugas");
+  const [redirectUrl, setRedirectUrl] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const params = new URLSearchParams(window.location.search);
+      const redirect = params.get("redirect");
+      const role = params.get("role");
+      setRedirectUrl(redirect);
+
+      if (role === "pasien" || (redirect && redirect.includes("/pasien"))) {
+        setActivePortal("pasien");
+      }
+    }
+  }, []);
+
   const [form, setForm]       = useState<LoginInput>({ email: "", password: "" });
   const [touched, setTouched] = useState({ email: false, password: false });
   const [showPw, setShowPw]   = useState(false);
@@ -114,7 +130,15 @@ export function LoginForm() {
       }
 
       setStatus("success");
-      setTimeout(() => { window.location.href = "/petugas/dashboard"; }, 1200);
+      setTimeout(() => {
+        if (redirectUrl) {
+          window.location.href = redirectUrl;
+        } else if (data.user?.role === "pasien" || data.user?.role === "user") {
+          window.location.href = "/pasien/dashboard";
+        } else {
+          window.location.href = "/petugas/dashboard";
+        }
+      }, 1200);
     } catch {
       setStatus("error");
       setServerMsg("Tidak dapat terhubung ke server. Coba lagi.");
@@ -175,8 +199,9 @@ export function LoginForm() {
               <span style={{ color: "#88ead6" }}>Jalan</span>
             </h1>
             <p className="text-[0.95rem] leading-relaxed" style={{ color: "rgba(255,255,255,0.65)" }}>
-              Portal resmi Petugas Fasilitas Kesehatan.<br />
-              Akses data pasien secara aman dan real-time.
+              {activePortal === "petugas"
+                ? "Portal resmi Petugas Fasilitas Kesehatan. Akses data pasien secara aman dan real-time."
+                : "Akses riwayat medis, unduh QR Code, dan kelola privasi data kesehatan Anda di mana saja."}
             </p>
           </div>
 
@@ -228,18 +253,54 @@ export function LoginForm() {
 
         <div className="w-full max-w-[420px]">
 
+          {/* ── Portal Tab Selector ── */}
+          <div className="mb-6 flex rounded-xl bg-line/50 p-1 border border-line">
+            <button
+              type="button"
+              onClick={() => {
+                setActivePortal("petugas");
+                setServerMsg(null);
+              }}
+              className={`flex-1 rounded-lg py-2.5 text-xs font-bold transition-all cursor-pointer ${
+                activePortal === "petugas"
+                  ? "bg-white shadow-sm"
+                  : "text-ink-soft hover:text-primary"
+              }`}
+              style={{ color: activePortal === "petugas" ? C.blue : C.inkSoft }}
+            >
+              Petugas Faskes
+            </button>
+            <button
+              type="button"
+              onClick={() => {
+                setActivePortal("pasien");
+                setServerMsg(null);
+              }}
+              className={`flex-1 rounded-lg py-2.5 text-xs font-bold transition-all cursor-pointer ${
+                activePortal === "pasien"
+                  ? "bg-white shadow-sm"
+                  : "text-ink-soft hover:text-primary"
+              }`}
+              style={{ color: activePortal === "pasien" ? C.blue : C.inkSoft }}
+            >
+              Pasien
+            </button>
+          </div>
+
           {/* ── Badge + heading ── */}
           <div className="mb-8">
             <span className="inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-[11px] font-bold uppercase tracking-widest mb-3"
               style={{ background: C.tealSoft, color: C.tealDark }}>
               <span className="h-1.5 w-1.5 rounded-full animate-pulse" style={{ background: C.teal }} />
-              Portal Petugas Faskes
+              {activePortal === "petugas" ? "Portal Petugas Faskes" : "Portal Pasien"}
             </span>
             <h2 className="text-[1.85rem] font-bold tracking-tight" style={{ color: C.ink }}>
               Selamat Datang
             </h2>
             <p className="mt-1.5 text-sm" style={{ color: C.inkSoft }}>
-              Masuk menggunakan akun petugas yang sudah terdaftar.
+              {activePortal === "petugas"
+                ? "Masuk menggunakan akun petugas yang sudah terdaftar."
+                : "Masuk menggunakan akun pasien terdaftar untuk mengakses rekam medis Anda."}
             </p>
           </div>
 
@@ -259,7 +320,7 @@ export function LoginForm() {
             <div>
               <label htmlFor="login-email" className="block text-sm font-semibold mb-1.5"
                 style={{ color: C.ink }}>
-                Email Petugas
+                {activePortal === "petugas" ? "Email Petugas" : "Email Pasien"}
               </label>
               <div className="relative">
                 <span className="pointer-events-none absolute inset-y-0 left-3.5 flex items-center"
@@ -274,7 +335,7 @@ export function LoginForm() {
                   value={form.email}
                   onChange={handleChange}
                   onBlur={handleBlur}
-                  placeholder="nama@faskes.id"
+                  placeholder={activePortal === "petugas" ? "nama@faskes.id" : "nama@email.com"}
                   aria-describedby={errors.email ? "email-err" : undefined}
                   aria-invalid={!!errors.email}
                   className="w-full rounded-xl py-3 pl-10 pr-10 text-sm bg-white"
