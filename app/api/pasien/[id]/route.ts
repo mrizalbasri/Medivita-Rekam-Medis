@@ -90,6 +90,8 @@ export async function GET(request: Request, { params }: Props) {
         petugas: {
           select: {
             faskesName: true,
+            faskesType: true,
+            licenseNo: true,
             user: {
               select: { name: true }
             }
@@ -102,16 +104,20 @@ export async function GET(request: Request, { params }: Props) {
     const history = riwayatKunjungan.map((k) => ({
       id: k.id,
       facility: `${k.petugas.faskesName}`,
+      faskesType: k.petugas.faskesType,
+      licenseNo: k.petugas.licenseNo,
       doctorName: k.petugas.user.name,
       date: k.tanggal.toLocaleDateString("id-ID", {
         day: "numeric",
         month: "short",
         year: "numeric",
       }),
+      tanggal: k.tanggal.toISOString(),
       keluhan: k.keluhan,
       diagnosis: k.diagnosis,
       tindakan: k.tindakan,
       resepObat: k.resepObat ? k.resepObat.split(", ").map(r => r.trim()).filter(Boolean) : [],
+      resepObatRaw: k.resepObat,
     }));
 
     // 5. Catat LogAkses (READ_MEDIS)

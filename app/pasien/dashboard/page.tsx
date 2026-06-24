@@ -193,53 +193,37 @@ export default function PatientDashboard() {
             {/* Sidebar Navigation Card */}
             <div className="rounded-2xl border border-line bg-white p-4 shadow-sm">
               <nav className="flex flex-col gap-1">
-                <button
-                  onClick={() => setActiveTab("overview")}
-                  className={`flex w-full items-center gap-3 rounded-xl px-4 py-3 text-sm font-semibold transition-all ${
-                    activeTab === "overview"
-                      ? "bg-primary-soft text-primary"
-                      : "text-ink-soft hover:bg-primary-soft/40 hover:text-primary"
-                  }`}
+                <Link
+                  href="/pasien/dashboard"
+                  className="flex w-full items-center gap-3 rounded-xl px-4 py-3 text-sm font-semibold transition-all bg-primary-soft text-primary"
                 >
                   <Icons.QrIcon className="h-5 w-5" />
                   <span>Overview</span>
-                </button>
-                <button
-                  onClick={() => setActiveTab("profile")}
-                  className={`flex w-full items-center gap-3 rounded-xl px-4 py-3 text-sm font-semibold transition-all ${
-                    activeTab === "profile"
-                      ? "bg-primary-soft text-primary"
-                      : "text-ink-soft hover:bg-primary-soft/40 hover:text-primary"
-                  }`}
+                </Link>
+                <Link
+                  href="/pasien/profil-medis"
+                  className="flex w-full items-center gap-3 rounded-xl px-4 py-3 text-sm font-semibold transition-all text-ink-soft hover:bg-primary-soft/40 hover:text-primary"
                 >
                   <Icons.ProfileIcon className="h-5 w-5" />
                   <span>Medical Profile</span>
-                </button>
-                <button
-                  onClick={() => setActiveTab("history")}
-                  className={`flex w-full items-center gap-3 rounded-xl px-4 py-3 text-sm font-semibold transition-all ${
-                    activeTab === "history"
-                      ? "bg-primary-soft text-primary"
-                      : "text-ink-soft hover:bg-primary-soft/40 hover:text-primary"
-                  }`}
+                </Link>
+                <Link
+                  href="/pasien/riwayat-kunjungan"
+                  className="flex w-full items-center gap-3 rounded-xl px-4 py-3 text-sm font-semibold transition-all text-ink-soft hover:bg-primary-soft/40 hover:text-primary"
                 >
                   <Icons.HistoryIcon className="h-5 w-5" />
                   <span>Visit History</span>
-                </button>
+                </Link>
                 <button
-                  onClick={() => setActiveTab("access")}
-                  className={`flex w-full items-center gap-3 rounded-xl px-4 py-3 text-sm font-semibold transition-all ${
-                    activeTab === "access"
-                      ? "bg-primary-soft text-primary"
-                      : "text-ink-soft hover:bg-primary-soft/40 hover:text-primary"
-                  }`}
+                  onClick={() => alert("Membuka detail log akses...")}
+                  className="flex w-full items-center gap-3 rounded-xl px-4 py-3 text-sm font-semibold transition-all text-ink-soft hover:bg-primary-soft/40 hover:text-primary cursor-pointer"
                 >
                   <Icons.LockIcon className="h-5 w-5" />
                   <span>Access Logs</span>
                 </button>
                 <button
                   onClick={handleRevokeAccess}
-                  className="flex w-full items-center gap-3 rounded-xl px-4 py-3 text-sm font-semibold text-alert hover:bg-alert-soft transition-all"
+                  className="flex w-full items-center gap-3 rounded-xl px-4 py-3 text-sm font-semibold text-alert hover:bg-alert-soft transition-all cursor-pointer"
                 >
                   <Icons.CancelIcon className="h-5 w-5 text-alert" />
                   <span>Cabut Akses</span>
