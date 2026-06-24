@@ -176,3 +176,13 @@ export function SettingsIcon(props: IconProps) {
     </svg>
   );
 }
+
+export function LockIcon(props: IconProps) {
+  return (
+    <svg viewBox="0 0 24 24" {...base} {...props}>
+      <rect x="5" y="11" width="14" height="10" rx="2" />
+      <path d="M12 15v3M17 11V7a5 5 0 0 0-10 0v4" />
+    </svg>
+  );
+}
+
