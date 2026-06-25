@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -85,6 +85,16 @@ function SettingsIcon({ className = "h-5 w-5" }: { className?: string }) {
   );
 }
 
+function LogoutIcon({ className = "h-5 w-5" }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
+      <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+      <polyline points="16 17 21 12 16 7" />
+      <line x1="21" y1="12" x2="9" y2="12" />
+    </svg>
+  );
+}
+
 function ScanIcon({ className = "h-4 w-4" }: { className?: string }) {
   return (
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
@@ -158,6 +168,31 @@ export default function PatientDashboard() {
   const [activeTab, setActiveTab] = useState("overview");
   const [accessRevoked, setAccessRevoked] = useState(false);
   const [showNotification, setShowNotification] = useState(false);
+  const [userData, setUserData] = useState<any>(null);
+  
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        const response = await fetch("/api/users/me");
+        if (response.ok) {
+          const data = await response.json();
+          setUserData(data.user);
+        }
+      } catch (error) {
+        console.error("Gagal mengambil data user:", error);
+      }
+    };
+    fetchUserData();
+  }, []);
+
+  const handleLogout = async () => {
+    try {
+      await fetch("/api/auth/logout", { method: "POST" });
+      window.location.href = "/";
+    } catch (error) {
+      console.error("Gagal logout:", error);
+    }
+  };
 
   const handleDownload = () => {
     alert("Mengunduh QR Code Sarah Az-Zahra...");
@@ -240,17 +275,25 @@ export default function PatientDashboard() {
               <BellIcon className="h-5 w-5" />
               <span className="absolute top-1.5 right-1.5 h-2 w-2 rounded-full bg-alert"></span>
             </button>
-            <button
-              onClick={() => alert("Pengaturan akun pasien...")}
+            <Link
+              href="/pasien/pengaturan-profil"
               aria-label="Settings"
               className="rounded-full p-2 text-ink-soft hover:bg-primary-soft hover:text-primary transition-all"
             >
               <SettingsIcon className="h-5 w-5" />
+            </Link>
+            <button
+              onClick={handleLogout}
+              aria-label="Logout"
+              className="rounded-full p-2 text-ink-soft hover:bg-alert-soft hover:text-alert transition-all"
+            >
+              <LogoutIcon className="h-5 w-5" />
             </button>
+            <span className="h-6 w-[1px] bg-line/80 mx-1" aria-hidden />
             <div className="relative h-9 w-9 overflow-hidden rounded-full border border-line shadow-sm hover:scale-105 transition-transform cursor-pointer">
               <Image
-                src="/sarah-avatar.png"
-                alt="Sarah Az-Zahra Profile"
+                src={userData?.profilePicture || "/sarah-avatar.png"}
+                alt="Profile"
                 fill
                 className="object-cover"
               />
@@ -315,6 +358,13 @@ export default function PatientDashboard() {
                 >
                   <HistoryIcon className="h-5 w-5" />
                   <span>Visit History</span>
+                </Link>
+                <Link
+                  href="/pasien/pengaturan-privasi"
+                  className="flex w-full items-center gap-3 rounded-xl px-4 py-3 text-sm font-semibold transition-all text-ink-soft hover:bg-primary-soft/40 hover:text-primary cursor-pointer"
+                >
+                  <ShieldCheckIcon className="h-5 w-5" />
+                  <span>Pengaturan Privasi</span>
                 </Link>
                 <button
                   onClick={() => alert("Membuka detail log akses...")}

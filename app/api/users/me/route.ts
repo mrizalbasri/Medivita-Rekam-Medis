@@ -21,6 +21,7 @@ export async function GET(request: Request) {
         id: true,
         name: true,
         email: true,
+        profilePicture: true,
         role: true,
         createdAt: true,
         updatedAt: true,
