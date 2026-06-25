@@ -3,6 +3,7 @@ import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { extractTokenFromRequest, verifySessionToken } from "@/lib/auth";
 import { decrypt } from "@/lib/encryption";
+import { signQrToken } from "@/lib/qr";
 
 export const runtime = "nodejs";
 
@@ -136,6 +137,8 @@ export async function GET(request: Request, { params }: Props) {
       }
     }
 
+    const isOwner = pasien.userId === session.sub;
+
     return NextResponse.json(
       {
         pasien: {
@@ -146,6 +149,10 @@ export async function GET(request: Request, { params }: Props) {
           gender: pasien.gender,
           medicalData: decryptedMedicalData,
           history,
+          ...(isOwner && {
+            qrToken: signQrToken(pasien.id, pasien.qrToken),
+            kodeCadangan: pasien.kodeCadangan,
+          }),
         },
       },
       { status: 200 }

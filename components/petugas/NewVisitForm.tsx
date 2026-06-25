@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 function PlusCircleIcon(props: React.SVGProps<SVGSVGElement>) {
   return (
@@ -35,11 +35,40 @@ interface NewVisitData {
 interface NewVisitFormProps {
   onFinalize: (data: NewVisitData) => void;
   defaultFacility?: string;
+  pasienId?: string;
 }
 
-export function NewVisitForm({ onFinalize, defaultFacility = "Puskesmas Pekan Baru" }: NewVisitFormProps) {
+export function NewVisitForm({ onFinalize, defaultFacility = "Puskesmas Pekan Baru", pasienId }: NewVisitFormProps) {
   const [visitType, setVisitType] = useState<string>("Pemeriksaan Umum");
   const [facility, setFacility] = useState<string>(defaultFacility);
+
+  useEffect(() => {
+    if (defaultFacility) {
+      setFacility(defaultFacility);
+    }
+  }, [defaultFacility]);
+
+  // Load draft when patient changes
+  useEffect(() => {
+    if (!pasienId) return;
+    const savedDraft = localStorage.getItem(`draft_visit_${pasienId}`);
+    if (savedDraft) {
+      try {
+        const parsed = JSON.parse(savedDraft);
+        setVisitType(parsed.visitType || "Pemeriksaan Umum");
+        setFacility(parsed.facility || defaultFacility);
+        setNotes(parsed.notes || "");
+        setPrescriptions(parsed.prescriptions || []);
+      } catch (err) {
+        console.error("Gagal memuat draf:", err);
+      }
+    } else {
+      setVisitType("Pemeriksaan Umum");
+      setFacility(defaultFacility);
+      setNotes("");
+      setPrescriptions([]);
+    }
+  }, [pasienId, defaultFacility]);
   const [notes, setNotes] = useState<string>("");
   const [drugName, setDrugName] = useState<string>("");
   const [dosage, setDosage] = useState<string>("");
@@ -60,6 +89,22 @@ export function NewVisitForm({ onFinalize, defaultFacility = "Puskesmas Pekan Ba
     setPrescriptions(prescriptions.filter((d) => d !== drug));
   };
 
+  const handleSaveDraft = (e: React.MouseEvent) => {
+    e.preventDefault();
+    if (!pasienId) {
+      alert("Pilih pasien terlebih dahulu untuk menyimpan draf.");
+      return;
+    }
+    const draftData = {
+      visitType,
+      facility,
+      notes,
+      prescriptions,
+    };
+    localStorage.setItem(`draft_visit_${pasienId}`, JSON.stringify(draftData));
+    alert("Draf kunjungan berhasil disimpan di penyimpanan lokal!");
+  };
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!notes.trim() || !facility.trim()) {
@@ -73,6 +118,11 @@ export function NewVisitForm({ onFinalize, defaultFacility = "Puskesmas Pekan Ba
       notes,
       prescriptions: [...prescriptions],
     });
+
+    // Hapus draf setelah disubmit
+    if (pasienId) {
+      localStorage.removeItem(`draft_visit_${pasienId}`);
+    }
 
     // Reset Form
     setNotes("");
@@ -186,11 +236,8 @@ export function NewVisitForm({ onFinalize, defaultFacility = "Puskesmas Pekan Ba
         <div className="flex justify-end gap-3 pt-4 border-t border-line">
           <button
             type="button"
-            onClick={() => {
-              setNotes("");
-              setPrescriptions([]);
-            }}
-            className="px-6 py-3 rounded-xl border border-line hover:bg-paper transition-colors text-sm font-semibold text-ink"
+            onClick={handleSaveDraft}
+            className="px-6 py-3 rounded-xl border border-line hover:bg-paper transition-colors text-sm font-semibold text-ink cursor-pointer"
           >
             Save as Draft
           </button>

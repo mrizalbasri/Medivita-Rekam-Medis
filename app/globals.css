@@ -67,3 +67,28 @@ body {
     animation: none;
   }
 }
+
+@media print {
+  body {
+    background: white !important;
+    color: black !important;
+  }
+  header, footer, aside, button, form, .no-print {
+    display: none !important;
+  }
+  main {
+    max-width: 100% !important;
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+  .lg\:col-span-8 {
+    width: 100% !important;
+  }
+  .grid {
+    display: block !important;
+  }
+  .shadow-sm, .shadow-xs, .shadow-md, .shadow-lg, .border {
+    box-shadow: none !important;
+    border-color: #cbd5e1 !important;
+  }
+}

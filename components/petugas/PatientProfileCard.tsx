@@ -16,6 +16,7 @@ interface Patient {
   allergy: string;
   bloodType: string;
   chronicConditions: string;
+  routineMedications: string;
   emergencyContact: string;
   insurance: string;
 }
@@ -50,20 +51,26 @@ export function PatientProfileCard({ patient, onEditClick }: PatientProfileCardP
             </div>
           </div>
         </div>
-        <button 
-          onClick={onEditClick}
-          className="bg-white/10 hover:bg-white/20 rounded-lg p-2 transition-colors border border-white/10" 
-          aria-label="Edit Profile"
-        >
-          <EditIcon className="h-5 w-5" />
-        </button>
+        {onEditClick && (
+          <button 
+            onClick={onEditClick}
+            className="bg-white/10 hover:bg-white/20 rounded-lg p-2 transition-colors border border-white/10" 
+            aria-label="Edit Profile"
+          >
+            <EditIcon className="h-5 w-5" />
+          </button>
+        )}
       </div>
 
       {/* Sub Details */}
-      <div className="grid grid-cols-1 md:grid-cols-3 divide-y md:divide-y-0 md:divide-x divide-line bg-paper">
+      <div className="grid grid-cols-1 md:grid-cols-4 divide-y md:divide-y-0 md:divide-x divide-line bg-paper">
         <div className="p-5">
           <p className="text-xs font-mono uppercase tracking-wider text-ink-soft">CHRONIC CONDITIONS</p>
           <p className="font-semibold text-sm text-ink mt-1">{patient.chronicConditions}</p>
+        </div>
+        <div className="p-5">
+          <p className="text-xs font-mono uppercase tracking-wider text-ink-soft">ROUTINE MEDICATIONS</p>
+          <p className="font-semibold text-sm text-ink mt-1">{patient.routineMedications}</p>
         </div>
         <div className="p-5">
           <p className="text-xs font-mono uppercase tracking-wider text-ink-soft">EMERGENCY CONTACT</p>

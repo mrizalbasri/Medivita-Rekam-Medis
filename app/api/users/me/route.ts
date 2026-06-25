@@ -32,6 +32,9 @@ export async function GET(request: Request) {
         petugas: {
           select: {
             id: true,
+            faskesName: true,
+            faskesType: true,
+            licenseNo: true,
           },
         },
       },
