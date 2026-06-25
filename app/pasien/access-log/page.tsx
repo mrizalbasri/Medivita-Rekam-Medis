@@ -5,6 +5,7 @@ import * as Icons from "@/components/ui/icons";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from "recharts";
 
 function ShieldCheckIcon({ className = "h-4 w-4" }: { className?: string }) {
   return (
@@ -14,6 +15,19 @@ function ShieldCheckIcon({ className = "h-4 w-4" }: { className?: string }) {
     </svg>
   );
 }
+
+const activityData = [
+  { name: 'Minggu 1', akses: 12 },
+  { name: 'Minggu 2', akses: 25 },
+  { name: 'Minggu 3', akses: 8 },
+  { name: 'Minggu 4', akses: 15 },
+];
+
+const distributionData = [
+  { name: 'Read Only', value: 60, color: '#0b3c5d' },
+  { name: 'Update Record', value: 30, color: '#056839' },
+  { name: 'Emergency', value: 10, color: '#e84c3d' },
+];
 
 const baseMockLogs = [
   {
@@ -235,6 +249,64 @@ export default function AccessLogPage() {
           <p className="text-sm leading-relaxed text-ink-soft">
             Review when and where your medical records were accessed. You can revoke active sessions immediately if you notice suspicious activity.
           </p>
+        </div>
+
+        {/* ANALYTICS DASHBOARD */}
+        <div className="mb-8 grid grid-cols-1 md:grid-cols-2 gap-6">
+          {/* Bar Chart */}
+          <div className="rounded-2xl border border-line bg-white p-6 shadow-sm">
+            <h3 className="text-sm font-bold text-primary-dark mb-6">Aktivitas 30 Hari Terakhir</h3>
+            <div className="h-48 w-full">
+              <ResponsiveContainer width="100%" height="100%">
+                <BarChart data={activityData}>
+                  <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#e5e7eb" />
+                  <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{ fontSize: 10, fill: '#64748b' }} />
+                  <YAxis axisLine={false} tickLine={false} tick={{ fontSize: 10, fill: '#64748b' }} />
+                  <Tooltip 
+                    cursor={{ fill: '#f4f8fa' }}
+                    contentStyle={{ borderRadius: '8px', border: 'none', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)' }}
+                  />
+                  <Bar dataKey="akses" fill="#0b3c5d" radius={[4, 4, 0, 0]} barSize={32} />
+                </BarChart>
+              </ResponsiveContainer>
+            </div>
+          </div>
+          
+          {/* Donut Chart */}
+          <div className="rounded-2xl border border-line bg-white p-6 shadow-sm">
+            <h3 className="text-sm font-bold text-primary-dark mb-6">Distribusi Jenis Akses</h3>
+            <div className="h-48 w-full flex items-center justify-center">
+              <div className="h-full w-1/2">
+                <ResponsiveContainer width="100%" height="100%">
+                  <PieChart>
+                    <Pie
+                      data={distributionData}
+                      cx="50%"
+                      cy="50%"
+                      innerRadius={50}
+                      outerRadius={70}
+                      paddingAngle={5}
+                      dataKey="value"
+                    >
+                      {distributionData.map((entry, index) => (
+                        <Cell key={`cell-${index}`} fill={entry.color} stroke="none" />
+                      ))}
+                    </Pie>
+                    <Tooltip contentStyle={{ borderRadius: '8px', border: 'none', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)' }} />
+                  </PieChart>
+                </ResponsiveContainer>
+              </div>
+              <div className="flex flex-col justify-center gap-3 w-1/2 pl-4">
+                {distributionData.map((entry, index) => (
+                  <div key={index} className="flex items-center gap-2">
+                    <span className="h-3 w-3 rounded-full flex-shrink-0" style={{ backgroundColor: entry.color }}></span>
+                    <span className="text-xs font-medium text-ink-soft">{entry.name}</span>
+                    <span className="text-xs font-bold text-primary-dark ml-auto">{entry.value}%</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
         </div>
 
         {/* ACCESS LOG TABLE CARD */}
