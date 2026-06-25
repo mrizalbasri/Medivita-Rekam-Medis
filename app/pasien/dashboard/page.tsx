@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import * as Icons from "@/components/ui/icons";
 import { MedivitaLogo } from "@/components/ui/logo";
 import Image from "next/image";
@@ -48,6 +48,31 @@ export default function PatientDashboard() {
   const [activeTab, setActiveTab] = useState("overview");
   const [accessRevoked, setAccessRevoked] = useState(false);
   const [showNotification, setShowNotification] = useState(false);
+  const [userData, setUserData] = useState<any>(null);
+  
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        const response = await fetch("/api/users/me");
+        if (response.ok) {
+          const data = await response.json();
+          setUserData(data.user);
+        }
+      } catch (error) {
+        console.error("Gagal mengambil data user:", error);
+      }
+    };
+    fetchUserData();
+  }, []);
+
+  const handleLogout = async () => {
+    try {
+      await fetch("/api/auth/logout", { method: "POST" });
+      window.location.href = "/";
+    } catch (error) {
+      console.error("Gagal logout:", error);
+    }
+  };
 
   const handleDownload = () => {
     alert("Mengunduh QR Code Sarah Az-Zahra...");
@@ -132,16 +157,24 @@ export default function PatientDashboard() {
               <span className="absolute top-1.5 right-1.5 h-2 w-2 rounded-full bg-alert"></span>
             </button>
             <Link
-              href="/pasien/pengaturan-privasi"
-              aria-label="Pengaturan Privasi"
+              href="/pasien/pengaturan-profil"
+              aria-label="Pengaturan Profil"
               className="rounded-full p-2 text-ink-soft hover:bg-primary-soft hover:text-primary transition-all"
             >
               <Icons.SettingsIcon className="h-5 w-5" />
             </Link>
+            <button
+              onClick={handleLogout}
+              aria-label="Logout"
+              className="rounded-full p-2 text-ink-soft hover:bg-alert-soft hover:text-alert transition-all"
+            >
+              <Icons.LogoutIcon className="h-5 w-5" />
+            </button>
+            <span className="h-6 w-[1px] bg-line/80 mx-1" aria-hidden />
             <div className="relative h-9 w-9 overflow-hidden rounded-full border border-line shadow-sm hover:scale-105 transition-transform cursor-pointer">
               <Image
-                src="/sarah-avatar.png"
-                alt="Sarah Az-Zahra Profile"
+                src={userData?.profilePicture || "/sarah-avatar.png"}
+                alt="Profile"
                 fill
                 className="object-cover"
               />
@@ -215,10 +248,17 @@ export default function PatientDashboard() {
                   <span>Access Logs</span>
                 </Link>
                 <Link
-                  href="/pasien/pengaturan-privasi"
+                  href="/pasien/pengaturan-profil"
                   className="flex w-full items-center gap-3 rounded-xl px-4 py-3 text-sm font-semibold transition-all text-ink-soft hover:bg-primary-soft/40 hover:text-primary"
                 >
                   <Icons.SettingsIcon className="h-5 w-5" />
+                  <span>Pengaturan Profil</span>
+                </Link>
+                <Link
+                  href="/pasien/pengaturan-privasi"
+                  className="flex w-full items-center gap-3 rounded-xl px-4 py-3 text-sm font-semibold transition-all text-ink-soft hover:bg-primary-soft/40 hover:text-primary"
+                >
+                  <ShieldCheckIcon className="h-5 w-5" />
                   <span>Pengaturan Privasi</span>
                 </Link>
                 <button

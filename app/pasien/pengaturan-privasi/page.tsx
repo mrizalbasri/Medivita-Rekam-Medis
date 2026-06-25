@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -32,6 +32,7 @@ function ShieldIcon({ className = "h-5 w-5" }: { className?: string }) {
   );
 }
 
+// MailIcon with rect width/height
 function MailIcon({ className = "h-5 w-5" }: { className?: string }) {
   return (
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
@@ -96,12 +97,14 @@ function Toggle({ enabled, onToggle, id }: { enabled: boolean; onToggle: () => v
       role="switch"
       aria-checked={enabled}
       onClick={onToggle}
-      style={{ backgroundColor: enabled ? "#2AACAB" : "#cbd5e1" }}
-      className="relative inline-flex h-7 w-12 shrink-0 cursor-pointer items-center rounded-full transition-all duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#2B5BA8] focus-visible:ring-offset-2"
+      className={`relative inline-flex h-6 w-11 shrink-0 cursor-pointer items-center rounded-full transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-[#2AACAB] focus:ring-offset-2 ${
+        enabled ? "bg-[#2AACAB]" : "bg-gray-200"
+      }`}
     >
       <span
-        className="inline-block h-5 w-5 transform rounded-full bg-white shadow-md transition-transform duration-300"
-        style={{ transform: enabled ? "translateX(22px)" : "translateX(3px)" }}
+        className={`inline-block h-4 w-4 transform rounded-full bg-white shadow transition-transform duration-300 ${
+          enabled ? "translate-x-5" : "translate-x-1"
+        }`}
       />
     </button>
   );
@@ -126,6 +129,7 @@ const ACTIVITY_LOGS: ActivityItem[] = [
 // ─── Page ─────────────────────────────────────────────────────────────────────
 
 export default function PengaturanPrivasiPage() {
+  const [userData, setUserData]               = useState<any>(null);
   const [shareData, setShareData]             = useState(true);
   const [emailNotif, setEmailNotif]           = useState(true);
   const [saved, setSaved]                     = useState(false);
@@ -134,6 +138,21 @@ export default function PengaturanPrivasiPage() {
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [deleteLoading, setDeleteLoading]     = useState(false);
   const [showNotif, setShowNotif]             = useState(false);
+
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        const response = await fetch("/api/users/me");
+        if (response.ok) {
+          const data = await response.json();
+          setUserData(data.user);
+        }
+      } catch (error) {
+        console.error("Gagal mengambil data user:", error);
+      }
+    };
+    fetchUserData();
+  }, []);
 
   function handleSave() {
     setSaved(true);
@@ -205,20 +224,20 @@ export default function PengaturanPrivasiPage() {
             </button>
 
             <Link
-              href="/pasien/pengaturan-privasi"
-              aria-label="Pengaturan Privasi"
-              className="rounded-full p-2 bg-[#eff6ff] text-[#2B5BA8] transition-all"
+              href="/pasien/pengaturan-profil"
+              aria-label="Pengaturan Profil"
+              className="rounded-full p-2 text-[#64748b] hover:bg-[#eff6ff] hover:text-[#2B5BA8] transition-all"
             >
               <SettingsIcon className="h-5 w-5" />
             </Link>
 
             <div className="flex items-center gap-2.5">
               <div className="relative h-9 w-9 overflow-hidden rounded-full border border-[#e2e8f0] shadow-sm hover:scale-105 transition-transform cursor-pointer">
-                <Image src="/sarah-avatar.png" alt="Sarah Az-Zahra" fill className="object-cover" />
+                <Image src={userData?.profilePicture || "/sarah-avatar.png"} alt="Sarah Az-Zahra" fill className="object-cover" />
               </div>
               <div className="hidden sm:flex flex-col leading-tight">
-                <span className="text-[13px] font-bold text-[#0f172a]">Sarah K.</span>
-                <span className="text-[11px] text-[#64748b]">sarah.k@mail.com</span>
+                <span className="text-[13px] font-bold text-[#0f172a]">{userData?.name || "Sarah K."}</span>
+                <span className="text-[11px] text-[#64748b]">{userData?.email || "sarah.k@mail.com"}</span>
               </div>
             </div>
           </div>
@@ -295,30 +314,38 @@ export default function PengaturanPrivasiPage() {
             <section>
               <h3 className="text-sm font-bold text-[#0f172a] mb-4">Pengaturan Privasi Umum</h3>
 
-              <div className="flex items-start gap-4 py-4 border-b border-[#f1f5f9]">
-                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[#eff6ff]">
-                  <ShieldIcon className="h-5 w-5 text-[#2B5BA8]" />
+              <div className="flex items-start justify-between gap-4 py-4 border-b border-[#f1f5f9]">
+                <div className="flex items-start gap-4">
+                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[#eff6ff]">
+                    <ShieldIcon className="h-5 w-5 text-[#2B5BA8]" />
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <p className="text-sm font-semibold text-[#0f172a]">Berbagi data dengan pihak ketiga</p>
+                    <p className="text-xs text-[#64748b] mt-0.5 leading-relaxed">
+                      Izinkan Medivita membagikan data terenkripsi Anda dengan mitra kesehatan dan riset resmi untuk peningkatan layanan.
+                    </p>
+                  </div>
                 </div>
-                <div className="flex-1 min-w-0">
-                  <p className="text-sm font-semibold text-[#0f172a]">Berbagi data dengan pihak ketiga</p>
-                  <p className="text-xs text-[#64748b] mt-0.5 leading-relaxed">
-                    Izinkan Medivita membagikan data terenkripsi Anda dengan mitra kesehatan dan riset resmi untuk peningkatan layanan.
-                  </p>
+                <div className="flex-shrink-0 mt-1">
+                  <Toggle id="toggle-share-data" enabled={shareData} onToggle={() => setShareData(v => !v)} />
                 </div>
-                <Toggle id="toggle-share-data" enabled={shareData} onToggle={() => setShareData(v => !v)} />
               </div>
 
-              <div className="flex items-start gap-4 pt-4">
-                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[#f0f9ff]">
-                  <MailIcon className="h-5 w-5 text-[#0284c7]" />
+              <div className="flex items-start justify-between gap-4 pt-4">
+                <div className="flex items-start gap-4">
+                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[#f0f9ff]">
+                    <MailIcon className="h-5 w-5 text-[#0284c7]" />
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <p className="text-sm font-semibold text-[#0f172a]">Izinkan notifikasi email</p>
+                    <p className="text-xs text-[#64748b] mt-0.5 leading-relaxed">
+                      Terima pembaruan penting, janji temu, dan hasil lab melalui email.
+                    </p>
+                  </div>
                 </div>
-                <div className="flex-1 min-w-0">
-                  <p className="text-sm font-semibold text-[#0f172a]">Izinkan notifikasi email</p>
-                  <p className="text-xs text-[#64748b] mt-0.5 leading-relaxed">
-                    Terima pembaruan penting, janji temu, dan hasil lab melalui email.
-                  </p>
+                <div className="flex-shrink-0 mt-1">
+                  <Toggle id="toggle-email-notif" enabled={emailNotif} onToggle={() => setEmailNotif(v => !v)} />
                 </div>
-                <Toggle id="toggle-email-notif" enabled={emailNotif} onToggle={() => setEmailNotif(v => !v)} />
               </div>
             </section>
 
@@ -326,26 +353,28 @@ export default function PengaturanPrivasiPage() {
             <section>
               <h3 className="text-sm font-bold text-[#0f172a] mb-4">Aksi Akun</h3>
 
-              <div className="flex items-start gap-4 py-4 border-b border-[#f1f5f9]">
-                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[#eff6ff]">
-                  <DownloadIcon className="h-5 w-5 text-[#2B5BA8]" />
-                </div>
-                <div className="flex-1 min-w-0">
-                  <p className="text-sm font-semibold text-[#0f172a]">Ekspor Data Anda</p>
-                  <p className="text-xs text-[#64748b] mt-0.5 leading-relaxed">
-                    Unduh salinan lengkap rekam medis Anda dalam format terenkripsi (PDF/JSON).
-                  </p>
-                  {exportProgress && (
-                    <div className="mt-2 h-1.5 w-full rounded-full bg-[#e2e8f0] overflow-hidden">
-                      <div className="h-full w-[65%] rounded-full bg-gradient-to-r from-[#2B5BA8] to-[#2AACAB] animate-pulse" />
-                    </div>
-                  )}
-                  {exportError && (
-                    <p className="text-xs text-[#ef4444] mt-1">{exportError}</p>
-                  )}
-                  {!exportProgress && !exportError && (
-                    <p className="text-[11px] text-[#94a3b8] mt-1">Terakhir: 12 Okt 2026</p>
-                  )}
+              <div className="flex items-start justify-between gap-4 py-4 border-b border-[#f1f5f9]">
+                <div className="flex items-start gap-4">
+                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[#eff6ff]">
+                    <DownloadIcon className="h-5 w-5 text-[#2B5BA8]" />
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <p className="text-sm font-semibold text-[#0f172a]">Ekspor Data Anda</p>
+                    <p className="text-xs text-[#64748b] mt-0.5 leading-relaxed">
+                      Unduh salinan lengkap rekam medis Anda dalam format terenkripsi (PDF/JSON).
+                    </p>
+                    {exportProgress && (
+                      <div className="mt-2 h-1.5 w-full rounded-full bg-[#e2e8f0] overflow-hidden">
+                        <div className="h-full w-[65%] rounded-full bg-gradient-to-r from-[#2B5BA8] to-[#2AACAB] animate-pulse" />
+                      </div>
+                    )}
+                    {exportError && (
+                      <p className="text-xs text-[#ef4444] mt-1">{exportError}</p>
+                    )}
+                    {!exportProgress && !exportError && (
+                      <p className="text-[11px] text-[#94a3b8] mt-1">Terakhir: 12 Okt 2026</p>
+                    )}
+                  </div>
                 </div>
                 <button
                   id="btn-ekspor-data"
@@ -357,15 +386,17 @@ export default function PengaturanPrivasiPage() {
                 </button>
               </div>
 
-              <div className="flex items-start gap-4 pt-4">
-                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[#fef2f2]">
-                  <AlertTriangleIcon className="h-5 w-5 text-[#ef4444]" />
-                </div>
-                <div className="flex-1 min-w-0">
-                  <p className="text-sm font-semibold text-[#0f172a]">Hapus Akun Medivita</p>
-                  <p className="text-xs text-[#64748b] mt-0.5 leading-relaxed">
-                    Hapus semua data pribadi dan rekam medis secara permanen. Tindakan ini tidak dapat dibatalkan.
-                  </p>
+              <div className="flex items-start justify-between gap-4 pt-4">
+                <div className="flex items-start gap-4">
+                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[#fef2f2]">
+                    <AlertTriangleIcon className="h-5 w-5 text-[#ef4444]" />
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <p className="text-sm font-semibold text-[#0f172a]">Hapus Akun Medivita</p>
+                    <p className="text-xs text-[#64748b] mt-0.5 leading-relaxed">
+                      Hapus semua data pribadi dan rekam medis secara permanen. Tindakan ini tidak dapat dibatalkan.
+                    </p>
+                  </div>
                 </div>
                 <button
                   id="btn-hapus-akun"
@@ -411,11 +442,11 @@ export default function PengaturanPrivasiPage() {
                 {saved ? (
                   <>
                     <CheckCircleIcon className="h-4 w-4" />
-                    Tersimpan!
+                    <span>Tersimpan!</span>
                   </>
                 ) : (
                   <>
-                    Simpan Perubahan
+                    <span>Simpan Perubahan</span>
                     <CheckCircleIcon className="h-4 w-4" />
                   </>
                 )}
@@ -431,6 +462,13 @@ export default function PengaturanPrivasiPage() {
           </Link>
         </div>
       </main>
+
+      {/* FOOTER */}
+      <footer className="border-t border-[#e2e8f0] bg-white mt-12">
+        <div className="mx-auto max-w-[1280px] px-4 py-6 md:px-10 text-center">
+          <p className="font-mono text-[10px] text-[#64748b]">&copy; 2026 PekanIT 2026 Credits.</p>
+        </div>
+      </footer>
     </div>
   );
 }
