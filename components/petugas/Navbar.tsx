@@ -107,16 +107,6 @@ export function Navbar({ onScanClick, doctorInitials = "DR", doctorName = "Dokte
             Dashboard
           </Link>
           <Link 
-            href="/petugas/scan" 
-            className={`text-sm font-semibold transition-colors ${
-              pathname === "/petugas/scan"
-                ? "text-primary border-b-2 border-primary pb-1"
-                : "text-ink-soft hover:text-primary"
-            }`}
-          >
-            Patients
-          </Link>
-          <Link 
             href="/petugas/workers" 
             className={`text-sm font-semibold transition-colors ${
               pathname === "/petugas/workers"

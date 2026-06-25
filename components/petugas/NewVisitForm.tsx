@@ -41,6 +41,12 @@ interface NewVisitFormProps {
 export function NewVisitForm({ onFinalize, defaultFacility = "Puskesmas Pekan Baru", pasienId }: NewVisitFormProps) {
   const [visitType, setVisitType] = useState<string>("Pemeriksaan Umum");
   const [facility, setFacility] = useState<string>(defaultFacility);
+  const [notes, setNotes] = useState<string>(" ");
+  const [drugName, setDrugName] = useState<string>("");
+  const [dosage, setDosage] = useState<string>("");
+  const [prescriptions, setPrescriptions] = useState<string[]>(["Amoxicillin 500mg"]);
+  const [isDraftSaving, setIsDraftSaving] = useState<boolean>(false);
+  const [isLoaded, setIsLoaded] = useState<boolean>(false);
 
   useEffect(() => {
     if (defaultFacility) {
@@ -51,6 +57,7 @@ export function NewVisitForm({ onFinalize, defaultFacility = "Puskesmas Pekan Ba
   // Load draft when patient changes
   useEffect(() => {
     if (!pasienId) return;
+    setIsLoaded(false);
     const savedDraft = localStorage.getItem(`draft_visit_${pasienId}`);
     if (savedDraft) {
       try {
@@ -68,11 +75,28 @@ export function NewVisitForm({ onFinalize, defaultFacility = "Puskesmas Pekan Ba
       setNotes("");
       setPrescriptions([]);
     }
+    // Set load complete
+    setTimeout(() => setIsLoaded(true), 100);
   }, [pasienId, defaultFacility]);
-  const [notes, setNotes] = useState<string>("");
-  const [drugName, setDrugName] = useState<string>("");
-  const [dosage, setDosage] = useState<string>("");
-  const [prescriptions, setPrescriptions] = useState<string[]>(["Amoxicillin 500mg"]);
+
+  // Auto-save draft on input changes
+  useEffect(() => {
+    if (!pasienId || !isLoaded) return;
+    const draftData = {
+      visitType,
+      facility,
+      notes,
+      prescriptions,
+    };
+    
+    // Simpan draf ke localStorage
+    localStorage.setItem(`draft_visit_${pasienId}`, JSON.stringify(draftData));
+    
+    // Tampilkan indikator loader sebentar
+    setIsDraftSaving(true);
+    const timer = setTimeout(() => setIsDraftSaving(false), 500);
+    return () => clearTimeout(timer);
+  }, [visitType, facility, notes, prescriptions, pasienId, isLoaded]);
 
   const handleAddDrug = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -87,22 +111,6 @@ export function NewVisitForm({ onFinalize, defaultFacility = "Puskesmas Pekan Ba
 
   const handleRemoveDrug = (drug: string) => {
     setPrescriptions(prescriptions.filter((d) => d !== drug));
-  };
-
-  const handleSaveDraft = (e: React.MouseEvent) => {
-    e.preventDefault();
-    if (!pasienId) {
-      alert("Pilih pasien terlebih dahulu untuk menyimpan draf.");
-      return;
-    }
-    const draftData = {
-      visitType,
-      facility,
-      notes,
-      prescriptions,
-    };
-    localStorage.setItem(`draft_visit_${pasienId}`, JSON.stringify(draftData));
-    alert("Draf kunjungan berhasil disimpan di penyimpanan lokal!");
   };
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -233,17 +241,24 @@ export function NewVisitForm({ onFinalize, defaultFacility = "Puskesmas Pekan Ba
         </div>
 
         {/* Form Buttons */}
-        <div className="flex justify-end gap-3 pt-4 border-t border-line">
-          <button
-            type="button"
-            onClick={handleSaveDraft}
-            className="px-6 py-3 rounded-xl border border-line hover:bg-paper transition-colors text-sm font-semibold text-ink cursor-pointer"
-          >
-            Save as Draft
-          </button>
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 pt-4 border-t border-line">
+          <div className="text-xs text-ink-soft flex items-center gap-1.5 font-semibold">
+            {pasienId && (
+              isDraftSaving ? (
+                <>
+                  <div className="h-3 w-3 animate-spin rounded-full border-2 border-primary/20 border-t-primary"></div>
+                  <span>Menyimpan draf...</span>
+                </>
+              ) : (
+                <span className="text-[#056839] flex items-center gap-1">
+                  <CheckIcon className="h-3.5 w-3.5" /> Draf tersimpan otomatis di perangkat Anda
+                </span>
+              )
+            )}
+          </div>
           <button
             type="submit"
-            className="px-6 py-3 rounded-xl bg-accent hover:bg-accent/95 text-white flex items-center gap-2 shadow-sm transition-colors text-sm font-bold"
+            className="px-6 py-3 rounded-xl bg-accent hover:bg-accent/95 text-white flex items-center gap-2 shadow-sm transition-colors text-sm font-bold cursor-pointer"
           >
             <CheckIcon className="h-4 w-4" />
             Finalize Visit
