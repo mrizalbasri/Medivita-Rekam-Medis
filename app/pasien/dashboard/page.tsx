@@ -207,13 +207,13 @@ export default function PatientDashboard() {
                   <Icons.HistoryIcon className="h-5 w-5" />
                   <span>Visit History</span>
                 </Link>
-                <button
-                  onClick={() => alert("Membuka detail log akses...")}
+                <Link
+                  href="/pasien/access-log"
                   className="flex w-full items-center gap-3 rounded-xl px-4 py-3 text-sm font-semibold transition-all text-ink-soft hover:bg-primary-soft/40 hover:text-primary cursor-pointer"
                 >
                   <Icons.LockIcon className="h-5 w-5" />
                   <span>Access Logs</span>
-                </button>
+                </Link>
                 <Link
                   href="/pasien/pengaturan-privasi"
                   className="flex w-full items-center gap-3 rounded-xl px-4 py-3 text-sm font-semibold transition-all text-ink-soft hover:bg-primary-soft/40 hover:text-primary"
@@ -361,12 +361,12 @@ export default function PatientDashboard() {
                 <h3 className="font-display text-sm font-bold text-primary-dark">
                   Log Akses
                 </h3>
-                <button
-                  onClick={() => alert("Membuka detail log akses...")}
+                <Link
+                  href="/pasien/access-log"
                   className="text-xs font-bold text-[#1e77b0] hover:underline"
                 >
                   View All
-                </button>
+                </Link>
               </div>
 
               <div className="space-y-4">

@@ -1,6 +1,7 @@
-import { QrCode, User, History, Lock, X, Calendar, Bell, Settings, Scan, Download, Printer } from "lucide-react";
+import { QrCode, User, History, Lock, X, Calendar, Bell, Settings, Scan, Download, Printer, Search } from "lucide-react";
 
 export const QrIcon = ({ className = "h-5 w-5" }: { className?: string }) => <QrCode className={className} />;
+export const SearchIcon = ({ className = "h-5 w-5" }: { className?: string }) => <Search className={className} />;
 export const ProfileIcon = ({ className = "h-5 w-5" }: { className?: string }) => <User className={className} />;
 export const HistoryIcon = ({ className = "h-5 w-5" }: { className?: string }) => <History className={className} />;
 export const LockIcon = ({ className = "h-5 w-5" }: { className?: string }) => <Lock className={className} />;
