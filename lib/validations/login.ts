@@ -15,7 +15,6 @@ export const loginSchema = z.object({
     .min(1, "Email wajib diisi")
     .email("Format email tidak valid")
     .transform((v) => v.toLowerCase().trim()),
-
   password: z
     .string()
     .min(1, "Password wajib diisi")
@@ -23,6 +22,7 @@ export const loginSchema = z.object({
 });
 
 export type LoginInput = z.input<typeof loginSchema>;
+export type LoginOutput = z.output<typeof loginSchema>;
 
 /**
  * Validasi satu field saja — dipakai on-blur & on-change di form.

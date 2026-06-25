@@ -54,6 +54,17 @@ body {
   font-family: var(--font-sans), Arial, Helvetica, sans-serif;
 }
 
+/* ── Brand gradient utility (blue → teal → green) ── */
+.brand-gradient {
+  background: linear-gradient(135deg, #2b5ba8 0%, #2aacab 55%, #5db870 100%);
+}
+.brand-gradient-text {
+  background: linear-gradient(135deg, #2b5ba8 0%, #2aacab 55%, #5db870 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
 @keyframes dash-travel {
   to {
     stroke-dashoffset: -24;
