@@ -54,7 +54,16 @@ function DashboardContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   
-  const [user, setUser] = useState<{ name: string; email: string } | null>(null);
+  const [user, setUser] = useState<{
+    name: string;
+    email: string;
+    petugas?: {
+      id: string;
+      faskesName: string;
+      faskesType: string;
+      licenseNo: string;
+    } | null;
+  } | null>(null);
   const [patients, setPatients] = useState<Patient[]>([]);
   const [activePatientId, setActivePatientId] = useState<string>("");
   const [activePatientDetail, setActivePatientDetail] = useState<any>(null);
@@ -213,6 +222,7 @@ function DashboardContent() {
     allergy: activePatientDetail.medicalData?.allergies?.join(", ") || "None",
     bloodType: activePatientDetail.medicalData?.bloodType || "-",
     chronicConditions: activePatientDetail.medicalData?.chronicConditions || "Tidak ada",
+    routineMedications: activePatientDetail.medicalData?.routineMedications?.join(", ") || "Tidak ada",
     emergencyContact: "0812-3456-7890 (Keluarga)",
     insurance: "BPJS Kesehatan (Aktif)",
   } : null;
@@ -242,14 +252,19 @@ function DashboardContent() {
       )}
 
       {/* Header (Navbar) */}
-      <Navbar onScanClick={handleScanClick} doctorInitials={doctorInitials} />
+      <Navbar onScanClick={handleScanClick} doctorInitials={doctorInitials} doctorName={doctorName} />
 
       {/* Main Grid Content */}
       <main className="flex-1 mx-auto w-full max-w-[1280px] px-6 py-8">
         <div className="mb-6 flex flex-col sm:flex-row justify-between sm:items-center gap-2">
           <div>
             <h1 className="text-2xl font-bold font-display text-ink">Selamat datang kembali, {doctorName}</h1>
-            <p className="text-xs text-ink-soft">Kelola dan input rekam medis pasien secara cepat dan terenkripsi.</p>
+            {user?.petugas && (
+              <p className="text-xs font-semibold text-primary mt-1">
+                {user.petugas.faskesName} • No. STR: {user.petugas.licenseNo}
+              </p>
+            )}
+            <p className="text-xs text-ink-soft mt-1">Kelola dan input rekam medis pasien secara cepat dan terenkripsi.</p>
           </div>
         </div>
 
@@ -309,7 +324,7 @@ function DashboardContent() {
                 <VisitHistory history={activePatientHistory} />
 
                 {/* Add New Visit Form */}
-                <NewVisitForm onFinalize={handleFinalizeVisit} defaultFacility="Puskesmas Pekan Baru" />
+                <NewVisitForm onFinalize={handleFinalizeVisit} defaultFacility={user?.petugas?.faskesName || "Puskesmas Pekan Baru"} pasienId={activePatientId} />
               </>
             ) : (
               /* Empty Placeholder State */
