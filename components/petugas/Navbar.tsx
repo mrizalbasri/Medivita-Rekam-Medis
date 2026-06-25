@@ -46,9 +46,19 @@ interface NavbarProps {
   onScanClick?: () => void;
   doctorInitials?: string;
   doctorName?: string;
+  isLoading?: boolean;
 }
 
-export function Navbar({ onScanClick, doctorInitials = "DR", doctorName = "Dokter Medivita" }: NavbarProps) {
+function UserSilhouetteIcon(props: React.SVGProps<SVGSVGElement>) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" {...props}>
+      <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" />
+      <circle cx="12" cy="7" r="4" />
+    </svg>
+  );
+}
+
+export function Navbar({ onScanClick, doctorInitials = "DR", doctorName = "Dokter Medivita", isLoading = false }: NavbarProps) {
   const pathname = usePathname();
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
@@ -142,11 +152,20 @@ export function Navbar({ onScanClick, doctorInitials = "DR", doctorName = "Dokte
           </button>
           <div className="flex items-center gap-2 border-l border-line pl-3 relative">
             <button 
-              onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-              className="h-9 w-9 rounded-full bg-primary-soft overflow-hidden flex items-center justify-center border border-line hover:border-primary/50 transition-all cursor-pointer shadow-xs active:scale-95"
+              onClick={() => !isLoading && setIsDropdownOpen(!isDropdownOpen)}
+              className={`h-9 w-9 rounded-full overflow-hidden flex items-center justify-center border border-line transition-all shadow-xs active:scale-95 ${
+                isLoading 
+                  ? "bg-line/40 animate-pulse cursor-not-allowed" 
+                  : "bg-primary-soft hover:border-primary/50 cursor-pointer"
+              }`}
               aria-label="Menu Profil"
+              disabled={isLoading}
             >
-              <span className="text-xs font-bold text-primary">{doctorInitials}</span>
+              {isLoading ? (
+                <UserSilhouetteIcon className="h-4 w-4 text-ink-soft/40" />
+              ) : (
+                <span className="text-xs font-bold text-primary">{doctorInitials}</span>
+              )}
             </button>
             
             {isDropdownOpen && (
@@ -158,20 +177,21 @@ export function Navbar({ onScanClick, doctorInitials = "DR", doctorName = "Dokte
                 <div className="absolute right-0 top-full mt-2 w-56 rounded-2xl border border-line bg-white p-2 shadow-xl z-50 animate-fade-in-up">
                   <div className="px-3.5 py-3 border-b border-line mb-1.5">
                     <p className="text-xs font-semibold text-ink-soft uppercase tracking-wider">Petugas Medis</p>
-                    <p className="font-bold text-sm text-ink truncate mt-0.5" title={doctorName}>{doctorName}</p>
+                    {isLoading ? (
+                      <div className="h-4 bg-line rounded-md animate-pulse w-32 mt-1"></div>
+                    ) : (
+                      <p className="font-bold text-sm text-ink truncate mt-0.5" title={doctorName}>{doctorName}</p>
+                    )}
                   </div>
                   
-                  <button 
-                    type="button"
-                    onClick={() => {
-                      setIsDropdownOpen(false);
-                      alert("Informasi: Pengaturan akun sedang dikembangkan.");
-                    }}
+                  <Link 
+                    href="/petugas/settings"
+                    onClick={() => setIsDropdownOpen(false)}
                     className="w-full flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-left text-sm font-semibold text-ink-soft hover:bg-primary-soft hover:text-primary transition-colors cursor-pointer"
                   >
                     <SettingsIcon className="h-4.5 w-4.5" />
                     Pengaturan Akun
-                  </button>
+                  </Link>
                   
                   <button 
                     type="button"

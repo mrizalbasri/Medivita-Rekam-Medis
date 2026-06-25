@@ -1,4 +1,5 @@
 import React from "react";
+import { formatDisplayId } from "@/lib/format";
 
 function CheckIcon(props: React.SVGProps<SVGSVGElement>) {
   return (
@@ -49,7 +50,7 @@ export function RecentScans({ patients, activePatientId, onSelectPatient }: Rece
                       {patient.name}
                     </p>
                     <p className={`text-xs ${isActive ? "text-primary/80" : "text-ink-soft"}`}>
-                      ID: {patient.id} • {patient.lastVisit}
+                      ID: {formatDisplayId(patient.id)} • {patient.lastVisit}
                     </p>
                   </div>
                 </div>

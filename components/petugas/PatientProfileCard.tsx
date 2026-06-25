@@ -1,4 +1,5 @@
 import React from "react";
+import { formatDisplayId } from "@/lib/format";
 
 function EditIcon(props: React.SVGProps<SVGSVGElement>) {
   return (
@@ -37,7 +38,7 @@ export function PatientProfileCard({ patient, onEditClick }: PatientProfileCardP
           <div>
             <h1 className="font-display text-2xl font-bold">{patient.name}</h1>
             <p className="text-xs text-white/85 mt-0.5">
-              ID: {patient.id} • {patient.age} Years Old • {patient.gender}
+              ID: {formatDisplayId(patient.id)} • {patient.age} Years Old • {patient.gender}
             </p>
             <div className="flex gap-2 mt-2">
               {patient.allergy !== "None" && (

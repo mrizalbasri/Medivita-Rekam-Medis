@@ -23,11 +23,32 @@ export async function GET(request: Request, { params }: Props) {
 
     const session = verifySessionToken(sessionToken);
 
-    // Ambil data Pasien
-    const pasien = await prisma.pasien.findUnique({
-      where: { id: pasienId },
-      include: { user: true },
-    });
+    // 1. Ambil data Pasien, Petugas (jika sesi petugas), dan Riwayat Kunjungan secara paralel
+    const [pasien, petugas, riwayatKunjungan] = await Promise.all([
+      prisma.pasien.findUnique({
+        where: { id: pasienId },
+        include: { user: true },
+      }),
+      session.role === "petugas" || session.role === "admin"
+        ? prisma.petugasFaskes.findUnique({ where: { userId: session.sub } })
+        : null,
+      prisma.riwayatKunjungan.findMany({
+        where: { pasienId },
+        orderBy: { tanggal: "desc" },
+        include: {
+          petugas: {
+            select: {
+              faskesName: true,
+              faskesType: true,
+              licenseNo: true,
+              user: {
+                select: { name: true }
+              }
+            }
+          }
+        }
+      })
+    ]);
 
     if (!pasien) {
       return NextResponse.json({ message: "Pasien tidak ditemukan" }, { status: 404 });
@@ -42,11 +63,6 @@ export async function GET(request: Request, { params }: Props) {
     } 
     // Skenario B: Petugas Medis
     else if (session.role === "petugas" || session.role === "admin") {
-      // Ambil profil Petugas
-      const petugas = await prisma.petugasFaskes.findUnique({
-        where: { userId: session.sub },
-      });
-
       if (petugas) {
         // Cari TokenAkses aktif
         const activeToken = await prisma.tokenAkses.findFirst({
@@ -82,24 +98,6 @@ export async function GET(request: Request, { params }: Props) {
       console.error("Gagal mendekripsi data medis pasien:", err);
       return NextResponse.json({ message: "Kesalahan internal dekripsi rekam medis" }, { status: 500 });
     }
-
-    // 4. Ambil Riwayat Kunjungan
-    const riwayatKunjungan = await prisma.riwayatKunjungan.findMany({
-      where: { pasienId: pasien.id },
-      orderBy: { tanggal: "desc" },
-      include: {
-        petugas: {
-          select: {
-            faskesName: true,
-            faskesType: true,
-            licenseNo: true,
-            user: {
-              select: { name: true }
-            }
-          }
-        }
-      }
-    });
 
     // Format riwayat kunjungan agar rapi
     const history = riwayatKunjungan.map((k) => ({

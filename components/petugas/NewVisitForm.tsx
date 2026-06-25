@@ -47,6 +47,7 @@ export function NewVisitForm({ onFinalize, defaultFacility = "Puskesmas Pekan Ba
   const [prescriptions, setPrescriptions] = useState<string[]>(["Amoxicillin 500mg"]);
   const [isDraftSaving, setIsDraftSaving] = useState<boolean>(false);
   const [isLoaded, setIsLoaded] = useState<boolean>(false);
+  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
 
   useEffect(() => {
     if (defaultFacility) {
@@ -113,28 +114,35 @@ export function NewVisitForm({ onFinalize, defaultFacility = "Puskesmas Pekan Ba
     setPrescriptions(prescriptions.filter((d) => d !== drug));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!notes.trim() || !facility.trim()) {
       alert("Harap isi fasilitas kesehatan dan diagnosis/catatan klinis.");
       return;
     }
 
-    onFinalize({
-      visitType,
-      facility,
-      notes,
-      prescriptions: [...prescriptions],
-    });
+    setIsSubmitting(true);
+    try {
+      await onFinalize({
+        visitType,
+        facility,
+        notes,
+        prescriptions: [...prescriptions],
+      });
 
-    // Hapus draf setelah disubmit
-    if (pasienId) {
-      localStorage.removeItem(`draft_visit_${pasienId}`);
+      // Hapus draf setelah disubmit
+      if (pasienId) {
+        localStorage.removeItem(`draft_visit_${pasienId}`);
+      }
+
+      // Reset Form
+      setNotes("");
+      setPrescriptions([]);
+    } catch (err) {
+      console.error("Gagal menyimpan rekam medis:", err);
+    } finally {
+      setIsSubmitting(false);
     }
-
-    // Reset Form
-    setNotes("");
-    setPrescriptions([]);
   };
 
   return (
@@ -258,10 +266,15 @@ export function NewVisitForm({ onFinalize, defaultFacility = "Puskesmas Pekan Ba
           </div>
           <button
             type="submit"
-            className="px-6 py-3 rounded-xl bg-accent hover:bg-accent/95 text-white flex items-center gap-2 shadow-sm transition-colors text-sm font-bold cursor-pointer"
+            disabled={isSubmitting}
+            className="px-6 py-3 rounded-xl bg-accent hover:bg-accent/95 text-white flex items-center gap-2 shadow-sm transition-colors text-sm font-bold cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            <CheckIcon className="h-4 w-4" />
-            Finalize Visit
+            {isSubmitting ? (
+              <div className="h-4 w-4 animate-spin rounded-full border-2 border-white/20 border-t-white"></div>
+            ) : (
+              <CheckIcon className="h-4 w-4" />
+            )}
+            {isSubmitting ? "Finalizing..." : "Finalize Visit"}
           </button>
         </div>
       </form>

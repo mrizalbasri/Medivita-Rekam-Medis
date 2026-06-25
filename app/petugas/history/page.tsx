@@ -81,7 +81,7 @@ function HistoryContent() {
     router.push("/petugas/scan");
   };
 
-  const doctorInitials = user ? user.name.split(" ").map((n: any) => n[0]).join("").slice(0, 2).toUpperCase() : "DR";
+  const doctorInitials = user ? user.name.replace(/^(dr\.|dr|dokter)\s+/i, "").split(" ").map((n: any) => n[0]).join("").slice(0, 2).toUpperCase() : "DR";
   const doctorName = user ? user.name : "Dokter Medivita";
 
   const filteredLogs = logs.filter((l) =>
@@ -119,7 +119,7 @@ function HistoryContent() {
 
   return (
     <div className="min-h-screen bg-[#f4f8fa] flex flex-col font-sans">
-      <Navbar onScanClick={handleScanClick} doctorInitials={doctorInitials} doctorName={doctorName} />
+      <Navbar onScanClick={handleScanClick} doctorInitials={doctorInitials} doctorName={doctorName} isLoading={!user} />
 
       <main className="flex-1 mx-auto w-full max-w-[1280px] px-6 py-8">
         <div className="mb-8">

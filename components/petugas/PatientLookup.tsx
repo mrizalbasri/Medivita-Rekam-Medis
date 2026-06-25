@@ -184,9 +184,12 @@ export function PatientLookup({ searchQuery, setSearchQuery, onFallbackSuccess }
           <button
             type="submit"
             disabled={loading || !!successMsg}
-            className="w-full py-2 bg-primary hover:bg-primary-dark text-white rounded-xl text-xs font-bold transition-colors disabled:opacity-50"
+            className="w-full py-2 bg-primary hover:bg-primary-dark text-white rounded-xl text-xs font-bold transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
           >
-            {loading ? "Memverifikasi..." : "Verifikasi & Buka Akses"}
+            {loading && (
+              <div className="h-3.5 w-3.5 animate-spin rounded-full border-2 border-white/20 border-t-white"></div>
+            )}
+            <span>{loading ? "Memverifikasi..." : "Verifikasi & Buka Akses"}</span>
           </button>
         </form>
       )}

@@ -83,7 +83,7 @@ function WorkersContent() {
     router.push("/petugas/scan");
   };
 
-  const doctorInitials = user ? user.name.split(" ").map((n: any) => n[0]).join("").slice(0, 2).toUpperCase() : "DR";
+  const doctorInitials = user ? user.name.replace(/^(dr\.|dr|dokter)\s+/i, "").split(" ").map((n: any) => n[0]).join("").slice(0, 2).toUpperCase() : "DR";
   const doctorName = user ? user.name : "Dokter Medivita";
 
   const filteredWorkers = workers.filter((w) =>
@@ -94,7 +94,7 @@ function WorkersContent() {
 
   return (
     <div className="min-h-screen bg-[#f4f8fa] flex flex-col font-sans">
-      <Navbar onScanClick={handleScanClick} doctorInitials={doctorInitials} doctorName={doctorName} />
+      <Navbar onScanClick={handleScanClick} doctorInitials={doctorInitials} doctorName={doctorName} isLoading={!user} />
 
       <main className="flex-1 mx-auto w-full max-w-[1280px] px-6 py-8">
         <div className="mb-8">
@@ -166,7 +166,7 @@ function WorkersContent() {
                       <div key={w.id} className="p-6 flex items-start sm:items-center justify-between gap-4 hover:bg-[#f4f8fa]/50 transition-colors">
                         <div className="flex items-center gap-4">
                           <div className="h-10 w-10 rounded-full bg-primary/10 flex items-center justify-center text-primary font-bold text-sm">
-                            {w.name.split(" ").map((n: string) => n[0]).join("").slice(0, 2).toUpperCase()}
+                            {w.name.replace(/^(dr\.|dr|dokter)\s+/i, "").split(" ").map((n: string) => n[0]).join("").slice(0, 2).toUpperCase()}
                           </div>
                           <div>
                             <div className="flex items-center gap-2">

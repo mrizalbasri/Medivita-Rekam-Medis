@@ -10,6 +10,7 @@ import { RecentScans } from "@/components/petugas/RecentScans";
 import { PatientProfileCard } from "@/components/petugas/PatientProfileCard";
 import { VisitHistory } from "@/components/petugas/VisitHistory";
 import { NewVisitForm } from "@/components/petugas/NewVisitForm";
+import { DiseaseTrends } from "@/components/petugas/DiseaseTrends";
 
 function CheckIcon(props: React.SVGProps<SVGSVGElement>) {
   return (
@@ -203,6 +204,7 @@ function DashboardContent() {
       }
     } catch (err: any) {
       alert(err.message || "Terjadi kesalahan saat menyimpan rekam medis.");
+      throw err;
     }
   };
 
@@ -210,7 +212,7 @@ function DashboardContent() {
     router.push("/petugas/scan");
   };
 
-  const doctorInitials = user ? user.name.split(" ").map(n => n[0]).join("").slice(0, 2).toUpperCase() : "DR";
+  const doctorInitials = user ? user.name.replace(/^(dr\.|dr|dokter)\s+/i, "").split(" ").map(n => n[0]).join("").slice(0, 2).toUpperCase() : "DR";
   const doctorName = user ? user.name : "Dokter Medivita";
 
   // Map activePatientDetail to matching structure for components
@@ -252,7 +254,7 @@ function DashboardContent() {
       )}
 
       {/* Header (Navbar) */}
-      <Navbar onScanClick={handleScanClick} doctorInitials={doctorInitials} doctorName={doctorName} />
+      <Navbar onScanClick={handleScanClick} doctorInitials={doctorInitials} doctorName={doctorName} isLoading={!user} />
 
       {/* Main Grid Content */}
       <main className="flex-1 mx-auto w-full max-w-[1280px] px-6 py-8">
@@ -327,22 +329,30 @@ function DashboardContent() {
                 <NewVisitForm onFinalize={handleFinalizeVisit} defaultFacility={user?.petugas?.faskesName || "Puskesmas Pekan Baru"} pasienId={activePatientId} />
               </>
             ) : (
-              /* Empty Placeholder State */
-              <div className="bg-white rounded-2xl border border-line p-12 shadow-sm flex flex-col items-center justify-center text-center min-h-[450px]">
-                <div className="h-16 w-16 bg-[#e1f0f7] text-primary rounded-3xl flex items-center justify-center mb-6">
-                  <ScanLargeIcon className="h-8 w-8" />
+              /* Grid Layout when No Patient Selected */
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-stretch">
+                {/* Empty Placeholder Card */}
+                <div className="bg-white rounded-2xl border border-line p-8 shadow-sm flex flex-col items-center justify-center text-center min-h-[450px]">
+                  <div className="h-16 w-16 bg-[#e1f0f7] text-primary rounded-3xl flex items-center justify-center mb-6">
+                    <ScanLargeIcon className="h-8 w-8" />
+                  </div>
+                  <h3 className="text-lg font-bold text-ink">Belum Ada Pasien Terpilih</h3>
+                  <p className="text-xs text-ink-soft max-w-xs mt-1 mb-8 leading-relaxed">
+                    Silakan lakukan pemindaian QR Code pasien atau masukkan NIK dan PIN Cadangan untuk mendekripsi data rekam medis mereka.
+                  </p>
+                  <button
+                    onClick={handleScanClick}
+                    className="bg-primary hover:bg-primary/95 text-white px-6 py-3 rounded-xl font-bold text-sm shadow-sm transition-all active:scale-95 flex items-center gap-2 cursor-pointer"
+                  >
+                    <ScanLargeIcon className="h-4.5 w-4.5" />
+                    Pindai QR Code Sekarang
+                  </button>
                 </div>
-                <h3 className="text-lg font-bold text-ink">Belum Ada Pasien Terpilih</h3>
-                <p className="text-xs text-ink-soft max-w-sm mt-1 mb-8 leading-relaxed">
-                  Silakan lakukan pemindaian QR Code pasien atau masukkan NIK dan PIN Cadangan untuk mendekripsi data rekam medis mereka.
-                </p>
-                <button
-                  onClick={handleScanClick}
-                  className="bg-primary hover:bg-primary/95 text-white px-6 py-3 rounded-xl font-bold text-sm shadow-sm transition-all active:scale-95 flex items-center gap-2"
-                >
-                  <ScanLargeIcon className="h-4.5 w-4.5" />
-                  Pindai QR Code Sekarang
-                </button>
+
+                {/* Disease Trends Card */}
+                <div className="flex flex-col h-full">
+                  <DiseaseTrends />
+                </div>
               </div>
             )}
 
