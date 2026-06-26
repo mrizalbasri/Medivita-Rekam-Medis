@@ -31,7 +31,7 @@ export function middleware(request: NextRequest) {
   const token = tokenCookie?.value;
 
   // 1. Proteksi Rute Petugas Faskes
-  if (pathname.startsWith("/petugas/dashboard") || pathname.startsWith("/petugas/scan")) {
+  if (pathname.startsWith("/petugas")) {
     if (!token) {
       return NextResponse.redirect(new URL("/login", request.url));
     }
@@ -67,8 +67,7 @@ export function middleware(request: NextRequest) {
 // Konfigurasi Matcher agar middleware hanya berjalan pada rute tertentu
 export const config = {
   matcher: [
-    "/petugas/dashboard/:path*",
-    "/petugas/scan/:path*",
+    "/petugas/:path*",
     "/pasien/:path*",
   ],
 };
