@@ -31,16 +31,16 @@ export function PatientProfileCard({ patient, onEditClick }: PatientProfileCardP
           <div>
             <h1 className="font-display text-2xl font-bold">{patient.name}</h1>
             <p className="text-xs text-white/85 mt-0.5">
-              ID: {formatDisplayId(patient.id)} • {patient.age} Years Old • {patient.gender}
+              ID: {formatDisplayId(patient.id)} • {patient.age} Tahun • {patient.gender}
             </p>
             <div className="flex gap-2 mt-2">
-              {patient.allergy !== "None" && (
+              {patient.allergy !== "None" && patient.allergy !== "Tidak ada riwayat alergi" && (
                 <span className="bg-alert text-white text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded-sm">
-                  ALLERGY: {patient.allergy}
+                  ALERGI: {patient.allergy}
                 </span>
               )}
               <span className="bg-[#10b981] text-white text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded-sm">
-                BLOOD: {patient.bloodType}
+                GOL. DARAH: {patient.bloodType}
               </span>
             </div>
           </div>
@@ -59,19 +59,19 @@ export function PatientProfileCard({ patient, onEditClick }: PatientProfileCardP
       {/* Sub Details */}
       <div className="grid grid-cols-1 md:grid-cols-4 divide-y md:divide-y-0 md:divide-x divide-line bg-paper">
         <div className="p-5">
-          <p className="text-xs font-mono uppercase tracking-wider text-ink-soft">CHRONIC CONDITIONS</p>
+          <p className="text-xs font-mono uppercase tracking-wider text-ink-soft">Penyakit Kronis</p>
           <p className="font-semibold text-sm text-ink mt-1">{patient.chronicConditions}</p>
         </div>
         <div className="p-5">
-          <p className="text-xs font-mono uppercase tracking-wider text-ink-soft">ROUTINE MEDICATIONS</p>
+          <p className="text-xs font-mono uppercase tracking-wider text-ink-soft">Obat Rutin</p>
           <p className="font-semibold text-sm text-ink mt-1">{patient.routineMedications}</p>
         </div>
         <div className="p-5">
-          <p className="text-xs font-mono uppercase tracking-wider text-ink-soft">EMERGENCY CONTACT</p>
+          <p className="text-xs font-mono uppercase tracking-wider text-ink-soft">Kontak Darurat</p>
           <p className="font-semibold text-sm text-ink mt-1">{patient.emergencyContact}</p>
         </div>
         <div className="p-5">
-          <p className="text-xs font-mono uppercase tracking-wider text-ink-soft">HEALTH INSURANCE</p>
+          <p className="text-xs font-mono uppercase tracking-wider text-ink-soft">Asuransi Kesehatan</p>
           <p className="font-semibold text-sm text-ink mt-1">{patient.insurance}</p>
         </div>
       </div>

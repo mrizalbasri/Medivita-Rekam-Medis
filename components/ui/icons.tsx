@@ -34,7 +34,8 @@ import {
   FilePlus,
   Key,
   Edit,
-  PlusCircle
+  PlusCircle,
+  Menu
 } from "lucide-react";
 
 export const QrIcon = ({ className = "h-5 w-5" }: { className?: string }) => <QrCode className={className} />;
@@ -77,6 +78,8 @@ export const FilePlusIcon = ({ className = "h-5 w-5" }: { className?: string }) 
 export const KeyIcon = ({ className = "h-5 w-5" }: { className?: string }) => <Key className={className} />;
 export const EditIcon = ({ className = "h-5 w-5" }: { className?: string }) => <Edit className={className} />;
 export const PlusCircleIcon = ({ className = "h-5 w-5" }: { className?: string }) => <PlusCircle className={className} />;
+export const MenuIcon = ({ className = "h-5 w-5" }: { className?: string }) => <Menu className={className} />;
+export const CloseIcon = ({ className = "h-5 w-5" }: { className?: string }) => <X className={className} />;
 
 
 
