@@ -1,0 +1,1 @@
+import React from 'react'; import { HospitalIcon } from '@/components/ui/icons'; export const VisitHistorySection = ({ history }: { history: any[] }) => (<div className='rounded-xl border border-line p-4'><h3 className='font-semibold mb-3 flex items-center gap-2'><HospitalIcon /> Riwayat Kunjungan</h3></div>);
