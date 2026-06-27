@@ -282,11 +282,11 @@ function DashboardContent() {
             {/* Quick Statistics */}
             <div className="grid grid-cols-2 gap-4">
               <div className="bg-[#1e77b0] text-white p-5 rounded-2xl shadow-xs">
-                <p className="text-xs font-semibold text-white/80">Active Scans</p>
+                <p className="text-xs font-semibold text-white/80">Scan Aktif</p>
                 <p className="text-3xl font-display font-bold mt-1">{patients.length}</p>
               </div>
               <div className="bg-[#eaf5ec] border border-[#d2ebd7] p-5 rounded-2xl shadow-xs">
-                <p className="text-xs font-semibold text-[#475e6b]">Avg Access Time</p>
+                <p className="text-xs font-semibold text-[#475e6b]">Rata-rata Akses</p>
                 <p className="text-3xl font-display font-bold text-[#63b676] mt-1">0.8s</p>
               </div>
             </div>
@@ -346,24 +346,15 @@ function DashboardContent() {
       </main>
 
       {/* Footer */}
-      <footer className="bg-white border-t border-line py-12 mt-16 text-ink-soft">
-        <div className="mx-auto max-w-[1280px] px-6 grid grid-cols-1 md:grid-cols-12 gap-8">
-          <div className="md:col-span-6 flex flex-col gap-3">
-            <span className="font-display font-bold text-ink text-lg">Medivita</span>
-            <p className="text-sm max-w-md">
-              Solusi rekam medis digital portabel untuk akses kesehatan yang lebih cepat, akurat, dan aman bagi setiap pasien.
-            </p>
+      <footer className="bg-white border-t border-line py-6 mt-16 text-ink-soft">
+        <div className="mx-auto max-w-[1280px] px-6 flex flex-col sm:flex-row items-center justify-between gap-3">
+          <span className="font-display font-bold text-ink text-sm">Medivita — Rekam Medis Jalan</span>
+          <div className="flex gap-5 text-xs">
+            <Link href="#" className="hover:text-primary transition-colors">Kebijakan Privasi</Link>
+            <Link href="#" className="hover:text-primary transition-colors">Syarat Layanan</Link>
+            <Link href="#" className="hover:text-primary transition-colors">Pusat Bantuan</Link>
           </div>
-          <div className="md:col-span-6 flex flex-col md:items-end justify-between gap-4">
-            <div className="flex gap-6 text-sm">
-              <Link href="#" className="hover:text-primary transition-colors">Privacy Policy</Link>
-              <Link href="#" className="hover:text-primary transition-colors">Terms of Service</Link>
-              <Link href="#" className="hover:text-primary transition-colors">Help Center</Link>
-            </div>
-            <p className="text-xs font-mono">
-              © 2026 Rekam Medis Jalan (Medivita). PekanIT 2026 Credits.
-            </p>
-          </div>
+          <p className="text-[11px] font-mono">© 2026 Medivita. Hak cipta dilindungi.</p>
         </div>
       </footer>
     </div>

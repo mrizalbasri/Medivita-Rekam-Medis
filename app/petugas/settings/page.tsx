@@ -308,9 +308,10 @@ export default function SettingsPage() {
         </div>
       </main>
 
-      <footer className="bg-white border-t border-line py-8 mt-16 text-ink-soft">
-        <div className="mx-auto max-w-[1280px] px-6 text-center text-xs font-mono">
-          © 2026 Rekam Medis Jalan (Medivita). PekanIT 2026 Credits.
+      <footer className="bg-white border-t border-line py-6 mt-16 text-ink-soft">
+        <div className="mx-auto max-w-[1280px] px-6 flex flex-col sm:flex-row items-center justify-between gap-3">
+          <span className="font-display font-bold text-ink text-sm">Medivita — Rekam Medis Jalan</span>
+          <p className="text-[11px] font-mono">© 2026 Medivita. Hak cipta dilindungi.</p>
         </div>
       </footer>
     </div>
