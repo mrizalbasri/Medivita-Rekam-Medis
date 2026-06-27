@@ -11,23 +11,7 @@ import { PatientProfileCard } from "@/components/petugas/PatientProfileCard";
 import { VisitHistory } from "@/components/petugas/VisitHistory";
 import { NewVisitForm } from "@/components/petugas/NewVisitForm";
 import { DiseaseTrends } from "@/components/petugas/DiseaseTrends";
-
-function CheckIcon(props: React.SVGProps<SVGSVGElement>) {
-  return (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" {...props}>
-      <path d="M20 6 9 17l-5-5" />
-    </svg>
-  );
-}
-
-function ScanLargeIcon(props: React.SVGProps<SVGSVGElement>) {
-  return (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" {...props}>
-      <path d="M4 8V5a2 2 0 0 1 2-2h3M20 8V5a2 2 0 0 0-2-2h-3M4 16v3a2 2 0 0 0 2 2h3M20 16v3a2 2 0 0 1-2 2h-3" />
-      <rect x="7" y="7" width="10" height="10" rx="2" />
-    </svg>
-  );
-}
+import { CheckIcon, ScanIcon } from "@/components/ui/icons";
 
 interface Visit {
   id: string;
@@ -334,7 +318,7 @@ function DashboardContent() {
                 {/* Empty Placeholder Card */}
                 <div className="bg-white rounded-2xl border border-line p-8 shadow-sm flex flex-col items-center justify-center text-center min-h-[450px]">
                   <div className="h-16 w-16 bg-[#e1f0f7] text-primary rounded-3xl flex items-center justify-center mb-6">
-                    <ScanLargeIcon className="h-8 w-8" />
+                    <ScanIcon className="h-8 w-8" />
                   </div>
                   <h3 className="text-lg font-bold text-ink">Belum Ada Pasien Terpilih</h3>
                   <p className="text-xs text-ink-soft max-w-xs mt-1 mb-8 leading-relaxed">
@@ -344,7 +328,7 @@ function DashboardContent() {
                     onClick={handleScanClick}
                     className="bg-primary hover:bg-primary/95 text-white px-6 py-3 rounded-xl font-bold text-sm shadow-sm transition-all active:scale-95 flex items-center gap-2 cursor-pointer"
                   >
-                    <ScanLargeIcon className="h-4.5 w-4.5" />
+                    <ScanIcon className="h-4.5 w-4.5" />
                     Pindai QR Code Sekarang
                   </button>
                 </div>

@@ -1,9 +1,0 @@
-# Connect to Postgres via the shared transaction-mode pooler (IPv4-only)
-DATABASE_URL="postgresql://postgres.yelwwnmjxftzfbxbdbtg:Rizalbasri230825@aws-1-ap-northeast-1.pooler.supabase.com:6543/postgres?pgbouncer=true"
-
-# Connect to Postgres via the shared session-mode pooler (used for migrations)
-DIRECT_URL="postgresql://postgres.yelwwnmjxftzfbxbdbtg:Rizalbasri230825@aws-1-ap-northeast-1.pooler.supabase.com:5432/postgres"
-
-JWT_SECRET="3d601b9d1fc20bb545ddb25b2c4a013600ba122f8bcf95d81031e2dd5d35c0ba"
-ENCRYPTION_KEY="a7f2533729ab1cefa0e99b1e06d06a9d2a0155c5eb13761818e72b7cf3ca4f91"
-NEXT_PUBLIC_APP_URL="http://localhost:3000"

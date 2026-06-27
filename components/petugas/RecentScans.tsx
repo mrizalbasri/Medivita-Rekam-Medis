@@ -1,13 +1,6 @@
 import React from "react";
 import { formatDisplayId } from "@/lib/format";
-
-function CheckIcon(props: React.SVGProps<SVGSVGElement>) {
-  return (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" {...props}>
-      <path d="M20 6 9 17l-5-5" />
-    </svg>
-  );
-}
+import { CheckIcon } from "@/components/ui/icons";
 
 interface Patient {
   id: string;
