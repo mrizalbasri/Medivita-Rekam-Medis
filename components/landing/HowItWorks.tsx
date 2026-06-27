@@ -1,3 +1,5 @@
+import { ScrollReveal } from "../ui/ScrollReveal";
+
 const steps = [
   {
     n: "01",
@@ -25,12 +27,14 @@ const steps = [
   },
 ];
 
+const delays = [100, 200, 300, 400] as const;
+const variants = ["left", "up", "up", "right"] as const;
 
 export function HowItWorks() {
   return (
     <section id="cara-kerja" className="bg-gradient-to-b from-paper/60 to-paper/20 py-16 md:py-20 border-y border-line/40">
       <div className="mx-auto max-w-[1280px] px-4 md:px-10">
-        <div className="mb-12 max-w-[640px] animate-fade-in-up">
+        <ScrollReveal variant="up" delay={100} className="mb-12 max-w-[640px]">
           <span className="text-xs font-bold uppercase tracking-wider text-[#2AACAB] mb-2.5 block">
             Alur Penggunaan
           </span>
@@ -41,25 +45,36 @@ export function HowItWorks() {
             Dari pendaftaran sampai dicatat oleh faskes berikutnya — alurnya
             dirancang singkat agar tetap praktis digunakan bahkan saat darurat.
           </p>
-        </div>
+        </ScrollReveal>
 
         <ol className="grid grid-cols-1 gap-6 md:grid-cols-4">
-          {steps.map((step) => (
-            <li
-              key={step.n}
-              className="group relative rounded-2xl border border-line/60 bg-white/70 p-6 backdrop-blur-xs transition-all duration-300 hover:-translate-y-1 hover:border-[#2AACAB]/30 hover:bg-white hover:shadow-[0_16px_36px_rgba(26,58,110,0.05)] animate-fade-in-up"
-            >
-              <div className="flex h-8 w-8 items-center justify-center rounded-full bg-[#2AACAB]/10 text-xs font-bold text-[#2AACAB] font-mono border border-[#2AACAB]/15 transition-colors group-hover:bg-[#2AACAB] group-hover:text-white">
-                {step.n}
-              </div>
-              <h3 className="mt-4 font-display text-base font-semibold text-ink group-hover:text-primary-dark transition-colors">
-                {step.title}
-              </h3>
-              <p className="mt-2 text-sm leading-relaxed text-ink-soft">
-                {step.description}
-              </p>
-            </li>
-          ))}
+          {steps.map((step, index) => {
+            const delay = delays[index % delays.length];
+            const variant = variants[index % variants.length];
+            return (
+              <ScrollReveal
+                key={step.n}
+                variant={variant}
+                delay={delay}
+                as="li"
+                className="h-full"
+              >
+                <div
+                  className="group relative h-full rounded-2xl border border-line/60 bg-white/70 p-6 backdrop-blur-xs transition-all duration-300 hover:-translate-y-1.5 hover:border-[#2AACAB]/30 hover:bg-white hover:shadow-[0_16px_36px_rgba(26,58,110,0.05)]"
+                >
+                  <div className="flex h-8 w-8 items-center justify-center rounded-full bg-[#2AACAB]/10 text-xs font-bold text-[#2AACAB] font-mono border border-[#2AACAB]/15 transition-all duration-300 group-hover:bg-[#2AACAB] group-hover:text-white group-hover:scale-110">
+                    {step.n}
+                  </div>
+                  <h3 className="mt-4 font-display text-base font-semibold text-ink group-hover:text-primary-dark transition-colors">
+                    {step.title}
+                  </h3>
+                  <p className="mt-2 text-sm leading-relaxed text-ink-soft">
+                    {step.description}
+                  </p>
+                </div>
+              </ScrollReveal>
+            );
+          })}
         </ol>
       </div>
     </section>
