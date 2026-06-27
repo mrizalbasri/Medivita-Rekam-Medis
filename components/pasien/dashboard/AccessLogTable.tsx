@@ -1,0 +1,1 @@
+import React from 'react'; import { ShieldCheckIcon } from '@/components/ui/icons'; export const AccessLogTable = ({ logs }: { logs: any[] }) => (<div className='rounded-xl border border-line p-4'><h3 className='font-semibold mb-3 flex items-center gap-2'><ShieldCheckIcon /> Riwayat Akses</h3></div>);
