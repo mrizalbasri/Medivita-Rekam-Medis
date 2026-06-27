@@ -2,14 +2,23 @@
 
 import { useState, useEffect } from "react";
 import * as Icons from "@/components/ui/icons";
-import { MedivitaLogo } from "@/components/ui/logo";
 import Image from "next/image";
 import Link from "next/link";
-
+import { PatientPrimaryNav } from "@/components/pasien/PatientPrimaryNav";
+import { PatientBottomNav } from "@/components/pasien/PatientBottomNav";
+import { PatientAccountMenu } from "@/components/pasien/PatientAccountMenu";
 
 function ShieldCheckIcon({ className = "h-4 w-4" }: { className?: string }) {
   return (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
+    <svg
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      className={className}
+    >
       <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
       <path d="m9 11 2 2 4-4" />
     </svg>
@@ -18,7 +27,15 @@ function ShieldCheckIcon({ className = "h-4 w-4" }: { className?: string }) {
 
 function HospitalIcon({ className = "h-5 w-5" }: { className?: string }) {
   return (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
+    <svg
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      className={className}
+    >
       <path d="M18 21V9a4 4 0 0 0-4-4H10a4 4 0 0 0-4 4v12" />
       <path d="M2 21h20" />
       <path d="M12 9v4M10 11h4" />
@@ -28,7 +45,15 @@ function HospitalIcon({ className = "h-5 w-5" }: { className?: string }) {
 
 function CapsuleIcon({ className = "h-5 w-5" }: { className?: string }) {
   return (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
+    <svg
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      className={className}
+    >
       <path d="m10.5 3.5 10 10a7.07 7.07 0 1 1-10-10Z" />
       <line x1="8.5" y1="15.5" x2="15.5" y2="8.5" />
     </svg>
@@ -37,32 +62,176 @@ function CapsuleIcon({ className = "h-5 w-5" }: { className?: string }) {
 
 function RefreshIcon({ className = "h-5 w-5" }: { className?: string }) {
   return (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
+    <svg
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      className={className}
+    >
       <path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67" />
     </svg>
   );
 }
 
+type UserProfile = {
+  id: string;
+  name: string;
+  email?: string;
+  profilePicture: string | null;
+  pasien?: { id: string } | null;
+};
+
+type PatientMedicalData = {
+  golonganDarah?: string;
+  alergi?: string[];
+};
+
+type PatientHistoryItem = {
+  id: string;
+  doctorName?: string;
+  facility: string;
+  date: string;
+};
+
+type AccessLogItem = {
+  id: string;
+  action: string;
+  doctorName: string;
+  facilityName: string;
+  createdAt: string;
+};
+
+type ToastState = {
+  message: string;
+  kind: "info" | "success" | "error";
+} | null;
+
+const fallbackAccessLogs = [
+  {
+    id: "fallback-1",
+    action: "READ_MEDIS",
+    doctorName: "General Practitioner Access",
+    facilityName: "RS Pondok Indah",
+    createdAt: new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString(),
+  },
+  {
+    id: "fallback-2",
+    action: "CREATE_KUNJUNGAN",
+    doctorName: "Prescription Retrieval",
+    facilityName: "Apotek Kimia Farma",
+    createdAt: new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString(),
+  },
+  {
+    id: "fallback-3",
+    action: "REVOKE_AKSES",
+    doctorName: "Personal Data Export",
+    facilityName: "Medivita Web App",
+    createdAt: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000).toISOString(),
+  },
+];
+
+const fallbackVisitHistory: PatientHistoryItem[] = [
+  {
+    id: "visit-1",
+    doctorName: "Dr. Andreas Susanto",
+    facility: "Annual Health Checkup",
+    date: "24 Oct 2026",
+  },
+  {
+    id: "visit-2",
+    doctorName: "Lab Prodia",
+    facility: "Blood Panel Analysis",
+    date: "14 Oct 2026",
+  },
+];
+
+function formatRelativeTime(value: string) {
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) return "Unknown time";
+
+  const diffMs = Date.now() - date.getTime();
+  const diffHours = Math.floor(diffMs / (1000 * 60 * 60));
+  const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+
+  if (diffHours < 1) return "just now";
+  if (diffHours < 24) return `${diffHours} hours ago`;
+  if (diffDays === 1) return "yesterday";
+  return `${diffDays} days ago`;
+}
+
 // Interactive Patient Dashboard
 export default function PatientDashboard() {
-  const [activeTab, setActiveTab] = useState("overview");
   const [accessRevoked, setAccessRevoked] = useState(false);
   const [showNotification, setShowNotification] = useState(false);
-  const [userData, setUserData] = useState<any>(null);
-  
+  const [toast, setToast] = useState<ToastState>(null);
+  const [userData, setUserData] = useState<UserProfile | null>(null);
+  const [medicalData, setMedicalData] = useState<PatientMedicalData>({});
+  const [accessLogs, setAccessLogs] =
+    useState<AccessLogItem[]>(fallbackAccessLogs);
+  const [visitHistory, setVisitHistory] =
+    useState<PatientHistoryItem[]>(fallbackVisitHistory);
+
+  const showToast = (
+    message: string,
+    kind: "info" | "success" | "error" = "info",
+  ) => {
+    setToast({ message, kind });
+    setTimeout(() => {
+      setToast(null);
+    }, 2800);
+  };
+
   useEffect(() => {
-    const fetchUserData = async () => {
+    const fetchDashboardData = async () => {
       try {
-        const response = await fetch("/api/users/me");
-        if (response.ok) {
-          const data = await response.json();
-          setUserData(data.user);
+        const userResponse = await fetch("/api/users/me");
+        if (!userResponse.ok) return;
+
+        const userPayload = (await userResponse.json()) as {
+          user?: UserProfile;
+        };
+        const currentUser = userPayload.user ?? null;
+        setUserData(currentUser);
+
+        const logsResponse = await fetch("/api/pasien/logs");
+        if (logsResponse.ok) {
+          const logsPayload = (await logsResponse.json()) as {
+            logs?: AccessLogItem[];
+          };
+          if (logsPayload.logs && logsPayload.logs.length > 0) {
+            setAccessLogs(logsPayload.logs);
+          }
+        }
+
+        const pasienId = currentUser?.pasien?.id;
+        if (!pasienId) return;
+
+        const patientResponse = await fetch(`/api/pasien/${pasienId}`);
+        if (!patientResponse.ok) return;
+
+        const patientPayload = (await patientResponse.json()) as {
+          pasien?: {
+            medicalData?: PatientMedicalData;
+            history?: PatientHistoryItem[];
+          };
+        };
+
+        setMedicalData(patientPayload.pasien?.medicalData ?? {});
+        if (
+          patientPayload.pasien?.history &&
+          patientPayload.pasien.history.length > 0
+        ) {
+          setVisitHistory(patientPayload.pasien.history.slice(0, 2));
         }
       } catch (error) {
-        console.error("Gagal mengambil data user:", error);
+        console.error("Gagal mengambil data dashboard pasien:", error);
       }
     };
-    fetchUserData();
+
+    fetchDashboardData();
   }, []);
 
   const handleLogout = async () => {
@@ -71,23 +240,31 @@ export default function PatientDashboard() {
       window.location.href = "/";
     } catch (error) {
       console.error("Gagal logout:", error);
+      showToast("Gagal logout, silakan coba lagi.", "error");
     }
   };
 
   const handleDownload = () => {
-    alert("Mengunduh QR Code Sarah Az-Zahra...");
+    const name = userData?.name ?? "pasien";
+    showToast(`QR Code untuk ${name} sedang disiapkan.`, "info");
   };
 
   const handlePrint = () => {
     window.print();
   };
 
-  const handleRevokeAccess = () => {
-    if (confirm("Apakah Anda yakin ingin mencabut semua akses faskes sementara ke rekam medis Anda?")) {
-      setAccessRevoked(true);
-      alert("Semua akses aktif telah berhasil dicabut.");
-    }
-  };
+  const displayName = userData?.name ?? "Pasien";
+  const todayLabel = new Intl.DateTimeFormat("en-US", {
+    month: "long",
+    day: "2-digit",
+    year: "numeric",
+  }).format(new Date());
+  const bloodType = medicalData.golonganDarah ?? "-";
+  const allergies = medicalData.alergi?.length
+    ? medicalData.alergi.join(", ")
+    : "No known allergies";
+  const recentLogs = accessLogs.slice(0, 3);
+  const recentVisits = visitHistory.slice(0, 2);
 
   return (
     <div className="flex min-h-screen flex-col bg-paper">
@@ -118,28 +295,14 @@ export default function PatientDashboard() {
           </Link>
 
           {/* Navigation Links */}
-          <nav className="hidden items-center gap-8 md:flex h-full">
-            <a
-              href="#"
-              className="relative py-2 text-sm font-semibold text-primary after:absolute after:bottom-[-16px] after:left-0 after:h-[3px] after:w-full after:bg-primary after:rounded-full"
-            >
-              Dashboard
-            </a>
-            <a href="#" className="py-2 text-sm font-medium text-ink-soft hover:text-primary transition-colors">
-              Patients
-            </a>
-            <a href="#" className="py-2 text-sm font-medium text-ink-soft hover:text-primary transition-colors">
-              Healthcare Workers
-            </a>
-            <a href="#" className="py-2 text-sm font-medium text-ink-soft hover:text-primary transition-colors">
-              Medical History
-            </a>
-          </nav>
+          <PatientPrimaryNav />
 
           {/* Controls */}
           <div className="flex items-center gap-4">
             <button
-              onClick={() => alert("Membuka kamera pemindai...")}
+              onClick={() =>
+                showToast("Fitur Scan QR sedang disiapkan.", "info")
+              }
               className="flex items-center gap-2 rounded-xl bg-[#0b3c5d] px-4 py-2.5 text-sm font-semibold text-white transition-all hover:bg-primary active:scale-95 shadow-sm"
             >
               <Icons.ScanIcon className="h-4 w-4 stroke-[2.5]" />
@@ -156,29 +319,13 @@ export default function PatientDashboard() {
               <Icons.BellIcon className="h-5 w-5" />
               <span className="absolute top-1.5 right-1.5 h-2 w-2 rounded-full bg-alert"></span>
             </button>
-            <Link
-              href="/pasien/pengaturan-profil"
-              aria-label="Pengaturan Profil"
-              className="rounded-full p-2 text-ink-soft hover:bg-primary-soft hover:text-primary transition-all"
-            >
-              <Icons.SettingsIcon className="h-5 w-5" />
-            </Link>
-            <button
-              onClick={handleLogout}
-              aria-label="Logout"
-              className="rounded-full p-2 text-ink-soft hover:bg-alert-soft hover:text-alert transition-all"
-            >
-              <Icons.LogoutIcon className="h-5 w-5" />
-            </button>
-            <span className="h-6 w-[1px] bg-line/80 mx-1" aria-hidden />
-            <div className="relative h-9 w-9 overflow-hidden rounded-full border border-line shadow-sm hover:scale-105 transition-transform cursor-pointer">
-              <Image
-                src={userData?.profilePicture || "/sarah-avatar.png"}
-                alt="Profile"
-                fill
-                className="object-cover"
-              />
-            </div>
+
+            <PatientAccountMenu
+              name={userData?.name}
+              email={userData?.email ?? ""}
+              profilePicture={userData?.profilePicture}
+              onLogout={handleLogout}
+            />
           </div>
         </div>
       </header>
@@ -191,9 +338,22 @@ export default function PatientDashboard() {
         </div>
       )}
 
+      {toast && (
+        <div
+          className={`fixed bottom-4 right-4 z-50 rounded-xl px-4 py-3 text-sm font-medium text-white shadow-lg ${
+            toast.kind === "success"
+              ? "bg-[#056839]"
+              : toast.kind === "error"
+                ? "bg-alert"
+                : "bg-primary-dark"
+          }`}
+        >
+          {toast.message}
+        </div>
+      )}
+
       {/* MAIN CONTAINER */}
       <main className="mx-auto w-full max-w-[1280px] flex-1 px-4 py-8 md:px-10">
-        
         {/* PATIENT METADATA SECTION */}
         <div className="mb-6 flex flex-col justify-between gap-2 sm:flex-row sm:items-end">
           <div>
@@ -201,76 +361,19 @@ export default function PatientDashboard() {
               Patient Overview
             </p>
             <h1 className="font-display text-2xl font-bold tracking-tight text-primary-dark">
-              Welcome back, Sarah Az-Zahra
+              Welcome back, {displayName}
             </h1>
           </div>
           <div className="flex items-center gap-2 font-medium text-ink-soft text-sm bg-white border border-line py-2 px-3.5 rounded-xl shadow-xs self-start sm:self-auto">
             <Icons.CalendarIcon className="h-4 w-4 text-primary" />
-            <span>October 24, 2026</span>
+            <span>{todayLabel}</span>
           </div>
         </div>
 
         {/* THREE-COLUMN GRID */}
         <div className="grid grid-cols-1 gap-6 lg:grid-cols-12">
-          
-          {/* COLUMN 1: LEFT SIDEBAR & CRITICAL DATA (lg:col-span-3) */}
+          {/* COLUMN 1: CRITICAL DATA (lg:col-span-3) */}
           <div className="flex flex-col gap-6 lg:col-span-3">
-            
-            {/* Sidebar Navigation Card */}
-            <div className="rounded-2xl border border-line bg-white p-4 shadow-sm">
-              <nav className="flex flex-col gap-1">
-                <Link
-                  href="/pasien/dashboard"
-                  className="flex w-full items-center gap-3 rounded-xl px-4 py-3 text-sm font-semibold transition-all bg-primary-soft text-primary"
-                >
-                  <Icons.QrIcon className="h-5 w-5" />
-                  <span>Overview</span>
-                </Link>
-                <Link
-                  href="/pasien/profil-medis"
-                  className="flex w-full items-center gap-3 rounded-xl px-4 py-3 text-sm font-semibold transition-all text-ink-soft hover:bg-primary-soft/40 hover:text-primary"
-                >
-                  <Icons.ProfileIcon className="h-5 w-5" />
-                  <span>Medical Profile</span>
-                </Link>
-                <Link
-                  href="/pasien/riwayat-kunjungan"
-                  className="flex w-full items-center gap-3 rounded-xl px-4 py-3 text-sm font-semibold transition-all text-ink-soft hover:bg-primary-soft/40 hover:text-primary"
-                >
-                  <Icons.HistoryIcon className="h-5 w-5" />
-                  <span>Visit History</span>
-                </Link>
-                <Link
-                  href="/pasien/access-log"
-                  className="flex w-full items-center gap-3 rounded-xl px-4 py-3 text-sm font-semibold transition-all text-ink-soft hover:bg-primary-soft/40 hover:text-primary cursor-pointer"
-                >
-                  <Icons.LockIcon className="h-5 w-5" />
-                  <span>Access Logs</span>
-                </Link>
-                <Link
-                  href="/pasien/pengaturan-profil"
-                  className="flex w-full items-center gap-3 rounded-xl px-4 py-3 text-sm font-semibold transition-all text-ink-soft hover:bg-primary-soft/40 hover:text-primary"
-                >
-                  <Icons.SettingsIcon className="h-5 w-5" />
-                  <span>Pengaturan Profil</span>
-                </Link>
-                <Link
-                  href="/pasien/pengaturan-privasi"
-                  className="flex w-full items-center gap-3 rounded-xl px-4 py-3 text-sm font-semibold transition-all text-ink-soft hover:bg-primary-soft/40 hover:text-primary"
-                >
-                  <ShieldCheckIcon className="h-5 w-5" />
-                  <span>Pengaturan Privasi</span>
-                </Link>
-                <button
-                  onClick={handleRevokeAccess}
-                  className="flex w-full items-center gap-3 rounded-xl px-4 py-3 text-sm font-semibold text-alert hover:bg-alert-soft transition-all cursor-pointer"
-                >
-                  <Icons.CancelIcon className="h-5 w-5 text-alert" />
-                  <span>Cabut Akses</span>
-                </button>
-              </nav>
-            </div>
-
             {/* Critical Data Card */}
             <div className="rounded-2xl border border-line bg-white p-5 shadow-sm">
               <h3 className="mb-4 font-mono text-xs font-bold tracking-wider text-ink-soft">
@@ -278,15 +381,19 @@ export default function PatientDashboard() {
               </h3>
               <div className="space-y-4">
                 <div>
-                  <p className="text-xs text-ink-soft font-medium mb-1.5">Blood Type</p>
+                  <p className="text-xs text-ink-soft font-medium mb-1.5">
+                    Blood Type
+                  </p>
                   <span className="inline-block rounded-md bg-[#0b3c5d] px-2.5 py-1 text-xs font-bold text-white uppercase tracking-wider">
-                    B Positive
+                    {bloodType}
                   </span>
                 </div>
                 <div>
-                  <p className="text-xs text-ink-soft font-medium mb-1.5">Known Allergies</p>
+                  <p className="text-xs text-ink-soft font-medium mb-1.5">
+                    Known Allergies
+                  </p>
                   <span className="inline-block rounded-md bg-alert px-2.5 py-1 text-xs font-bold text-white uppercase tracking-wider">
-                    Penicillin, Peanuts
+                    {allergies}
                   </span>
                 </div>
               </div>
@@ -301,7 +408,8 @@ export default function PatientDashboard() {
                   Universal Health ID
                 </h2>
                 <p className="mx-auto max-w-[380px] text-xs leading-relaxed text-ink-soft">
-                  Present this QR code to any registered Medivita partner clinic or hospital for instant medical record access.
+                  Present this QR code to any registered Medivita partner clinic
+                  or hospital for instant medical record access.
                 </p>
               </div>
 
@@ -309,50 +417,252 @@ export default function PatientDashboard() {
               <div className="my-8 flex h-[280px] w-[280px] items-center justify-center rounded-2xl border border-[#e1f0f7] bg-[#f4f8fa] p-4 shadow-inner relative group">
                 <div className="relative h-[220px] w-[220px] bg-white rounded-xl shadow-md p-3 flex items-center justify-center border border-line group-hover:scale-102 transition-transform duration-300">
                   {/* Clean Vector SVG QR Code matching the mockup */}
-                  <svg className={`h-full w-full ${accessRevoked ? "opacity-30 blur-xs" : ""}`} viewBox="0 0 100 100" fill="currentColor">
+                  <svg
+                    className={`h-full w-full ${accessRevoked ? "opacity-30 blur-xs" : ""}`}
+                    viewBox="0 0 100 100"
+                    fill="currentColor"
+                  >
                     {/* Finder pattern top-left */}
-                    <rect x="0" y="0" width="30" height="30" fill="#0a2835" rx="3" />
-                    <rect x="5" y="5" width="20" height="20" fill="white" rx="2" />
-                    <rect x="10" y="10" width="10" height="10" fill="#1e77b0" rx="1" />
+                    <rect
+                      x="0"
+                      y="0"
+                      width="30"
+                      height="30"
+                      fill="#0a2835"
+                      rx="3"
+                    />
+                    <rect
+                      x="5"
+                      y="5"
+                      width="20"
+                      height="20"
+                      fill="white"
+                      rx="2"
+                    />
+                    <rect
+                      x="10"
+                      y="10"
+                      width="10"
+                      height="10"
+                      fill="#1e77b0"
+                      rx="1"
+                    />
 
                     {/* Finder pattern top-right */}
-                    <rect x="70" y="0" width="30" height="30" fill="#0a2835" rx="3" />
-                    <rect x="75" y="5" width="20" height="20" fill="white" rx="2" />
-                    <rect x="80" y="10" width="10" height="10" fill="#1e77b0" rx="1" />
+                    <rect
+                      x="70"
+                      y="0"
+                      width="30"
+                      height="30"
+                      fill="#0a2835"
+                      rx="3"
+                    />
+                    <rect
+                      x="75"
+                      y="5"
+                      width="20"
+                      height="20"
+                      fill="white"
+                      rx="2"
+                    />
+                    <rect
+                      x="80"
+                      y="10"
+                      width="10"
+                      height="10"
+                      fill="#1e77b0"
+                      rx="1"
+                    />
 
                     {/* Finder pattern bottom-left */}
-                    <rect x="0" y="70" width="30" height="30" fill="#0a2835" rx="3" />
-                    <rect x="5" y="75" width="20" height="20" fill="white" rx="2" />
-                    <rect x="10" y="80" width="10" height="10" fill="#1e77b0" rx="1" />
+                    <rect
+                      x="0"
+                      y="70"
+                      width="30"
+                      height="30"
+                      fill="#0a2835"
+                      rx="3"
+                    />
+                    <rect
+                      x="5"
+                      y="75"
+                      width="20"
+                      height="20"
+                      fill="white"
+                      rx="2"
+                    />
+                    <rect
+                      x="10"
+                      y="80"
+                      width="10"
+                      height="10"
+                      fill="#1e77b0"
+                      rx="1"
+                    />
 
                     {/* QR Code body patterns (simulated matrix matching UI mockup) */}
-                    <rect x="35" y="0" width="5" height="15" fill="#1e77b0" rx="1" />
-                    <rect x="45" y="0" width="10" height="5" fill="#0a2835" rx="1" />
-                    <rect x="60" y="5" width="5" height="10" fill="#1e77b0" rx="1" />
-                    <rect x="35" y="20" width="15" height="5" fill="#0a2835" rx="1" />
-                    <rect x="55" y="20" width="10" height="10" fill="#1e77b0" rx="1" />
+                    <rect
+                      x="35"
+                      y="0"
+                      width="5"
+                      height="15"
+                      fill="#1e77b0"
+                      rx="1"
+                    />
+                    <rect
+                      x="45"
+                      y="0"
+                      width="10"
+                      height="5"
+                      fill="#0a2835"
+                      rx="1"
+                    />
+                    <rect
+                      x="60"
+                      y="5"
+                      width="5"
+                      height="10"
+                      fill="#1e77b0"
+                      rx="1"
+                    />
+                    <rect
+                      x="35"
+                      y="20"
+                      width="15"
+                      height="5"
+                      fill="#0a2835"
+                      rx="1"
+                    />
+                    <rect
+                      x="55"
+                      y="20"
+                      width="10"
+                      height="10"
+                      fill="#1e77b0"
+                      rx="1"
+                    />
 
-                    <rect x="35" y="35" width="5" height="20" fill="#0a2835" rx="1" />
-                    <rect x="45" y="35" width="20" height="5" fill="#1e77b0" rx="1" />
-                    <rect x="50" y="45" width="10" height="10" fill="#0a2835" rx="1" />
-                    <rect x="70" y="35" width="15" height="10" fill="#1e77b0" rx="1" />
-                    <rect x="70" y="50" width="5" height="15" fill="#0a2835" rx="1" />
-                    <rect x="80" y="55" width="10" height="5" fill="#1e77b0" rx="1" />
+                    <rect
+                      x="35"
+                      y="35"
+                      width="5"
+                      height="20"
+                      fill="#0a2835"
+                      rx="1"
+                    />
+                    <rect
+                      x="45"
+                      y="35"
+                      width="20"
+                      height="5"
+                      fill="#1e77b0"
+                      rx="1"
+                    />
+                    <rect
+                      x="50"
+                      y="45"
+                      width="10"
+                      height="10"
+                      fill="#0a2835"
+                      rx="1"
+                    />
+                    <rect
+                      x="70"
+                      y="35"
+                      width="15"
+                      height="10"
+                      fill="#1e77b0"
+                      rx="1"
+                    />
+                    <rect
+                      x="70"
+                      y="50"
+                      width="5"
+                      height="15"
+                      fill="#0a2835"
+                      rx="1"
+                    />
+                    <rect
+                      x="80"
+                      y="55"
+                      width="10"
+                      height="5"
+                      fill="#1e77b0"
+                      rx="1"
+                    />
 
-                    <rect x="35" y="70" width="5" height="10" fill="#1e77b0" rx="1" />
-                    <rect x="35" y="85" width="15" height="5" fill="#0a2835" rx="1" />
-                    <rect x="45" y="75" width="15" height="5" fill="#0a2835" rx="1" />
-                    <rect x="55" y="85" width="5" height="10" fill="#1e77b0" rx="1" />
-                    <rect x="65" y="70" width="10" height="10" fill="#0a2835" rx="1" />
-                    <rect x="80" y="70" width="5" height="20" fill="#1e77b0" rx="1" />
-                    <rect x="90" y="75" width="5" height="10" fill="#0a2835" rx="1" />
-                    <rect x="70" y="90" width="20" height="5" fill="#0a2835" rx="1" />
+                    <rect
+                      x="35"
+                      y="70"
+                      width="5"
+                      height="10"
+                      fill="#1e77b0"
+                      rx="1"
+                    />
+                    <rect
+                      x="35"
+                      y="85"
+                      width="15"
+                      height="5"
+                      fill="#0a2835"
+                      rx="1"
+                    />
+                    <rect
+                      x="45"
+                      y="75"
+                      width="15"
+                      height="5"
+                      fill="#0a2835"
+                      rx="1"
+                    />
+                    <rect
+                      x="55"
+                      y="85"
+                      width="5"
+                      height="10"
+                      fill="#1e77b0"
+                      rx="1"
+                    />
+                    <rect
+                      x="65"
+                      y="70"
+                      width="10"
+                      height="10"
+                      fill="#0a2835"
+                      rx="1"
+                    />
+                    <rect
+                      x="80"
+                      y="70"
+                      width="5"
+                      height="20"
+                      fill="#1e77b0"
+                      rx="1"
+                    />
+                    <rect
+                      x="90"
+                      y="75"
+                      width="5"
+                      height="10"
+                      fill="#0a2835"
+                      rx="1"
+                    />
+                    <rect
+                      x="70"
+                      y="90"
+                      width="20"
+                      height="5"
+                      fill="#0a2835"
+                      rx="1"
+                    />
                   </svg>
                   {accessRevoked && (
                     <div className="absolute inset-0 flex flex-col items-center justify-center bg-white/95 rounded-xl p-4">
                       <Icons.CancelIcon className="h-10 w-10 text-alert mb-2" />
-                      <span className="text-xs font-bold text-alert">Akses Dinonaktifkan</span>
-                      <button 
+                      <span className="text-xs font-bold text-alert">
+                        Akses Dinonaktifkan
+                      </span>
+                      <button
                         onClick={() => setAccessRevoked(false)}
                         className="mt-3 rounded-lg bg-primary px-3 py-1.5 text-xs font-semibold text-white hover:bg-primary-dark transition-colors"
                       >
@@ -394,7 +704,6 @@ export default function PatientDashboard() {
 
           {/* COLUMN 3: ACCESS LOGS & VISIT HISTORY (lg:col-span-3) */}
           <div className="flex flex-col gap-6 lg:col-span-3">
-            
             {/* Access Logs Card */}
             <div className="rounded-2xl border border-line bg-white p-5 shadow-sm">
               <div className="mb-4 flex items-center justify-between">
@@ -410,41 +719,46 @@ export default function PatientDashboard() {
               </div>
 
               <div className="space-y-4">
-                {/* Log Item 1 */}
-                <div className="flex gap-3 items-start hover:bg-primary-soft/20 p-1.5 rounded-lg transition-colors cursor-pointer">
-                  <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-primary-soft text-primary">
-                    <HospitalIcon className="h-5 w-5 text-primary" />
-                  </div>
-                  <div>
-                    <h4 className="text-xs font-bold text-primary-dark">RS Pondok Indah</h4>
-                    <p className="text-[11px] text-ink-soft">General Practitioner Access</p>
-                    <span className="text-[10px] italic text-ink-soft">2 hours ago</span>
-                  </div>
-                </div>
+                {recentLogs.map((log) => {
+                  const isRevoke = log.action === "REVOKE_AKSES";
+                  const isCreate = log.action === "CREATE_KUNJUNGAN";
 
-                {/* Log Item 2 */}
-                <div className="flex gap-3 items-start hover:bg-accent-soft/50 p-1.5 rounded-lg transition-colors cursor-pointer">
-                  <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-accent-soft text-accent">
-                    <CapsuleIcon className="h-5 w-5 text-accent" />
-                  </div>
-                  <div>
-                    <h4 className="text-xs font-bold text-primary-dark">Apotek Kimia Farma</h4>
-                    <p className="text-[11px] text-ink-soft">Prescription Retrieval</p>
-                    <span className="text-[10px] italic text-ink-soft">Yesterday, 14:20</span>
-                  </div>
-                </div>
-
-                {/* Log Item 3 */}
-                <div className="flex gap-3 items-start hover:bg-primary-soft/20 p-1.5 rounded-lg transition-colors cursor-pointer">
-                  <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-primary-soft/40 text-ink-soft">
-                    <RefreshIcon className="h-5 w-5 text-ink-soft" />
-                  </div>
-                  <div>
-                    <h4 className="text-xs font-bold text-primary-dark">Medivita Web App</h4>
-                    <p className="text-[11px] text-ink-soft">Personal Data Export</p>
-                    <span className="text-[10px] italic text-ink-soft">21 Oct 2026</span>
-                  </div>
-                </div>
+                  return (
+                    <div
+                      key={log.id}
+                      className="flex gap-3 items-start hover:bg-primary-soft/20 p-1.5 rounded-lg transition-colors"
+                    >
+                      <div
+                        className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-xl ${
+                          isRevoke
+                            ? "bg-primary-soft/40 text-ink-soft"
+                            : isCreate
+                              ? "bg-accent-soft text-accent"
+                              : "bg-primary-soft text-primary"
+                        }`}
+                      >
+                        {isRevoke ? (
+                          <RefreshIcon className="h-5 w-5" />
+                        ) : isCreate ? (
+                          <CapsuleIcon className="h-5 w-5" />
+                        ) : (
+                          <HospitalIcon className="h-5 w-5" />
+                        )}
+                      </div>
+                      <div>
+                        <h4 className="text-xs font-bold text-primary-dark">
+                          {log.facilityName}
+                        </h4>
+                        <p className="text-[11px] text-ink-soft">
+                          {log.doctorName}
+                        </p>
+                        <span className="text-[10px] italic text-ink-soft">
+                          {formatRelativeTime(log.createdAt)}
+                        </span>
+                      </div>
+                    </div>
+                  );
+                })}
               </div>
             </div>
 
@@ -455,27 +769,27 @@ export default function PatientDashboard() {
               </h3>
 
               <div className="relative border-l-2 border-line pl-4 ml-2 space-y-5">
-                {/* Timeline Item 1 */}
-                <div className="relative">
-                  <span className="absolute -left-[23px] top-1 flex h-2.5 w-2.5 rounded-full bg-primary ring-4 ring-white"></span>
-                  <h4 className="text-xs font-bold text-primary-dark">Dr. Andreas Susanto</h4>
-                  <p className="text-[11px] text-ink-soft">Annual Health Checkup</p>
-                  <span className="mt-1 inline-block text-[10px] font-bold text-[#1e77b0] hover:underline cursor-pointer">
-                    Status: Completed
-                  </span>
-                </div>
-
-                {/* Timeline Item 2 */}
-                <div className="relative">
-                  <span className="absolute -left-[23px] top-1 flex h-2.5 w-2.5 rounded-full bg-ink-soft/40 ring-4 ring-white"></span>
-                  <h4 className="text-xs font-bold text-primary-dark">Lab Prodia</h4>
-                  <p className="text-[11px] text-ink-soft">Blood Panel Analysis</p>
-                  <span className="text-[10px] text-ink-soft italic">14 Oct 2026</span>
-                </div>
+                {recentVisits.map((visit, index) => (
+                  <div className="relative" key={visit.id}>
+                    <span
+                      className={`absolute -left-[23px] top-1 flex h-2.5 w-2.5 rounded-full ring-4 ring-white ${
+                        index === 0 ? "bg-primary" : "bg-ink-soft/40"
+                      }`}
+                    ></span>
+                    <h4 className="text-xs font-bold text-primary-dark">
+                      {visit.doctorName ?? "Fasilitas Kesehatan"}
+                    </h4>
+                    <p className="text-[11px] text-ink-soft">
+                      {visit.facility}
+                    </p>
+                    <span className="text-[10px] text-ink-soft italic">
+                      {visit.date}
+                    </span>
+                  </div>
+                ))}
               </div>
             </div>
           </div>
-
         </div>
       </main>
 
@@ -498,7 +812,8 @@ export default function PatientDashboard() {
               </span>
             </div>
             <p className="mt-3 max-w-[360px] text-xs leading-relaxed text-ink-soft">
-              Empowering patients with secure, portable, and instant access to their medical history anywhere in the world.
+              Empowering patients with secure, portable, and instant access to
+              their medical history anywhere in the world.
             </p>
             <p className="mt-6 font-mono text-[10px] text-ink-soft">
               &copy; 2026 PekanIT 2026 Credits.
@@ -510,9 +825,21 @@ export default function PatientDashboard() {
               Platform
             </h4>
             <ul className="mt-3 space-y-2 text-xs text-ink-soft">
-              <li><a href="#" className="hover:text-primary transition-colors">Features</a></li>
-              <li><a href="#" className="hover:text-primary transition-colors">Hospitals Partner</a></li>
-              <li><a href="#" className="hover:text-primary transition-colors">App Store</a></li>
+              <li>
+                <a href="#" className="hover:text-primary transition-colors">
+                  Features
+                </a>
+              </li>
+              <li>
+                <a href="#" className="hover:text-primary transition-colors">
+                  Hospitals Partner
+                </a>
+              </li>
+              <li>
+                <a href="#" className="hover:text-primary transition-colors">
+                  App Store
+                </a>
+              </li>
             </ul>
           </div>
 
@@ -521,9 +848,21 @@ export default function PatientDashboard() {
               Company
             </h4>
             <ul className="mt-3 space-y-2 text-xs text-ink-soft">
-              <li><a href="#" className="hover:text-primary transition-colors">About Us</a></li>
-              <li><a href="#" className="hover:text-primary transition-colors">Contact Info</a></li>
-              <li><a href="#" className="hover:text-primary transition-colors">Privacy Policy</a></li>
+              <li>
+                <a href="#" className="hover:text-primary transition-colors">
+                  About Us
+                </a>
+              </li>
+              <li>
+                <a href="#" className="hover:text-primary transition-colors">
+                  Contact Info
+                </a>
+              </li>
+              <li>
+                <a href="#" className="hover:text-primary transition-colors">
+                  Privacy Policy
+                </a>
+              </li>
             </ul>
           </div>
 
@@ -534,7 +873,16 @@ export default function PatientDashboard() {
             <p className="mt-2 text-xs text-ink-soft leading-relaxed mb-3">
               Stay updated on latest medical security standards.
             </p>
-            <form onSubmit={(e) => { e.preventDefault(); alert("Terima kasih telah bergabung!"); }} className="flex gap-2">
+            <form
+              onSubmit={(e) => {
+                e.preventDefault();
+                showToast(
+                  "Terima kasih, Anda sudah bergabung newsletter.",
+                  "success",
+                );
+              }}
+              className="flex gap-2"
+            >
               <input
                 type="email"
                 placeholder="email@example.com"
@@ -551,7 +899,7 @@ export default function PatientDashboard() {
           </div>
         </div>
       </footer>
+      <PatientBottomNav />
     </div>
   );
 }
-

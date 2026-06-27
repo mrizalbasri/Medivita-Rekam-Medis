@@ -1,8 +1,12 @@
 "use client";
 
 import { useState } from "react";
+import * as Icons from "@/components/ui/icons";
 import Image from "next/image";
 import Link from "next/link";
+import { PatientPrimaryNav } from "@/components/pasien/PatientPrimaryNav";
+import { PatientBottomNav } from "@/components/pasien/PatientBottomNav";
+import { PatientAccountMenu } from "@/components/pasien/PatientAccountMenu";
 
 // ─── Icon Components ────────────────────────────────────────────────────────
 
@@ -323,6 +327,7 @@ export default function ProfilMedisPage() {
   const [newAlergi, setNewAlergi] = useState("");
   const [newPenyakit, setNewPenyakit] = useState("");
   const [savedToast, setSavedToast] = useState(false);
+  const [showNotification, setShowNotification] = useState(false);
 
   function showToast() {
     setSavedToast(true);
@@ -411,6 +416,7 @@ export default function ProfilMedisPage() {
     <div className="flex min-h-screen flex-col bg-paper">
 
       {/* ── HEADER ── */}
+      {/* ── HEADER ── */}
       <header className="sticky top-0 z-50 w-full border-b border-line bg-paper/90 backdrop-blur-sm">
         <div className="mx-auto flex max-w-[1280px] items-center justify-between px-4 py-3.5 md:px-10">
           <Link href="/" className="flex items-center gap-3">
@@ -419,22 +425,38 @@ export default function ProfilMedisPage() {
             </div>
             <span className="font-display text-lg font-bold tracking-tight text-primary-dark">Rekam Medis Jalan</span>
           </Link>
-          <div className="flex items-center gap-3">
-            <Link
-              href="/pasien/dashboard"
-              className="flex items-center gap-2 rounded-xl border border-line bg-white px-4 py-2.5 text-sm font-semibold text-ink-soft hover:bg-primary-soft hover:text-primary transition-all"
+          <PatientPrimaryNav />
+
+          {/* Controls */}
+          <div className="flex items-center gap-4">
+            <button
+              onClick={() => setSavedToast(true)}
+              className="flex items-center gap-2 rounded-xl bg-[#0b3c5d] px-4 py-2.5 text-sm font-semibold text-white transition-all hover:bg-primary active:scale-95 shadow-sm"
             >
-              <ArrowLeftIcon className="h-4 w-4" />
-              <span className="hidden sm:inline">Kembali ke Dashboard</span>
-            </Link>
-            <div className="relative h-9 w-9 overflow-hidden rounded-full border border-line shadow-sm">
-              <Image src="/sarah-avatar.png" alt="Sarah Az-Zahra" fill className="object-cover" />
-            </div>
+              <Icons.ScanIcon className="h-4 w-4 stroke-[2.5]" />
+              Scan QR
+            </button>
+            <button
+              onClick={() => { setShowNotification(true); setTimeout(() => setShowNotification(false), 3000); }}
+              aria-label="Notification"
+              className="relative rounded-full p-2 text-ink-soft hover:bg-primary-soft hover:text-primary transition-all"
+            >
+              <Icons.BellIcon className="h-5 w-5" />
+              <span className="absolute top-1.5 right-1.5 h-2 w-2 rounded-full bg-alert"></span>
+            </button>
+            <PatientAccountMenu name={profil.nama} email={profil.email} />
           </div>
         </div>
       </header>
 
       {/* ── SAVE TOAST ── */}
+      {showNotification && (
+        <div className="fixed top-20 right-4 z-50 flex items-center gap-2 rounded-xl bg-primary-dark p-4 text-sm text-white shadow-xl">
+          <ShieldCheckIcon className="h-5 w-5 text-accent" />
+          <span>Keamanan enkripsi aktif. Semua data medis Anda aman.</span>
+        </div>
+      )}
+
       {savedToast && (
         <div className="fixed top-20 right-4 z-50 flex items-center gap-2 rounded-xl bg-accent px-5 py-3 text-sm font-semibold text-white shadow-xl" role="status">
           <CheckIcon className="h-4 w-4" />
@@ -740,6 +762,7 @@ export default function ProfilMedisPage() {
         </p>
       </footer>
 
+      <PatientBottomNav />
     </div>
   );
 }
