@@ -52,9 +52,10 @@ export function Navbar() {
               key={link.href}
               href={link.href}
               onClick={(e) => { e.preventDefault(); handleScrollTo(link.href); }}
-              className="text-sm font-medium text-ink-soft hover:text-ink relative py-1 transition-colors cursor-pointer"
+              className="text-sm font-medium text-ink-soft hover:text-ink relative py-1 transition-colors cursor-pointer group"
             >
               {link.label}
+              <span className="absolute bottom-0 left-0 w-0 h-[2px] bg-primary transition-all duration-300 group-hover:w-full" />
             </a>
           ))}
         </nav>
@@ -63,13 +64,13 @@ export function Navbar() {
         <div className="hidden items-center gap-2 md:flex">
           <a
             href="/login?role=pasien"
-            className="flex items-center gap-2 rounded-full border border-line bg-white px-4 py-2 text-sm font-medium text-ink hover:bg-paper transition-all active:scale-95"
+            className="flex items-center gap-2 rounded-full border border-line bg-white px-4 py-2 text-sm font-medium text-ink hover:bg-paper transition-all hover:-translate-y-0.5 active:scale-95"
           >
             Masuk Akun
           </a>
           <a
             href="/login?role=petugas"
-            className="flex items-center gap-1.5 rounded-full bg-primary px-4 py-2 text-sm font-semibold text-white hover:bg-primary/90 transition-all hover:-translate-y-0.5 active:scale-95"
+            className="flex items-center gap-1.5 rounded-full bg-primary px-4 py-2 text-sm font-semibold text-white hover:bg-primary/90 transition-all hover:-translate-y-0.5 active:scale-95 shadow-xs"
           >
             <ScanIcon className="h-4 w-4" />
             Portal Petugas
@@ -81,46 +82,48 @@ export function Navbar() {
           aria-label={open ? "Tutup menu" : "Buka menu"}
           aria-expanded={open}
           onClick={() => setOpen((v) => !v)}
-          className="rounded-lg p-2 text-ink-soft hover:text-ink md:hidden"
+          className="rounded-lg p-2 text-ink-soft hover:text-ink md:hidden transition-transform duration-200 active:scale-90"
         >
-          {open ? <CloseIcon className="h-5 w-5" /> : <MenuIcon className="h-5 w-5" />}
+          {open ? <CloseIcon className="h-5 w-5 rotate-90 transition-transform" /> : <MenuIcon className="h-5 w-5 transition-transform" />}
         </button>
       </div>
 
-      {/* Mobile dropdown */}
-      {open && (
-        <div className="border-t border-line bg-white px-4 py-4 md:hidden">
-          <nav className="flex flex-col gap-1">
-            {navLinks.map((link) => (
-              <a
-                key={link.href}
-                href={link.href}
-                onClick={(e) => { e.preventDefault(); handleScrollTo(link.href); }}
-                className="rounded-lg px-3 py-2.5 text-sm font-medium text-ink-soft hover:bg-paper hover:text-ink cursor-pointer transition-colors"
-              >
-                {link.label}
-              </a>
-            ))}
-            <div className="mt-3 flex flex-col gap-2 border-t border-line pt-3">
-              <a
-                href="/login?role=pasien"
-                onClick={() => setOpen(false)}
-                className="flex items-center justify-center gap-2 rounded-full border border-line bg-white px-4 py-2.5 text-sm font-medium text-ink transition-all active:scale-95"
-              >
-                Masuk Akun
-              </a>
-              <a
-                href="/login?role=petugas"
-                onClick={() => setOpen(false)}
-                className="flex items-center justify-center gap-2 rounded-full bg-primary px-4 py-2.5 text-sm font-semibold text-white hover:bg-primary/90 transition-all active:scale-95"
-              >
-                <ScanIcon className="h-4 w-4" />
-                Portal Petugas
-              </a>
-            </div>
-          </nav>
-        </div>
-      )}
+      {/* Mobile dropdown with smooth sliding and fading */}
+      <div 
+        className={`border-t border-line bg-white overflow-hidden transition-all duration-300 md:hidden ${
+          open ? "max-h-[300px] opacity-100 py-4 px-4" : "max-h-0 opacity-0 py-0 px-4 pointer-events-none"
+        }`}
+      >
+        <nav className="flex flex-col gap-1">
+          {navLinks.map((link) => (
+            <a
+              key={link.href}
+              href={link.href}
+              onClick={(e) => { e.preventDefault(); handleScrollTo(link.href); }}
+              className="rounded-lg px-3 py-2.5 text-sm font-medium text-ink-soft hover:bg-paper hover:text-ink cursor-pointer transition-colors"
+            >
+              {link.label}
+            </a>
+          ))}
+          <div className="mt-3 flex flex-col gap-2 border-t border-line pt-3">
+            <a
+              href="/login?role=pasien"
+              onClick={() => setOpen(false)}
+              className="flex items-center justify-center gap-2 rounded-full border border-line bg-white px-4 py-2.5 text-sm font-medium text-ink transition-all active:scale-95"
+            >
+              Masuk Akun
+            </a>
+            <a
+              href="/login?role=petugas"
+              onClick={() => setOpen(false)}
+              className="flex items-center justify-center gap-2 rounded-full bg-primary px-4 py-2.5 text-sm font-semibold text-white hover:bg-primary/90 transition-all active:scale-95"
+            >
+              <ScanIcon className="h-4 w-4" />
+              Portal Petugas
+            </a>
+          </div>
+        </nav>
+      </div>
     </header>
   );
 }
