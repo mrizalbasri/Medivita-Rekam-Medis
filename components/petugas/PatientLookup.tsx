@@ -76,7 +76,7 @@ export function PatientLookup({ searchQuery, setSearchQuery, onFallbackSuccess }
   return (
     <div className="bg-white rounded-2xl border border-line p-6 shadow-sm flex flex-col gap-4">
       <div>
-        <h2 className="font-display text-lg font-bold text-ink">Patient Quick Lookup</h2>
+        <h2 className="font-display text-lg font-bold text-ink">Pencarian Cepat Pasien</h2>
         <p className="text-[11px] text-ink-soft">Cari pasien aktif atau gunakan PIN cadangan untuk otorisasi manual.</p>
       </div>
 
@@ -87,7 +87,7 @@ export function PatientLookup({ searchQuery, setSearchQuery, onFallbackSuccess }
             <SearchIcon className="absolute left-4 top-3.5 h-5 w-5 text-ink-soft/60" />
             <input
               type="text"
-              placeholder="Search scanned patient by name or ID..."
+              placeholder="Cari pasien berdasarkan nama atau ID..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               className="w-full pl-11 pr-4 py-3 rounded-xl border border-line focus:border-primary focus:ring-1 focus:ring-primary focus:outline-hidden text-sm bg-paper text-ink transition-all placeholder:text-ink-soft/50"

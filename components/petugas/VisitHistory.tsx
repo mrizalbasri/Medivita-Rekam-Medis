@@ -27,7 +27,7 @@ export function VisitHistory({ history }: VisitHistoryProps) {
           <span className="text-primary">
             <ActivityIcon className="h-5 w-5" />
           </span>
-          Visit History
+          Riwayat Kunjungan
         </h2>
         {history.length > 0 && (
           <button

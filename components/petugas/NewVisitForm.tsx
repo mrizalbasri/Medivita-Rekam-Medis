@@ -127,14 +127,14 @@ export function NewVisitForm({ onFinalize, defaultFacility = "Puskesmas Pekan Ba
         <PlusCircleIcon className="h-6 w-6 text-accent" />
         <div>
           <h2 className="font-display text-lg font-bold text-ink">Tambah Kunjungan Baru</h2>
-          <p className="text-xs text-ink-soft">Record new medical diagnosis and prescription</p>
+          <p className="text-xs text-ink-soft">Catat diagnosis medis dan resep obat baru untuk pasien</p>
         </div>
       </div>
 
       <form onSubmit={handleSubmit} className="flex flex-col gap-6">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div className="flex flex-col gap-1.5">
-            <label className="text-xs font-bold text-ink uppercase tracking-wider">VISIT TYPE</label>
+            <label className="text-xs font-bold text-ink uppercase tracking-wider">TIPE KUNJUNGAN</label>
             <select
               value={visitType}
               onChange={(e) => setVisitType(e.target.value)}
@@ -148,7 +148,7 @@ export function NewVisitForm({ onFinalize, defaultFacility = "Puskesmas Pekan Ba
             </select>
           </div>
           <div className="flex flex-col gap-1.5">
-            <label className="text-xs font-bold text-ink uppercase tracking-wider">HEALTHCARE FACILITY</label>
+            <label className="text-xs font-bold text-ink uppercase tracking-wider">FASILITAS KESEHATAN</label>
             <input
               type="text"
               value={facility}
@@ -161,32 +161,32 @@ export function NewVisitForm({ onFinalize, defaultFacility = "Puskesmas Pekan Ba
         </div>
 
         <div className="flex flex-col gap-1.5">
-          <label className="text-xs font-bold text-ink uppercase tracking-wider">DIAGNOSIS & CLINICAL NOTES</label>
+          <label className="text-xs font-bold text-ink uppercase tracking-wider">DIAGNOSIS & CATATAN KLINIS</label>
           <textarea
             rows={4}
             value={notes}
             onChange={(e) => setNotes(e.target.value)}
-            placeholder="Enter findings, symptoms, and diagnosis..."
+            placeholder="Masukkan temuan klinis, gejala, dan diagnosis pasien..."
             className="w-full px-4 py-3 rounded-xl border border-line focus:border-primary focus:ring-1 focus:ring-primary focus:outline-hidden text-sm bg-paper text-ink transition-all resize-none placeholder:text-ink-soft/40"
             required
           ></textarea>
         </div>
 
-        {/* Prescriptions (E-Resep) */}
+        {/* Resep Obat (E-Resep) */}
         <div className="border border-line rounded-xl p-4 bg-paper/50 flex flex-col gap-4">
-          <label className="text-xs font-bold text-ink uppercase tracking-wider">PRESCRIPTIONS (E-RESEP)</label>
+          <label className="text-xs font-bold text-ink uppercase tracking-wider">RESEP OBAT (E-RESEP)</label>
           
           <div className="flex flex-col sm:flex-row gap-3">
             <input
               type="text"
-              placeholder="Drug Name (e.g. Paracetamol)"
+              placeholder="Nama Obat (misal: Paracetamol)"
               value={drugName}
               onChange={(e) => setDrugName(e.target.value)}
               className="flex-1 px-4 py-2.5 rounded-xl border border-line focus:border-primary focus:ring-1 focus:ring-primary focus:outline-hidden text-sm bg-white text-ink transition-all"
             />
             <input
               type="text"
-              placeholder="Dosage (e.g. 500mg, 3x1)"
+              placeholder="Dosis (misal: 500mg, 3x1)"
               value={dosage}
               onChange={(e) => setDosage(e.target.value)}
               className="sm:w-1/3 px-4 py-2.5 rounded-xl border border-line focus:border-primary focus:ring-1 focus:ring-primary focus:outline-hidden text-sm bg-white text-ink transition-all"
@@ -201,7 +201,7 @@ export function NewVisitForm({ onFinalize, defaultFacility = "Puskesmas Pekan Ba
             </button>
           </div>
 
-          {/* Added Drugs List */}
+          {/* List Obat yang Ditambahkan */}
           {prescriptions.length > 0 && (
             <div className="flex flex-wrap gap-2 pt-2 border-t border-line">
               {prescriptions.map((drug) => (
@@ -224,7 +224,7 @@ export function NewVisitForm({ onFinalize, defaultFacility = "Puskesmas Pekan Ba
           )}
         </div>
 
-        {/* Form Buttons */}
+        {/* Tombol Form */}
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 pt-4 border-t border-line">
           <div className="text-xs text-ink-soft flex items-center gap-1.5 font-semibold">
             {pasienId && (
@@ -250,7 +250,7 @@ export function NewVisitForm({ onFinalize, defaultFacility = "Puskesmas Pekan Ba
             ) : (
               <CheckIcon className="h-4 w-4" />
             )}
-            {isSubmitting ? "Finalizing..." : "Finalize Visit"}
+            {isSubmitting ? "Menyimpan..." : "Simpan Rekam Medis"}
           </button>
         </div>
       </form>
