@@ -138,7 +138,7 @@ export function NewVisitForm({ onFinalize, defaultFacility = "Puskesmas Pekan Ba
             <select
               value={visitType}
               onChange={(e) => setVisitType(e.target.value)}
-              className="w-full px-4 py-3 rounded-xl border border-line focus:border-primary focus:ring-1 focus:ring-primary focus:outline-hidden text-sm bg-paper text-ink transition-all"
+              className="w-full px-4 py-3 rounded-xl border border-line focus:border-accent focus:ring-1 focus:ring-accent focus:outline-hidden text-sm bg-paper text-ink transition-all"
             >
               <option>Pemeriksaan Umum</option>
               <option>Spesialis Jantung</option>
@@ -154,7 +154,7 @@ export function NewVisitForm({ onFinalize, defaultFacility = "Puskesmas Pekan Ba
               value={facility}
               onChange={(e) => setFacility(e.target.value)}
               placeholder="Nama Faskes..."
-              className="w-full px-4 py-3 rounded-xl border border-line focus:border-primary focus:ring-1 focus:ring-primary focus:outline-hidden text-sm bg-paper text-ink transition-all"
+              className="w-full px-4 py-3 rounded-xl border border-line focus:border-accent focus:ring-1 focus:ring-accent focus:outline-hidden text-sm bg-paper text-ink transition-all"
               required
             />
           </div>
@@ -167,7 +167,7 @@ export function NewVisitForm({ onFinalize, defaultFacility = "Puskesmas Pekan Ba
             value={notes}
             onChange={(e) => setNotes(e.target.value)}
             placeholder="Masukkan temuan klinis, gejala, dan diagnosis pasien..."
-            className="w-full px-4 py-3 rounded-xl border border-line focus:border-primary focus:ring-1 focus:ring-primary focus:outline-hidden text-sm bg-paper text-ink transition-all resize-none placeholder:text-ink-soft/40"
+            className="w-full px-4 py-3 rounded-xl border border-line focus:border-accent focus:ring-1 focus:ring-accent focus:outline-hidden text-sm bg-paper text-ink transition-all resize-none placeholder:text-ink-soft/40"
             required
           ></textarea>
         </div>
@@ -182,19 +182,19 @@ export function NewVisitForm({ onFinalize, defaultFacility = "Puskesmas Pekan Ba
               placeholder="Nama Obat (misal: Paracetamol)"
               value={drugName}
               onChange={(e) => setDrugName(e.target.value)}
-              className="flex-1 px-4 py-2.5 rounded-xl border border-line focus:border-primary focus:ring-1 focus:ring-primary focus:outline-hidden text-sm bg-white text-ink transition-all"
+              className="flex-1 px-4 py-2.5 rounded-xl border border-line focus:border-accent focus:ring-1 focus:ring-accent focus:outline-hidden text-sm bg-white text-ink transition-all"
             />
             <input
               type="text"
               placeholder="Dosis (misal: 500mg, 3x1)"
               value={dosage}
               onChange={(e) => setDosage(e.target.value)}
-              className="sm:w-1/3 px-4 py-2.5 rounded-xl border border-line focus:border-primary focus:ring-1 focus:ring-primary focus:outline-hidden text-sm bg-white text-ink transition-all"
+              className="sm:w-1/3 px-4 py-2.5 rounded-xl border border-line focus:border-accent focus:ring-1 focus:ring-accent focus:outline-hidden text-sm bg-white text-ink transition-all"
             />
             <button
               type="button"
               onClick={handleAddDrug}
-              className="bg-primary hover:bg-primary/95 text-white p-2.5 rounded-xl flex items-center justify-center shadow-xs transition-colors"
+              className="bg-accent hover:bg-accent/95 text-white p-2.5 rounded-xl flex items-center justify-center shadow-xs transition-colors"
               aria-label="Tambah Obat"
             >
               <PlusIcon className="h-5 w-5" />
@@ -230,7 +230,7 @@ export function NewVisitForm({ onFinalize, defaultFacility = "Puskesmas Pekan Ba
             {pasienId && (
               isDraftSaving ? (
                 <>
-                  <div className="h-3 w-3 animate-spin rounded-full border-2 border-primary/20 border-t-primary"></div>
+                  <div className="h-3 w-3 animate-spin rounded-full border-2 border-accent/20 border-t-accent"></div>
                   <span>Menyimpan draf...</span>
                 </>
               ) : (

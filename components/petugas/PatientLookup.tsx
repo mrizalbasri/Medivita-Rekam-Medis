@@ -90,14 +90,14 @@ export function PatientLookup({ searchQuery, setSearchQuery, onFallbackSuccess }
               placeholder="Cari pasien berdasarkan nama atau ID..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-11 pr-4 py-3 rounded-xl border border-line focus:border-primary focus:ring-1 focus:ring-primary focus:outline-hidden text-sm bg-paper text-ink transition-all placeholder:text-ink-soft/50"
+              className="w-full pl-11 pr-4 py-3 rounded-xl border border-line focus:border-accent focus:ring-1 focus:ring-accent focus:outline-hidden text-sm bg-paper text-ink transition-all placeholder:text-ink-soft/50"
             />
           </div>
 
           {/* Toggle Button for Fallback PIN */}
           <button
             onClick={() => setShowFallbackForm(true)}
-            className="flex items-center justify-center gap-2 py-2 px-4 rounded-xl border border-dashed border-line text-xs font-semibold text-ink-soft hover:text-primary hover:border-primary/50 transition-colors"
+            className="flex items-center justify-center gap-2 py-2 px-4 rounded-xl border border-dashed border-line text-xs font-semibold text-ink-soft hover:text-accent hover:border-accent/50 transition-colors"
           >
             <KeyIcon className="h-4 w-4" />
             Gunakan PIN Cadangan Pasien
@@ -108,7 +108,7 @@ export function PatientLookup({ searchQuery, setSearchQuery, onFallbackSuccess }
         <form onSubmit={handleFallbackSubmit} className="flex flex-col gap-3 border-t border-line pt-3 animate-fade-in-up">
           <div className="flex items-center justify-between">
             <span className="text-xs font-bold text-ink-soft flex items-center gap-1.5">
-              <LockIcon className="h-3.5 w-3.5 text-primary" />
+              <LockIcon className="h-3.5 w-3.5 text-accent" />
               Otorisasi PIN Cadangan
             </span>
             <button
@@ -130,7 +130,7 @@ export function PatientLookup({ searchQuery, setSearchQuery, onFallbackSuccess }
               maxLength={16}
               value={nik}
               onChange={(e) => setNik(e.target.value.replace(/\D/g, ""))}
-              className="w-full px-3 py-2 rounded-xl border border-line focus:border-primary focus:outline-hidden text-xs bg-paper text-ink"
+              className="w-full px-3 py-2 rounded-xl border border-line focus:border-accent focus:outline-hidden text-xs bg-paper text-ink"
               required
             />
             <input
@@ -139,7 +139,7 @@ export function PatientLookup({ searchQuery, setSearchQuery, onFallbackSuccess }
               maxLength={6}
               value={pin}
               onChange={(e) => setPin(e.target.value.replace(/\D/g, ""))}
-              className="w-full px-3 py-2 rounded-xl border border-line focus:border-primary focus:outline-hidden text-xs bg-paper text-ink"
+              className="w-full px-3 py-2 rounded-xl border border-line focus:border-accent focus:outline-hidden text-xs bg-paper text-ink"
               required
             />
           </div>
@@ -159,7 +159,7 @@ export function PatientLookup({ searchQuery, setSearchQuery, onFallbackSuccess }
           <button
             type="submit"
             disabled={loading || !!successMsg}
-            className="w-full py-2 bg-primary hover:bg-primary-dark text-white rounded-xl text-xs font-bold transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
+            className="w-full py-2 bg-accent hover:bg-accent/95 text-white rounded-xl text-xs font-bold transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
           >
             {loading && (
               <div className="h-3.5 w-3.5 animate-spin rounded-full border-2 border-white/20 border-t-white"></div>

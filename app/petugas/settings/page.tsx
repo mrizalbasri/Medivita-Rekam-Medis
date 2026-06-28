@@ -133,7 +133,7 @@ export default function SettingsPage() {
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-[#f4f8fa]">
-        <div className="h-10 w-10 animate-spin rounded-full border-4 border-primary/20 border-t-primary"></div>
+        <div className="h-10 w-10 animate-spin rounded-full border-4 border-accent/20 border-t-accent"></div>
       </div>
     );
   }
@@ -157,13 +157,13 @@ export default function SettingsPage() {
           {/* Left Column - Read-only Profile Info */}
           <div className="lg:col-span-4 flex flex-col gap-6">
             <div className="bg-white rounded-2xl border border-line p-6 shadow-sm flex flex-col gap-4">
-              <div className="h-12 w-12 bg-primary-soft text-primary rounded-2xl flex items-center justify-center">
+              <div className="h-12 w-12 bg-accent-soft text-accent rounded-2xl flex items-center justify-center">
                 <SettingsIcon className="h-6 w-6" />
               </div>
               <div>
                 <p className="text-xs font-semibold text-ink-soft uppercase tracking-wider">Identitas Penugasan</p>
                 <h2 className="text-lg font-bold font-display text-ink mt-1 truncate" title={user?.name}>{user?.name}</h2>
-                <p className="text-xs text-primary font-medium mt-0.5">{user?.email}</p>
+                <p className="text-xs text-accent font-medium mt-0.5">{user?.email}</p>
               </div>
               <div className="border-t border-line pt-4 mt-2 space-y-3 text-xs">
                 <div>
@@ -187,7 +187,7 @@ export default function SettingsPage() {
             {/* Form Ubah Nama */}
             <div className="bg-white rounded-2xl border border-line p-6 shadow-sm">
               <div className="flex items-center gap-2 border-b border-line pb-4 mb-6">
-                <UserIcon className="h-5.5 w-5.5 text-primary" />
+                <UserIcon className="h-5.5 w-5.5 text-accent" />
                 <div>
                   <h3 className="font-display font-bold text-ink text-sm">Informasi Profil</h3>
                   <p className="text-xs text-ink-soft">Ubah nama lengkap petugas medis Anda</p>
@@ -202,7 +202,7 @@ export default function SettingsPage() {
                     value={name}
                     onChange={(e) => setName(e.target.value)}
                     placeholder="Nama lengkap..."
-                    className="w-full px-4 py-3 rounded-xl border border-line focus:border-primary focus:ring-1 focus:ring-primary focus:outline-hidden text-sm bg-paper text-ink transition-all"
+                    className="w-full px-4 py-3 rounded-xl border border-line focus:border-accent focus:ring-1 focus:ring-accent focus:outline-hidden text-sm bg-paper text-ink transition-all"
                     required
                   />
                 </div>
@@ -222,7 +222,7 @@ export default function SettingsPage() {
                 <button
                   type="submit"
                   disabled={submittingProfile || profileSuccess}
-                  className="w-fit self-end px-5 py-2.5 bg-primary hover:bg-primary/95 text-white rounded-xl text-xs font-bold transition-all shadow-sm flex items-center gap-2 disabled:opacity-50 cursor-pointer"
+                  className="w-fit self-end px-5 py-2.5 bg-accent hover:bg-accent/95 text-white rounded-xl text-xs font-bold transition-all shadow-sm flex items-center gap-2 disabled:opacity-50 cursor-pointer"
                 >
                   {submittingProfile && (
                     <div className="h-3 w-3 animate-spin rounded-full border-2 border-white/20 border-t-white"></div>
@@ -235,7 +235,7 @@ export default function SettingsPage() {
             {/* Form Ubah Password */}
             <div className="bg-white rounded-2xl border border-line p-6 shadow-sm">
               <div className="flex items-center gap-2 border-b border-line pb-4 mb-6">
-                <KeyIcon className="h-5.5 w-5.5 text-primary" />
+                <KeyIcon className="h-5.5 w-5.5 text-accent" />
                 <div>
                   <h3 className="font-display font-bold text-ink text-sm">Ganti Kata Sandi</h3>
                   <p className="text-xs text-ink-soft">Ubah kata sandi pengaman akun Anda</p>
@@ -250,7 +250,7 @@ export default function SettingsPage() {
                     value={currentPassword}
                     onChange={(e) => setCurrentPassword(e.target.value)}
                     placeholder="Masukkan password saat ini..."
-                    className="w-full px-4 py-3 rounded-xl border border-line focus:border-primary focus:ring-1 focus:ring-primary focus:outline-hidden text-sm bg-paper text-ink transition-all"
+                    className="w-full px-4 py-3 rounded-xl border border-line focus:border-accent focus:ring-1 focus:ring-accent focus:outline-hidden text-sm bg-paper text-ink transition-all"
                     required
                   />
                 </div>
@@ -263,7 +263,7 @@ export default function SettingsPage() {
                       value={newPassword}
                       onChange={(e) => setNewPassword(e.target.value)}
                       placeholder="Minimal 8 karakter..."
-                      className="w-full px-4 py-3 rounded-xl border border-line focus:border-primary focus:ring-1 focus:ring-primary focus:outline-hidden text-sm bg-paper text-ink transition-all"
+                      className="w-full px-4 py-3 rounded-xl border border-line focus:border-accent focus:ring-1 focus:ring-accent focus:outline-hidden text-sm bg-paper text-ink transition-all"
                       required
                     />
                   </div>
@@ -274,7 +274,7 @@ export default function SettingsPage() {
                       value={confirmPassword}
                       onChange={(e) => setConfirmPassword(e.target.value)}
                       placeholder="Masukkan kembali password baru..."
-                      className="w-full px-4 py-3 rounded-xl border border-line focus:border-primary focus:ring-1 focus:ring-primary focus:outline-hidden text-sm bg-paper text-ink transition-all"
+                      className="w-full px-4 py-3 rounded-xl border border-line focus:border-accent focus:ring-1 focus:ring-accent focus:outline-hidden text-sm bg-paper text-ink transition-all"
                       required
                     />
                   </div>
@@ -295,7 +295,7 @@ export default function SettingsPage() {
                 <button
                   type="submit"
                   disabled={submittingPassword || passwordSuccess}
-                  className="w-fit self-end px-5 py-2.5 bg-primary hover:bg-primary/95 text-white rounded-xl text-xs font-bold transition-all shadow-sm flex items-center gap-2 disabled:opacity-50 cursor-pointer"
+                  className="w-fit self-end px-5 py-2.5 bg-accent hover:bg-accent/95 text-white rounded-xl text-xs font-bold transition-all shadow-sm flex items-center gap-2 disabled:opacity-50 cursor-pointer"
                 >
                   {submittingPassword && (
                     <div className="h-3 w-3 animate-spin rounded-full border-2 border-white/20 border-t-white"></div>
