@@ -50,40 +50,40 @@ export default function ProfileForm({ initialData, onSuccess }: ProfileFormProps
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
       {message && (
-        <div className={`p-3 rounded-md text-sm ${message.type === "success" ? "bg-green-50 text-green-700" : "bg-red-50 text-red-700"}`}>
+        <div className={`p-3.5 rounded-xl text-sm font-medium ${message.type === "success" ? "bg-accent-soft text-accent" : "bg-alert-soft text-alert"}`}>
           {message.text}
         </div>
       )}
       
       <div>
-        <label htmlFor="name" className="block text-sm font-medium text-gray-700">Nama Lengkap</label>
+        <label htmlFor="name" className="block text-xs font-bold uppercase tracking-wider text-ink-soft mb-1.5">Nama Lengkap</label>
         <input
           type="text"
           id="name"
           value={name}
           onChange={(e) => setName(e.target.value)}
-          className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+          className="block w-full rounded-xl border border-line bg-paper px-3 py-2.5 text-sm text-ink outline-none focus:border-primary focus:ring-2 focus:ring-primary/10 transition-all"
           required
         />
       </div>
 
       <div>
-        <label htmlFor="email" className="block text-sm font-medium text-gray-700">Email</label>
+        <label htmlFor="email" className="block text-xs font-bold uppercase tracking-wider text-ink-soft mb-1.5">Email</label>
         <input
           type="email"
           id="email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+          className="block w-full rounded-xl border border-line bg-paper px-3 py-2.5 text-sm text-ink outline-none focus:border-primary focus:ring-2 focus:ring-primary/10 transition-all"
           required
         />
       </div>
 
-      <div className="flex justify-end">
+      <div className="flex justify-end pt-2">
         <button
           type="submit"
           disabled={isLoading}
-          className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50"
+          className="w-full sm:w-auto px-5 py-2.5 bg-[#0b3c5d] hover:bg-primary-dark text-white rounded-xl font-semibold text-sm transition-all focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary disabled:opacity-50 flex items-center justify-center gap-2 cursor-pointer"
         >
           {isLoading ? "Menyimpan..." : "Simpan Perubahan"}
         </button>

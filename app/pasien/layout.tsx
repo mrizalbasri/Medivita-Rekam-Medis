@@ -1,15 +1,1 @@
-import React from "react";
-import { PatientBottomNav } from "@/components/pasien/PatientBottomNav";
-
-export default function PasienLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
-  return (
-    <>
-      <div className="pb-16 md:pb-0">{children}</div>
-      <PatientBottomNav />
-    </>
-  );
-}
+import React from 'react'; import { PatientBottomNav } from '@/components/pasien/PatientBottomNav'; export default function PasienLayout({ children }: { children: React.ReactNode }) { return ( <> <div className='pb-16 md:pb-0'>{children}</div> <PatientBottomNav /> </> ); }

@@ -64,6 +64,9 @@ model RiwayatKunjungan {
   tindakan     String?
   resepObat    String?
   createdAt    DateTime      @default(now())
+
+  @@index([pasienId])
+  @@index([petugasId])
 }
 
 model TokenAkses {
@@ -76,6 +79,9 @@ model TokenAkses {
   expiresAt DateTime
   isRevoked Boolean       @default(false)
   createdAt DateTime      @default(now())
+
+  @@index([pasienId])
+  @@index([petugasId])
 }
 
 model LogAkses {
@@ -86,4 +92,7 @@ model LogAkses {
   petugas   PetugasFaskes @relation(fields: [petugasId], references: [id], onDelete: Cascade)
   aksi      String        // misal: "READ_MEDIS", "CREATE_KUNJUNGAN", "REVOKE_AKSES"
   createdAt DateTime      @default(now())
+
+  @@index([pasienId])
+  @@index([petugasId])
 }

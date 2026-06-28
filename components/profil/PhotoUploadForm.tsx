@@ -72,13 +72,13 @@ export default function PhotoUploadForm({ currentPhotoUrl, onSuccess }: PhotoUpl
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
       {message && (
-        <div className={`p-3 rounded-md text-sm ${message.type === "success" ? "bg-green-50 text-green-700" : "bg-red-50 text-red-700"}`}>
+        <div className={`p-3.5 rounded-xl text-sm font-medium ${message.type === "success" ? "bg-accent-soft text-accent" : "bg-alert-soft text-alert"}`}>
           {message.text}
         </div>
       )}
 
       <div className="flex flex-col items-center space-y-4 sm:flex-row sm:space-y-0 sm:space-x-6">
-        <div className="relative h-32 w-32 shrink-0 overflow-hidden rounded-full border-2 border-gray-200 bg-gray-100 flex items-center justify-center">
+        <div className="relative h-32 w-32 shrink-0 overflow-hidden rounded-full border-2 border-line bg-paper flex items-center justify-center shadow-inner">
           {preview ? (
             <Image
               src={preview}
@@ -88,13 +88,13 @@ export default function PhotoUploadForm({ currentPhotoUrl, onSuccess }: PhotoUpl
               sizes="128px"
             />
           ) : (
-            <svg className="h-16 w-16 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <svg className="h-16 w-16 text-ink-soft/40" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
             </svg>
           )}
         </div>
 
-        <div className="flex flex-col items-center sm:items-start space-y-2">
+        <div className="flex flex-col items-center sm:items-start space-y-2 w-full sm:w-auto">
           <input
             type="file"
             accept="image/*"
@@ -105,19 +105,19 @@ export default function PhotoUploadForm({ currentPhotoUrl, onSuccess }: PhotoUpl
           <button
             type="button"
             onClick={() => fileInputRef.current?.click()}
-            className="px-4 py-2 bg-white border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+            className="w-full sm:w-auto px-4 py-2 bg-white border border-line rounded-xl text-sm font-semibold text-primary hover:bg-primary-soft/50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary transition-all cursor-pointer text-center"
           >
             Pilih Foto Baru
           </button>
-          <p className="text-xs text-gray-500">JPG, PNG atau GIF. Maksimal 5MB.</p>
+          <p className="text-xs text-ink-soft">JPG, PNG atau GIF. Maksimal 5MB.</p>
         </div>
       </div>
 
-      <div className="flex justify-end pt-2 border-t border-gray-100">
+      <div className="flex justify-end pt-3 border-t border-line">
         <button
           type="submit"
           disabled={!file || isLoading}
-          className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed"
+          className="w-full sm:w-auto px-5 py-2.5 bg-[#0b3c5d] hover:bg-primary-dark text-white rounded-xl font-semibold text-sm transition-all focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 cursor-pointer"
         >
           {isLoading ? "Mengunggah..." : "Simpan Foto"}
         </button>

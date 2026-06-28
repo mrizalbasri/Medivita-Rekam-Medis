@@ -85,3 +85,5 @@ export const CloseIcon = ({ className = "h-5 w-5" }: { className?: string }) => 
 
 
 
+export const CapsuleIcon = ({ className = 'h-5 w-5' }: { className?: string }) => <Pill className={className} />;
+export const RefreshIcon = ({ className = 'h-5 w-5' }: { className?: string }) => <Clock className={className} />;
