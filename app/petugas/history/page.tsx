@@ -58,7 +58,7 @@ function HistoryContent() {
     switch (action) {
       case "READ_MEDIS":
         return (
-          <span className="inline-flex items-center gap-1 text-[11px] font-bold text-primary bg-primary-soft px-2.5 py-1 rounded-full">
+          <span className="inline-flex items-center gap-1 text-[11px] font-bold text-accent bg-accent-soft px-2.5 py-1 rounded-full">
             <EyeIcon className="h-3.5 w-3.5" /> Buka Rekam Medis
           </span>
         );
@@ -95,14 +95,14 @@ function HistoryContent() {
 
         {loading ? (
           <div className="bg-white rounded-2xl border border-line p-12 shadow-sm flex items-center justify-center min-h-[300px]">
-            <div className="h-8 w-8 animate-spin rounded-full border-4 border-primary/20 border-t-primary"></div>
+            <div className="h-8 w-8 animate-spin rounded-full border-4 border-accent/20 border-t-accent"></div>
           </div>
         ) : (
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
             {/* Stats Panel */}
             <div className="lg:col-span-4 flex flex-col gap-6">
               <div className="bg-white rounded-2xl border border-line p-6 shadow-sm flex flex-col gap-4">
-                <div className="h-12 w-12 bg-primary-soft text-primary rounded-2xl flex items-center justify-center">
+                <div className="h-12 w-12 bg-accent-soft text-accent rounded-2xl flex items-center justify-center">
                   <ActivityIcon className="h-6 w-6" />
                 </div>
                 <div>
@@ -132,7 +132,7 @@ function HistoryContent() {
                     placeholder="Nama pasien, NIK, atau aksi..."
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
-                    className="w-full pl-9 pr-4 py-2.5 rounded-xl border border-line focus:border-primary focus:ring-1 focus:ring-primary focus:outline-hidden text-xs bg-paper text-ink transition-all"
+                    className="w-full pl-9 pr-4 py-2.5 rounded-xl border border-line focus:border-accent focus:ring-1 focus:ring-accent focus:outline-hidden text-xs bg-paper text-ink transition-all"
                   />
                 </div>
               </div>
@@ -154,7 +154,7 @@ function HistoryContent() {
                     {filteredLogs.map((log) => (
                       <div key={log.id} className="p-6 flex items-start sm:items-center justify-between gap-4 hover:bg-[#f4f8fa]/50 transition-colors">
                         <div className="flex items-center gap-4">
-                          <div className={`h-9 w-9 rounded-xl flex items-center justify-center ${log.action === 'READ_MEDIS' ? 'bg-primary-soft text-primary' : 'bg-accent-soft text-accent'}`}>
+                          <div className="h-9 w-9 rounded-xl flex items-center justify-center bg-accent-soft text-accent">
                             {log.action === "READ_MEDIS" ? <EyeIcon className="h-4 w-4" /> : <FilePlusIcon className="h-4 w-4" />}
                           </div>
                           <div>
@@ -180,9 +180,10 @@ function HistoryContent() {
         )}
       </main>
 
-      <footer className="bg-white border-t border-line py-8 mt-16 text-ink-soft">
-        <div className="mx-auto max-w-[1280px] px-6 text-center text-xs font-mono">
-          © 2026 Rekam Medis Jalan (Medivita). PekanIT 2026 Credits.
+      <footer className="bg-white border-t border-line py-6 mt-16 text-ink-soft">
+        <div className="mx-auto max-w-[1280px] px-6 flex flex-col sm:flex-row items-center justify-between gap-3">
+          <span className="font-display font-bold text-ink text-sm">Medivita — Rekam Medis Jalan</span>
+          <p className="text-[11px] font-mono">© 2026 Medivita. Hak cipta dilindungi.</p>
         </div>
       </footer>
     </div>
@@ -193,7 +194,7 @@ export default function HistoryPage() {
   return (
     <Suspense fallback={
       <div className="min-h-screen flex items-center justify-center bg-[#f4f8fa]">
-        <div className="h-10 w-10 animate-spin rounded-full border-4 border-primary/20 border-t-primary"></div>
+        <div className="h-10 w-10 animate-spin rounded-full border-4 border-accent/20 border-t-accent"></div>
       </div>
     }>
       <HistoryContent />

@@ -70,20 +70,20 @@ function WorkersContent() {
 
         {loading ? (
           <div className="bg-white rounded-2xl border border-line p-12 shadow-sm flex items-center justify-center min-h-[300px]">
-            <div className="h-8 w-8 animate-spin rounded-full border-4 border-primary/20 border-t-primary"></div>
+            <div className="h-8 w-8 animate-spin rounded-full border-4 border-accent/20 border-t-accent"></div>
           </div>
         ) : (
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
             {/* Info Faskes Panel */}
             <div className="lg:col-span-4 flex flex-col gap-6">
               <div className="bg-white rounded-2xl border border-line p-6 shadow-sm flex flex-col gap-4">
-                <div className="h-12 w-12 bg-primary-soft text-primary rounded-2xl flex items-center justify-center">
+                <div className="h-12 w-12 bg-accent-soft text-accent rounded-2xl flex items-center justify-center">
                   <HospitalIcon className="h-6 w-6" />
                 </div>
                 <div>
                   <p className="text-xs font-semibold text-ink-soft uppercase tracking-wider">Lokasi Penugasan Anda</p>
                   <h2 className="text-xl font-bold font-display text-ink mt-1">{facility?.name || "Fasilitas Kesehatan"}</h2>
-                  <p className="text-xs text-primary font-bold mt-1">Tipe: {facility?.type || "-"}</p>
+                  <p className="text-xs text-accent font-bold mt-1">Tipe: {facility?.type || "-"}</p>
                 </div>
                 <div className="border-t border-line pt-4 mt-2 grid grid-cols-2 gap-4">
                   <div>
@@ -107,7 +107,7 @@ function WorkersContent() {
                     placeholder="Nama, STR, atau email..."
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
-                    className="w-full pl-9 pr-4 py-2.5 rounded-xl border border-line focus:border-primary focus:ring-1 focus:ring-primary focus:outline-hidden text-xs bg-paper text-ink transition-all"
+                    className="w-full pl-9 pr-4 py-2.5 rounded-xl border border-line focus:border-accent focus:ring-1 focus:ring-accent focus:outline-hidden text-xs bg-paper text-ink transition-all"
                   />
                 </div>
               </div>
@@ -129,18 +129,18 @@ function WorkersContent() {
                     {filteredWorkers.map((w) => (
                       <div key={w.id} className="p-6 flex items-start sm:items-center justify-between gap-4 hover:bg-[#f4f8fa]/50 transition-colors">
                         <div className="flex items-center gap-4">
-                          <div className="h-10 w-10 rounded-full bg-primary/10 flex items-center justify-center text-primary font-bold text-sm">
+                          <div className="h-10 w-10 rounded-full bg-accent/10 flex items-center justify-center text-accent font-bold text-sm">
                             {w.name.replace(/^(dr\.|dr|dokter)\s+/i, "").split(" ").map((n: string) => n[0]).join("").slice(0, 2).toUpperCase()}
                           </div>
                           <div>
                             <div className="flex items-center gap-2">
                               <h4 className="font-bold text-sm text-ink">{w.name}</h4>
                               {w.id === user?.petugas?.id && (
-                                <span className="text-[10px] font-bold text-primary bg-primary-soft px-2 py-0.5 rounded-md">Anda</span>
+                                <span className="text-[10px] font-bold text-accent bg-accent-soft px-2 py-0.5 rounded-md">Anda</span>
                               )}
                             </div>
                             <p className="text-xs text-ink-soft mt-0.5">{w.email}</p>
-                            <p className="text-[11px] font-semibold text-primary mt-1">STR: {w.licenseNo}</p>
+                            <p className="text-[11px] font-semibold text-accent mt-1">STR: {w.licenseNo}</p>
                           </div>
                         </div>
                         <div className="text-right hidden sm:block">
@@ -159,9 +159,10 @@ function WorkersContent() {
         )}
       </main>
 
-      <footer className="bg-white border-t border-line py-8 mt-16 text-ink-soft">
-        <div className="mx-auto max-w-[1280px] px-6 text-center text-xs font-mono">
-          © 2026 Rekam Medis Jalan (Medivita). PekanIT 2026 Credits.
+      <footer className="bg-white border-t border-line py-6 mt-16 text-ink-soft">
+        <div className="mx-auto max-w-[1280px] px-6 flex flex-col sm:flex-row items-center justify-between gap-3">
+          <span className="font-display font-bold text-ink text-sm">Medivita — Rekam Medis Jalan</span>
+          <p className="text-[11px] font-mono">© 2026 Medivita. Hak cipta dilindungi.</p>
         </div>
       </footer>
     </div>
@@ -172,7 +173,7 @@ export default function WorkersPage() {
   return (
     <Suspense fallback={
       <div className="min-h-screen flex items-center justify-center bg-[#f4f8fa]">
-        <div className="h-10 w-10 animate-spin rounded-full border-4 border-primary/20 border-t-primary"></div>
+        <div className="h-10 w-10 animate-spin rounded-full border-4 border-accent/20 border-t-accent"></div>
       </div>
     }>
       <WorkersContent />

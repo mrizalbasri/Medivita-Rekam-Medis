@@ -1291,7 +1291,7 @@ export default function RiwayatKunjunganPage() {
           <span className="font-semibold text-primary-dark">
             Medivita · Rekam Medis Jalan
           </span>{" "}
-          — PekanIT 2026
+          — Hak cipta dilindungi.
         </p>
       </footer>
       <PatientBottomNav />

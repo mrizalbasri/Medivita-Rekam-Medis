@@ -727,11 +727,11 @@ export default function AccessLogPage() {
               </span>
             </div>
             <p className="mt-3 max-w-[360px] text-xs leading-relaxed text-ink-soft">
-              Secure, portable, and patient-controlled medical records for a
-              healthier future.
+              Rekam medis aman, portabel, dan sepenuhnya dikendalikan oleh pasien 
+              untuk masa depan yang lebih sehat.
             </p>
             <p className="mt-6 font-mono text-[10px] text-ink-soft">
-              &copy; 2026 Rekam Medis Jalan (Medivita). PekanIT 2026 Credits.
+              &copy; 2026 Rekam Medis Jalan (Medivita). Hak cipta dilindungi.
             </p>
           </div>
 

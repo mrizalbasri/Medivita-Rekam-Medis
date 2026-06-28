@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import * as Icons from "@/components/ui/icons";
 import Image from "next/image";
 import Link from "next/link";
+import QRCode from "qrcode";
 import { PatientPrimaryNav } from "@/components/pasien/PatientPrimaryNav";
 import { PatientBottomNav } from "@/components/pasien/PatientBottomNav";
 import { PatientAccountMenu } from "@/components/pasien/PatientAccountMenu";
@@ -173,6 +174,7 @@ export default function PatientDashboard() {
     useState<AccessLogItem[]>(fallbackAccessLogs);
   const [visitHistory, setVisitHistory] =
     useState<PatientHistoryItem[]>(fallbackVisitHistory);
+  const [qrCodeUrl, setQrCodeUrl] = useState<string | null>(null);
 
   const showToast = (
     message: string,
@@ -216,6 +218,7 @@ export default function PatientDashboard() {
           pasien?: {
             medicalData?: PatientMedicalData;
             history?: PatientHistoryItem[];
+            qrToken?: string;
           };
         };
 
@@ -225,6 +228,23 @@ export default function PatientDashboard() {
           patientPayload.pasien.history.length > 0
         ) {
           setVisitHistory(patientPayload.pasien.history.slice(0, 2));
+        }
+
+        const qrToken = patientPayload.pasien?.qrToken;
+        if (qrToken) {
+          try {
+            const dataUrl = await QRCode.toDataURL(qrToken, {
+              errorCorrectionLevel: "H",
+              margin: 1,
+              color: {
+                dark: "#0a2835",
+                light: "#ffffff",
+              },
+            });
+            setQrCodeUrl(dataUrl);
+          } catch (err) {
+            console.error("Gagal men-generate QR Code data URL:", err);
+          }
         }
       } catch (error) {
         console.error("Gagal mengambil data dashboard pasien:", error);
@@ -245,8 +265,18 @@ export default function PatientDashboard() {
   };
 
   const handleDownload = () => {
+    if (!qrCodeUrl) {
+      showToast("QR Code belum siap untuk diunduh.", "error");
+      return;
+    }
     const name = userData?.name ?? "pasien";
-    showToast(`QR Code untuk ${name} sedang disiapkan.`, "info");
+    const link = document.createElement("a");
+    link.href = qrCodeUrl;
+    link.download = `medivita-qr-${name.toLowerCase().replace(/\s+/g, "-")}.png`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    showToast(`QR Code untuk ${name} berhasil diunduh.`, "success");
   };
 
   const handlePrint = () => {
@@ -416,246 +446,20 @@ export default function PatientDashboard() {
               {/* QR Container */}
               <div className="my-8 flex h-[280px] w-[280px] items-center justify-center rounded-2xl border border-[#e1f0f7] bg-[#f4f8fa] p-4 shadow-inner relative group">
                 <div className="relative h-[220px] w-[220px] bg-white rounded-xl shadow-md p-3 flex items-center justify-center border border-line group-hover:scale-102 transition-transform duration-300">
-                  {/* Clean Vector SVG QR Code matching the mockup */}
-                  <svg
-                    className={`h-full w-full ${accessRevoked ? "opacity-30 blur-xs" : ""}`}
-                    viewBox="0 0 100 100"
-                    fill="currentColor"
-                  >
-                    {/* Finder pattern top-left */}
-                    <rect
-                      x="0"
-                      y="0"
-                      width="30"
-                      height="30"
-                      fill="#0a2835"
-                      rx="3"
+                  {qrCodeUrl ? (
+                    <img
+                      src={qrCodeUrl}
+                      alt="Universal Health ID QR Code"
+                      className={`h-full w-full object-contain transition-all duration-300 ${
+                        accessRevoked ? "opacity-15 blur-xs" : ""
+                      }`}
                     />
-                    <rect
-                      x="5"
-                      y="5"
-                      width="20"
-                      height="20"
-                      fill="white"
-                      rx="2"
-                    />
-                    <rect
-                      x="10"
-                      y="10"
-                      width="10"
-                      height="10"
-                      fill="#1e77b0"
-                      rx="1"
-                    />
-
-                    {/* Finder pattern top-right */}
-                    <rect
-                      x="70"
-                      y="0"
-                      width="30"
-                      height="30"
-                      fill="#0a2835"
-                      rx="3"
-                    />
-                    <rect
-                      x="75"
-                      y="5"
-                      width="20"
-                      height="20"
-                      fill="white"
-                      rx="2"
-                    />
-                    <rect
-                      x="80"
-                      y="10"
-                      width="10"
-                      height="10"
-                      fill="#1e77b0"
-                      rx="1"
-                    />
-
-                    {/* Finder pattern bottom-left */}
-                    <rect
-                      x="0"
-                      y="70"
-                      width="30"
-                      height="30"
-                      fill="#0a2835"
-                      rx="3"
-                    />
-                    <rect
-                      x="5"
-                      y="75"
-                      width="20"
-                      height="20"
-                      fill="white"
-                      rx="2"
-                    />
-                    <rect
-                      x="10"
-                      y="80"
-                      width="10"
-                      height="10"
-                      fill="#1e77b0"
-                      rx="1"
-                    />
-
-                    {/* QR Code body patterns (simulated matrix matching UI mockup) */}
-                    <rect
-                      x="35"
-                      y="0"
-                      width="5"
-                      height="15"
-                      fill="#1e77b0"
-                      rx="1"
-                    />
-                    <rect
-                      x="45"
-                      y="0"
-                      width="10"
-                      height="5"
-                      fill="#0a2835"
-                      rx="1"
-                    />
-                    <rect
-                      x="60"
-                      y="5"
-                      width="5"
-                      height="10"
-                      fill="#1e77b0"
-                      rx="1"
-                    />
-                    <rect
-                      x="35"
-                      y="20"
-                      width="15"
-                      height="5"
-                      fill="#0a2835"
-                      rx="1"
-                    />
-                    <rect
-                      x="55"
-                      y="20"
-                      width="10"
-                      height="10"
-                      fill="#1e77b0"
-                      rx="1"
-                    />
-
-                    <rect
-                      x="35"
-                      y="35"
-                      width="5"
-                      height="20"
-                      fill="#0a2835"
-                      rx="1"
-                    />
-                    <rect
-                      x="45"
-                      y="35"
-                      width="20"
-                      height="5"
-                      fill="#1e77b0"
-                      rx="1"
-                    />
-                    <rect
-                      x="50"
-                      y="45"
-                      width="10"
-                      height="10"
-                      fill="#0a2835"
-                      rx="1"
-                    />
-                    <rect
-                      x="70"
-                      y="35"
-                      width="15"
-                      height="10"
-                      fill="#1e77b0"
-                      rx="1"
-                    />
-                    <rect
-                      x="70"
-                      y="50"
-                      width="5"
-                      height="15"
-                      fill="#0a2835"
-                      rx="1"
-                    />
-                    <rect
-                      x="80"
-                      y="55"
-                      width="10"
-                      height="5"
-                      fill="#1e77b0"
-                      rx="1"
-                    />
-
-                    <rect
-                      x="35"
-                      y="70"
-                      width="5"
-                      height="10"
-                      fill="#1e77b0"
-                      rx="1"
-                    />
-                    <rect
-                      x="35"
-                      y="85"
-                      width="15"
-                      height="5"
-                      fill="#0a2835"
-                      rx="1"
-                    />
-                    <rect
-                      x="45"
-                      y="75"
-                      width="15"
-                      height="5"
-                      fill="#0a2835"
-                      rx="1"
-                    />
-                    <rect
-                      x="55"
-                      y="85"
-                      width="5"
-                      height="10"
-                      fill="#1e77b0"
-                      rx="1"
-                    />
-                    <rect
-                      x="65"
-                      y="70"
-                      width="10"
-                      height="10"
-                      fill="#0a2835"
-                      rx="1"
-                    />
-                    <rect
-                      x="80"
-                      y="70"
-                      width="5"
-                      height="20"
-                      fill="#1e77b0"
-                      rx="1"
-                    />
-                    <rect
-                      x="90"
-                      y="75"
-                      width="5"
-                      height="10"
-                      fill="#0a2835"
-                      rx="1"
-                    />
-                    <rect
-                      x="70"
-                      y="90"
-                      width="20"
-                      height="5"
-                      fill="#0a2835"
-                      rx="1"
-                    />
-                  </svg>
+                  ) : (
+                    <div className="flex flex-col items-center justify-center gap-2 text-ink-soft/40">
+                      <div className="h-8 w-8 animate-spin rounded-full border-4 border-primary/20 border-t-primary" />
+                      <span className="text-[10px]">Menyiapkan QR...</span>
+                    </div>
+                  )}
                   {accessRevoked && (
                     <div className="absolute inset-0 flex flex-col items-center justify-center bg-white/95 rounded-xl p-4">
                       <Icons.CancelIcon className="h-10 w-10 text-alert mb-2" />
@@ -812,11 +616,11 @@ export default function PatientDashboard() {
               </span>
             </div>
             <p className="mt-3 max-w-[360px] text-xs leading-relaxed text-ink-soft">
-              Empowering patients with secure, portable, and instant access to
-              their medical history anywhere in the world.
+              Memberdayakan pasien dengan akses aman, portabel, dan instan ke
+              riwayat medis mereka di mana saja secara aman.
             </p>
             <p className="mt-6 font-mono text-[10px] text-ink-soft">
-              &copy; 2026 PekanIT 2026 Credits.
+              &copy; 2026 Rekam Medis Jalan (Medivita). Hak cipta dilindungi.
             </p>
           </div>
 

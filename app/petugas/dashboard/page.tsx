@@ -246,7 +246,7 @@ function DashboardContent() {
           <div>
             <h1 className="text-2xl font-bold font-display text-ink">Selamat datang kembali, {doctorName}</h1>
             {user?.petugas && (
-              <p className="text-xs font-semibold text-primary mt-1">
+              <p className="text-xs font-semibold text-accent mt-1">
                 {user.petugas.faskesName} • No. STR: {user.petugas.licenseNo}
               </p>
             )}
@@ -269,7 +269,7 @@ function DashboardContent() {
             {/* Scanned Patient List */}
             {loadingList ? (
               <div className="bg-white rounded-2xl border border-line p-8 shadow-sm flex items-center justify-center min-h-[300px]">
-                <div className="h-8 w-8 animate-spin rounded-full border-4 border-primary/20 border-t-primary"></div>
+                <div className="h-8 w-8 animate-spin rounded-full border-4 border-accent/20 border-t-accent"></div>
               </div>
             ) : (
               <RecentScans
@@ -282,11 +282,11 @@ function DashboardContent() {
             {/* Quick Statistics */}
             <div className="grid grid-cols-2 gap-4">
               <div className="bg-[#1e77b0] text-white p-5 rounded-2xl shadow-xs">
-                <p className="text-xs font-semibold text-white/80">Active Scans</p>
+                <p className="text-xs font-semibold text-white/80">Scan Aktif</p>
                 <p className="text-3xl font-display font-bold mt-1">{patients.length}</p>
               </div>
               <div className="bg-[#eaf5ec] border border-[#d2ebd7] p-5 rounded-2xl shadow-xs">
-                <p className="text-xs font-semibold text-[#475e6b]">Avg Access Time</p>
+                <p className="text-xs font-semibold text-[#475e6b]">Rata-rata Akses</p>
                 <p className="text-3xl font-display font-bold text-[#63b676] mt-1">0.8s</p>
               </div>
             </div>
@@ -298,13 +298,13 @@ function DashboardContent() {
             
             {loadingDetail ? (
               <div className="bg-white rounded-2xl border border-line p-12 shadow-sm flex flex-col items-center justify-center min-h-[400px]">
-                <div className="h-10 w-10 animate-spin rounded-full border-4 border-primary/20 border-t-primary mb-3"></div>
+                <div className="h-10 w-10 animate-spin rounded-full border-4 border-accent/20 border-t-accent mb-3"></div>
                 <p className="text-xs text-ink-soft">Memuat berkas rekam medis terenkripsi...</p>
               </div>
             ) : activePatientInfo ? (
               <>
                 {/* Active Patient Details */}
-                <PatientProfileCard patient={activePatientInfo} />
+                <PatientProfileCard patient={activePatientInfo} onCloseClick={() => setActivePatientId("")} />
 
                 {/* Timeline Medical Visit History */}
                 <VisitHistory history={activePatientHistory} />
@@ -317,7 +317,7 @@ function DashboardContent() {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-stretch">
                 {/* Empty Placeholder Card */}
                 <div className="bg-white rounded-2xl border border-line p-8 shadow-sm flex flex-col items-center justify-center text-center min-h-[450px]">
-                  <div className="h-16 w-16 bg-[#e1f0f7] text-primary rounded-3xl flex items-center justify-center mb-6">
+                  <div className="h-16 w-16 bg-[#eaf8f8] text-accent rounded-3xl flex items-center justify-center mb-6">
                     <ScanIcon className="h-8 w-8" />
                   </div>
                   <h3 className="text-lg font-bold text-ink">Belum Ada Pasien Terpilih</h3>
@@ -326,7 +326,7 @@ function DashboardContent() {
                   </p>
                   <button
                     onClick={handleScanClick}
-                    className="bg-primary hover:bg-primary/95 text-white px-6 py-3 rounded-xl font-bold text-sm shadow-sm transition-all active:scale-95 flex items-center gap-2 cursor-pointer"
+                    className="bg-accent hover:bg-accent/95 text-white px-6 py-3 rounded-xl font-bold text-sm shadow-sm transition-all active:scale-95 flex items-center gap-2 cursor-pointer"
                   >
                     <ScanIcon className="h-4.5 w-4.5" />
                     Pindai QR Code Sekarang
@@ -346,24 +346,15 @@ function DashboardContent() {
       </main>
 
       {/* Footer */}
-      <footer className="bg-white border-t border-line py-12 mt-16 text-ink-soft">
-        <div className="mx-auto max-w-[1280px] px-6 grid grid-cols-1 md:grid-cols-12 gap-8">
-          <div className="md:col-span-6 flex flex-col gap-3">
-            <span className="font-display font-bold text-ink text-lg">Medivita</span>
-            <p className="text-sm max-w-md">
-              Solusi rekam medis digital portabel untuk akses kesehatan yang lebih cepat, akurat, dan aman bagi setiap pasien.
-            </p>
+      <footer className="bg-white border-t border-line py-6 mt-16 text-ink-soft">
+        <div className="mx-auto max-w-[1280px] px-6 flex flex-col sm:flex-row items-center justify-between gap-3">
+          <span className="font-display font-bold text-ink text-sm">Medivita — Rekam Medis Jalan</span>
+          <div className="flex gap-5 text-xs">
+            <Link href="#" className="hover:text-accent transition-colors">Kebijakan Privasi</Link>
+            <Link href="#" className="hover:text-accent transition-colors">Syarat Layanan</Link>
+            <Link href="#" className="hover:text-accent transition-colors">Pusat Bantuan</Link>
           </div>
-          <div className="md:col-span-6 flex flex-col md:items-end justify-between gap-4">
-            <div className="flex gap-6 text-sm">
-              <Link href="#" className="hover:text-primary transition-colors">Privacy Policy</Link>
-              <Link href="#" className="hover:text-primary transition-colors">Terms of Service</Link>
-              <Link href="#" className="hover:text-primary transition-colors">Help Center</Link>
-            </div>
-            <p className="text-xs font-mono">
-              © 2026 Rekam Medis Jalan (Medivita). PekanIT 2026 Credits.
-            </p>
-          </div>
+          <p className="text-[11px] font-mono">© 2026 Medivita. Hak cipta dilindungi.</p>
         </div>
       </footer>
     </div>
@@ -374,7 +365,7 @@ export default function PetugasDashboard() {
   return (
     <Suspense fallback={
       <div className="min-h-screen flex items-center justify-center bg-[#f4f8fa]">
-        <div className="h-10 w-10 animate-spin rounded-full border-4 border-primary/20 border-t-primary"></div>
+        <div className="h-10 w-10 animate-spin rounded-full border-4 border-accent/20 border-t-accent"></div>
       </div>
     }>
       <DashboardContent />

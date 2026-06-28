@@ -368,11 +368,11 @@ export default function PengaturanProfilPage() {
               </span>
             </div>
             <p className="mt-3 max-w-[360px] text-xs leading-relaxed text-ink-soft">
-              Empowering patients with secure, portable, and instant access to
-              their medical history anywhere in the world.
+              Memberdayakan pasien dengan akses aman, portabel, dan instan ke
+              riwayat medis mereka di mana saja secara aman.
             </p>
             <p className="mt-6 font-mono text-[10px] text-ink-soft">
-              &copy; 2026 PekanIT 2026 Credits.
+              &copy; 2026 Rekam Medis Jalan (Medivita). Hak cipta dilindungi.
             </p>
           </div>
 

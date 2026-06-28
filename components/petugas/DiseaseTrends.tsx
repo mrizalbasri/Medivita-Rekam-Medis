@@ -57,7 +57,7 @@ export function DiseaseTrends() {
   return (
     <div className="bg-white rounded-2xl border border-line p-6 shadow-sm flex flex-col gap-4 h-full">
       <div className="flex items-center gap-2.5 border-b border-line pb-3">
-        <div className="h-8 w-8 bg-primary-soft text-primary rounded-xl flex items-center justify-center">
+        <div className="h-8 w-8 bg-accent-soft text-accent rounded-xl flex items-center justify-center">
           <ActivityIcon className="h-4.5 w-4.5" />
         </div>
         <div>
@@ -71,11 +71,11 @@ export function DiseaseTrends() {
           trends.map((t, i) => {
             // Skema warna bar bergantian untuk visualisasi yang menarik
             const barColors = [
-              "bg-primary",
+              "bg-accent",
               "bg-[#0284c7]",
               "bg-[#5db870]",
               "bg-[#3d9652]",
-              "bg-primary/70",
+              "bg-accent/70",
             ];
             const colorClass = barColors[i % barColors.length];
 

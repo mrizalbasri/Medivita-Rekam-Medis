@@ -24,16 +24,16 @@ export function VisitHistory({ history }: VisitHistoryProps) {
     <div className="bg-white rounded-2xl border border-line p-6 shadow-sm">
       <div className="flex justify-between items-center mb-6">
         <h2 className="font-display text-lg font-bold text-ink flex items-center gap-2">
-          <span className="text-primary">
+          <span className="text-accent">
             <ActivityIcon className="h-5 w-5" />
           </span>
-          Visit History
+          Riwayat Kunjungan
         </h2>
         {history.length > 0 && (
           <button
             type="button"
             onClick={handlePrint}
-            className="flex items-center gap-1.5 px-3 py-1.5 border border-line bg-white hover:bg-paper rounded-xl text-xs font-semibold text-primary transition-colors cursor-pointer"
+            className="flex items-center gap-1.5 px-3 py-1.5 border border-line bg-white hover:bg-paper rounded-xl text-xs font-semibold text-accent transition-colors cursor-pointer"
           >
             <PrinterIcon className="h-3.5 w-3.5" />
             Cetak Riwayat
@@ -46,7 +46,7 @@ export function VisitHistory({ history }: VisitHistoryProps) {
           {history.map((visit) => (
             <div key={visit.id} className="relative">
               {/* Circle icon on the timeline */}
-              <span className="absolute -left-[35px] top-0.5 bg-primary-soft text-primary rounded-full p-1.5 border-2 border-white shadow-xs">
+              <span className="absolute -left-[35px] top-0.5 bg-accent-soft text-accent rounded-full p-1.5 border-2 border-white shadow-xs">
                 <HospitalIcon className="h-4.5 w-4.5" />
               </span>
               
@@ -55,7 +55,7 @@ export function VisitHistory({ history }: VisitHistoryProps) {
                 <span className="text-xs font-mono text-ink-soft">{visit.date}</span>
               </div>
               {visit.type && (
-                <span className="inline-block bg-primary-soft/60 text-primary text-[10px] font-semibold px-2 py-0.5 rounded-md mt-1">
+                <span className="inline-block bg-accent-soft/60 text-accent text-[10px] font-semibold px-2 py-0.5 rounded-md mt-1">
                   {visit.type}
                 </span>
               )}

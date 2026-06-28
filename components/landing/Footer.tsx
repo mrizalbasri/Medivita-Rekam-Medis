@@ -33,9 +33,8 @@ export function Footer() {
             </div>
           </div>
           <p className="max-w-[340px] text-xs leading-relaxed text-ink-soft">
-            Prototipe untuk PekanIT 2026 (subtema Kesehatan & Kesejahteraan
-            Masyarakat) — menjaga kontinuitas data kesehatan pasien lintas
-            fasilitas, dengan kendali akses penuh di tangan pasien.
+            Menjaga kontinuitas data kesehatan pasien lintas fasilitas kesehatan 
+            dengan kendali akses penuh di tangan pasien secara aman dan terenkripsi.
           </p>
           <div className="flex gap-2.5">
             <Link
@@ -129,7 +128,7 @@ export function Footer() {
 
         {/* Bottom copyright */}
         <div className="col-span-12 flex flex-col items-center justify-between gap-3 border-t border-line/60 pt-8 mt-4 font-mono text-[10px] text-ink-soft/70 sm:flex-row">
-          <p>&copy; 2026 Rekam Medis Jalan (Medivita). Proposal PekanIT 2026.</p>
+          <p>&copy; 2026 Rekam Medis Jalan (Medivita). Hak cipta dilindungi.</p>
           <p>Prototipe MVP — belum terintegrasi dengan SATUSEHAT/SIMRS.</p>
         </div>
       </div>

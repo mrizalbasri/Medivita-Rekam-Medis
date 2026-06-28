@@ -7,9 +7,9 @@ import { validateLoginField, type LoginInput } from "@/lib/validations/login";
 
 /* ─── Warna brand Medivita (dari logo) ─────────────────────────── */
 const C = {
-  blue: "#2B5BA8",
+  blue: "#4fa0e0", // Biru Lembut
   blueDark: "#1a3a6e",
-  teal: "#2AACAB",
+  teal: "#2AACAB", // Teal Petugas
   tealDark: "#1b8786",
   tealSoft: "#d4f0ef",
   green: "#5DB870",
@@ -188,7 +188,7 @@ export function LoginForm() {
           <div className="space-y-2.5">
             <h1 className="text-[2.6rem] font-bold tracking-tight text-white leading-tight">
               Rekam Medis<br />
-              <span style={{ color: role === "pasien" ? "#88bfea" : "#88ead6" }}>Jalan</span>
+              <span className={role === "pasien" ? "bg-gradient-to-r from-sky-300 to-cyan-200 bg-clip-text text-transparent" : "bg-gradient-to-r from-emerald-300 to-teal-200 bg-clip-text text-transparent"}>Jalan</span>
             </h1>
             <p className="text-[0.95rem] leading-relaxed" style={{ color: "rgba(255,255,255,0.65)" }}>
               {role === "pasien"
@@ -440,8 +440,8 @@ export function LoginForm() {
               disabled={isLoading || isSuccess}
               className="relative w-full overflow-hidden rounded-xl py-3.5 text-sm font-semibold text-white transition-all duration-200"
               style={{
-                background: isSuccess ? C.green : (role === "pasien" ? C.blue : BRAND_GRADIENT),
-                boxShadow: isLoading || isSuccess ? "none" : `0 4px 18px ${role === "pasien" ? "rgba(43,91,168,0.28)" : "rgba(42,172,171,0.38)"}`,
+                background: isSuccess ? C.green : (role === "pasien" ? C.blue : C.teal),
+                boxShadow: isLoading || isSuccess ? "none" : `0 4px 18px ${role === "pasien" ? "rgba(79,160,224,0.28)" : "rgba(42,172,171,0.28)"}`,
                 opacity: isLoading ? 0.82 : 1,
                 cursor: isLoading || isSuccess ? "not-allowed" : "pointer",
                 transform: "scale(1)",

@@ -336,7 +336,7 @@ export default function PengaturanPrivasiPage() {
                 setTimeout(() => setShowNotif(false), 3000);
               }}
               aria-label="Notifikasi"
-              className="relative rounded-full p-2 text-[#64748b] hover:bg-[#eff6ff] hover:text-[#2B5BA8] transition-all"
+              className="relative rounded-full p-2 text-[#64748b] hover:bg-[#eff6ff] hover:text-[#4fa0e0] transition-all"
             >
               <BellIcon className="h-5 w-5" />
               <span className="absolute top-1.5 right-1.5 h-2 w-2 rounded-full bg-[#ef4444]" />
@@ -425,7 +425,7 @@ export default function PengaturanPrivasiPage() {
       {/* MAIN */}
       <main className="mx-auto w-full max-w-[820px] flex-1 px-4 py-10 md:px-6">
         <div className="mb-6">
-          <p className="font-mono text-xs font-semibold tracking-widest text-[#2B5BA8] uppercase mb-1">
+          <p className="font-mono text-xs font-semibold tracking-widest text-[#4fa0e0] uppercase mb-1">
             Akun &amp; Keamanan
           </p>
           <h1 className="text-3xl font-bold tracking-tight text-[#0f172a]">
@@ -451,7 +451,7 @@ export default function PengaturanPrivasiPage() {
               <div className="flex items-start justify-between gap-4 py-4 border-b border-[#f1f5f9]">
                 <div className="flex items-start gap-4">
                   <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[#eff6ff]">
-                    <ShieldIcon className="h-5 w-5 text-[#2B5BA8]" />
+                    <ShieldIcon className="h-5 w-5 text-[#4fa0e0]" />
                   </div>
                   <div className="flex-1 min-w-0">
                     <p className="text-sm font-semibold text-[#0f172a]">
@@ -506,7 +506,7 @@ export default function PengaturanPrivasiPage() {
               <div className="flex items-start justify-between gap-4 py-4 border-b border-[#f1f5f9]">
                 <div className="flex items-start gap-4">
                   <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[#eff6ff]">
-                    <DownloadIcon className="h-5 w-5 text-[#2B5BA8]" />
+                    <DownloadIcon className="h-5 w-5 text-[#4fa0e0]" />
                   </div>
                   <div className="flex-1 min-w-0">
                     <p className="text-sm font-semibold text-[#0f172a]">
@@ -518,7 +518,7 @@ export default function PengaturanPrivasiPage() {
                     </p>
                     {exportProgress && (
                       <div className="mt-2 h-1.5 w-full rounded-full bg-[#e2e8f0] overflow-hidden">
-                        <div className="h-full w-[65%] rounded-full bg-gradient-to-r from-[#2B5BA8] to-[#2AACAB] animate-pulse" />
+                        <div className="h-full w-[65%] rounded-full bg-gradient-to-r from-[#4fa0e0] to-[#2AACAB] animate-pulse" />
                       </div>
                     )}
                     {exportError && (
@@ -537,7 +537,7 @@ export default function PengaturanPrivasiPage() {
                   id="btn-ekspor-data"
                   onClick={handleExport}
                   disabled={exportProgress}
-                  className="shrink-0 rounded-xl border border-[#2B5BA8] px-4 py-2 text-sm font-semibold text-[#2B5BA8] hover:bg-[#eff6ff] transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="shrink-0 rounded-xl border border-[#4fa0e0] px-4 py-2 text-sm font-semibold text-[#4fa0e0] hover:bg-[#eff6ff] transition-all disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   {exportProgress ? "Memproses…" : "Ekspor Data"}
                 </button>
@@ -611,7 +611,7 @@ export default function PengaturanPrivasiPage() {
               <button
                 id="btn-simpan-perubahan"
                 onClick={handleSave}
-                className="flex items-center gap-2.5 rounded-full bg-gradient-to-r from-[#2B5BA8] to-[#2AACAB] px-7 py-3 text-sm font-bold text-white shadow-md hover:shadow-lg hover:scale-[1.02] active:scale-[0.98] transition-all"
+                className="flex items-center gap-2.5 rounded-full bg-gradient-to-r from-[#4fa0e0] to-[#2AACAB] px-7 py-3 text-sm font-bold text-white shadow-md hover:shadow-lg hover:scale-[1.02] active:scale-[0.98] transition-all"
               >
                 {saved ? (
                   <>
@@ -632,7 +632,7 @@ export default function PengaturanPrivasiPage() {
         <div className="mt-6 text-center">
           <Link
             href="/pasien/dashboard"
-            className="text-xs text-[#64748b] hover:text-[#2B5BA8] transition-colors font-medium"
+            className="text-xs text-[#64748b] hover:text-[#4fa0e0] transition-colors font-medium"
           >
             ← Kembali ke Dashboard
           </Link>
@@ -643,7 +643,7 @@ export default function PengaturanPrivasiPage() {
       <footer className="border-t border-[#e2e8f0] bg-white mt-12">
         <div className="mx-auto max-w-[1280px] px-4 py-6 md:px-10 text-center">
           <p className="font-mono text-[10px] text-[#64748b]">
-            &copy; 2026 PekanIT 2026 Credits.
+            &copy; 2026 Medivita. Hak cipta dilindungi.
           </p>
         </div>
       </footer>

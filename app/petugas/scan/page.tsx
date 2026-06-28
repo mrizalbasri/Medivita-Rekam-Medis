@@ -124,13 +124,13 @@ export default function ScanPage() {
       {/* Header */}
       <header className="sticky top-0 z-50 w-full border-b border-line bg-white py-3.5 shadow-xs">
         <div className="mx-auto flex max-w-[1280px] items-center justify-between px-6">
-          <Link href="/petugas/dashboard" className="flex items-center gap-2 text-sm font-semibold text-ink-soft hover:text-primary transition-colors">
+          <Link href="/petugas/dashboard" className="flex items-center gap-2 text-sm font-semibold text-ink-soft hover:text-accent transition-colors">
             <ArrowLeftIcon className="h-5 w-5" />
             Kembali ke Dashboard
           </Link>
           <div className="flex items-center gap-3">
-            <div className="relative h-8 w-8 overflow-hidden rounded-lg bg-primary-soft flex items-center justify-center">
-              <span className="font-display font-bold text-primary text-sm">M</span>
+            <div className="relative h-8 w-8 overflow-hidden rounded-lg bg-accent-soft flex items-center justify-center">
+              <span className="font-display font-bold text-accent text-sm">M</span>
             </div>
             <span className="font-display font-bold text-ink">Medivita</span>
           </div>
@@ -140,7 +140,7 @@ export default function ScanPage() {
       {/* Main Scanner Container */}
       <main className="mx-auto flex w-full max-w-[500px] flex-1 flex-col items-center justify-center px-6 py-12">
         <div className="w-full rounded-3xl border border-line bg-white p-6 shadow-md text-center">
-          <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-2xl bg-primary-soft text-primary">
+          <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-2xl bg-accent-soft text-accent">
             <ScanIcon className="h-6 w-6" />
           </div>
           <h1 className="font-display text-2xl font-bold text-ink mb-1">Pindai QR Code Pasien</h1>
@@ -194,13 +194,13 @@ export default function ScanPage() {
               placeholder="Paste QR Token JWT di sini..."
               value={simulatedToken}
               onChange={(e) => setSimulatedToken(e.target.value)}
-              className="flex-1 px-3 py-2 rounded-xl border border-line focus:border-primary focus:outline-hidden text-xs bg-[#f4f8fa] text-ink transition-all"
+              className="flex-1 px-3 py-2 rounded-xl border border-line focus:border-accent focus:outline-hidden text-xs bg-[#f4f8fa] text-ink transition-all"
               disabled={loading || !!successData}
             />
             <button
               type="submit"
               disabled={loading || !simulatedToken.trim() || !!successData}
-              className="rounded-xl bg-primary px-4 py-2 text-xs font-semibold text-white hover:bg-primary-dark transition-colors disabled:opacity-50"
+              className="rounded-xl bg-accent px-4 py-2 text-xs font-semibold text-white hover:bg-accent/90 transition-colors disabled:opacity-50"
             >
               Simulate
             </button>
