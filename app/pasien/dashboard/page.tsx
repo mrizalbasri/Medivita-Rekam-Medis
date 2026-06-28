@@ -597,111 +597,11 @@ export default function PatientDashboard() {
         </div>
       </main>
 
-      {/* FOOTER */}
-      <footer className="border-t border-line bg-primary-soft/30 mt-12">
-        <div className="mx-auto grid max-w-[1280px] grid-cols-1 gap-10 px-4 py-12 md:grid-cols-12 md:px-10">
-          <div className="col-span-12 md:col-span-5">
-            <div className="flex items-center gap-3">
-              <div className="relative h-9 w-9 overflow-hidden rounded-lg">
-                <Image
-                  src="/logo.webp"
-                  alt="Medivita Logo"
-                  fill
-                  sizes="36px"
-                  className="object-cover object-top scale-[1.3] -translate-y-[8%]"
-                />
-              </div>
-              <span className="font-display text-base font-semibold text-primary-dark">
-                Rekam Medis Jalan (Medivita)
-              </span>
-            </div>
-            <p className="mt-3 max-w-[360px] text-xs leading-relaxed text-ink-soft">
-              Memberdayakan pasien dengan akses aman, portabel, dan instan ke
-              riwayat medis mereka di mana saja secara aman.
-            </p>
-            <p className="mt-6 font-mono text-[10px] text-ink-soft">
-              &copy; 2026 Rekam Medis Jalan (Medivita). Hak cipta dilindungi.
-            </p>
-          </div>
-
-          <div className="col-span-6 sm:col-span-3 md:col-span-2">
-            <h4 className="font-mono text-[11px] uppercase tracking-widest text-primary-dark font-bold">
-              Platform
-            </h4>
-            <ul className="mt-3 space-y-2 text-xs text-ink-soft">
-              <li>
-                <a href="#" className="hover:text-primary transition-colors">
-                  Features
-                </a>
-              </li>
-              <li>
-                <a href="#" className="hover:text-primary transition-colors">
-                  Hospitals Partner
-                </a>
-              </li>
-              <li>
-                <a href="#" className="hover:text-primary transition-colors">
-                  App Store
-                </a>
-              </li>
-            </ul>
-          </div>
-
-          <div className="col-span-6 sm:col-span-3 md:col-span-2">
-            <h4 className="font-mono text-[11px] uppercase tracking-widest text-primary-dark font-bold">
-              Company
-            </h4>
-            <ul className="mt-3 space-y-2 text-xs text-ink-soft">
-              <li>
-                <a href="#" className="hover:text-primary transition-colors">
-                  About Us
-                </a>
-              </li>
-              <li>
-                <a href="#" className="hover:text-primary transition-colors">
-                  Contact Info
-                </a>
-              </li>
-              <li>
-                <a href="#" className="hover:text-primary transition-colors">
-                  Privacy Policy
-                </a>
-              </li>
-            </ul>
-          </div>
-
-          <div className="col-span-12 sm:col-span-6 md:col-span-3">
-            <h4 className="font-mono text-[11px] uppercase tracking-widest text-primary-dark font-bold">
-              Newsletter
-            </h4>
-            <p className="mt-2 text-xs text-ink-soft leading-relaxed mb-3">
-              Stay updated on latest medical security standards.
-            </p>
-            <form
-              onSubmit={(e) => {
-                e.preventDefault();
-                showToast(
-                  "Terima kasih, Anda sudah bergabung newsletter.",
-                  "success",
-                );
-              }}
-              className="flex gap-2"
-            >
-              <input
-                type="email"
-                placeholder="email@example.com"
-                required
-                className="flex-1 rounded-xl border border-line bg-white px-3 py-2 text-xs outline-none focus:border-primary transition-colors"
-              />
-              <button
-                type="submit"
-                className="rounded-xl bg-[#0b3c5d] px-4 py-2 text-xs font-semibold text-white hover:bg-primary-dark transition-colors"
-              >
-                Join
-              </button>
-            </form>
-          </div>
-        </div>
+      {/* ── FOOTER ── */}
+      <footer className="mt-12 border-t border-line bg-primary-soft/30 py-6 px-4 text-center">
+        <p className="text-xs text-ink-soft">
+          © 2026 <span className="font-semibold text-primary-dark">Medivita · Rekam Medis Jalan</span> — Hak cipta dilindungi.
+        </p>
       </footer>
       <PatientBottomNav />
     </div>

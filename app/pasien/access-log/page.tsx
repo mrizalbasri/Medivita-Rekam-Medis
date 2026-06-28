@@ -709,60 +709,11 @@ export default function AccessLogPage() {
       </main>
 
       {/* FOOTER */}
-      <footer className="border-t border-line bg-primary-soft/30 mt-12">
-        <div className="mx-auto grid max-w-[1280px] grid-cols-1 gap-10 px-4 py-12 md:grid-cols-12 md:px-10">
-          <div className="col-span-12 md:col-span-5">
-            <div className="flex items-center gap-3">
-              <div className="relative h-9 w-9 overflow-hidden rounded-lg">
-                <Image
-                  src="/logo.webp"
-                  alt="Medivita Logo"
-                  fill
-                  sizes="36px"
-                  className="object-cover object-top scale-[1.3] -translate-y-[8%]"
-                />
-              </div>
-              <span className="font-display text-base font-semibold text-primary-dark">
-                Rekam Medis Jalan (Medivita)
-              </span>
-            </div>
-            <p className="mt-3 max-w-[360px] text-xs leading-relaxed text-ink-soft">
-              Rekam medis aman, portabel, dan sepenuhnya dikendalikan oleh pasien 
-              untuk masa depan yang lebih sehat.
-            </p>
-            <p className="mt-6 font-mono text-[10px] text-ink-soft">
-              &copy; 2026 Rekam Medis Jalan (Medivita). Hak cipta dilindungi.
-            </p>
-          </div>
-
-          <div className="col-span-6 sm:col-span-3 md:col-span-2 md:col-start-9">
-            <h4 className="font-mono text-[11px] uppercase tracking-widest text-primary-dark font-bold">
-              Company
-            </h4>
-            <ul className="mt-3 space-y-2 text-xs text-ink-soft">
-              <li>
-                <a href="#" className="hover:text-primary transition-colors">
-                  Contact Info
-                </a>
-              </li>
-              <li>
-                <a href="#" className="hover:text-primary transition-colors">
-                  Privacy Policy
-                </a>
-              </li>
-              <li>
-                <a href="#" className="hover:text-primary transition-colors">
-                  Terms of Service
-                </a>
-              </li>
-              <li>
-                <a href="#" className="hover:text-primary transition-colors">
-                  Help Center
-                </a>
-              </li>
-            </ul>
-          </div>
-        </div>
+      {/* ── FOOTER ── */}
+      <footer className="mt-12 border-t border-line bg-primary-soft/30 py-6 px-4 text-center">
+        <p className="text-xs text-ink-soft">
+          © 2026 <span className="font-semibold text-primary-dark">Medivita · Rekam Medis Jalan</span> — Hak cipta dilindungi.
+        </p>
       </footer>
       <PatientBottomNav />
     </div>

@@ -639,13 +639,11 @@ export default function PengaturanPrivasiPage() {
         </div>
       </main>
 
-      {/* FOOTER */}
-      <footer className="border-t border-[#e2e8f0] bg-white mt-12">
-        <div className="mx-auto max-w-[1280px] px-4 py-6 md:px-10 text-center">
-          <p className="font-mono text-[10px] text-[#64748b]">
-            &copy; 2026 Medivita. Hak cipta dilindungi.
-          </p>
-        </div>
+      {/* ── FOOTER ── */}
+      <footer className="mt-12 border-t border-line bg-primary-soft/30 py-6 px-4 text-center">
+        <p className="text-xs text-ink-soft">
+          © 2026 <span className="font-semibold text-primary-dark">Medivita · Rekam Medis Jalan</span> — Hak cipta dilindungi.
+        </p>
       </footer>
       <PatientBottomNav />
     </div>
