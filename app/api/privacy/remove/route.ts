@@ -35,5 +35,7 @@ export async function DELETE(request: Request) {
   await prisma.pasien.deleteMany({ where: { userId } });
   await prisma.user.delete({ where: { id: userId } });
 
-  return NextResponse.json({ success: true });
+  const response = NextResponse.json({ success: true });
+  response.cookies.delete("session_token");
+  return response;
 }

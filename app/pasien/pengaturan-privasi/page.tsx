@@ -293,7 +293,7 @@ export default function PengaturanPrivasiPage() {
       if (!res.ok) throw new Error();
       // Hapus cookie & redirect ke halaman login
       document.cookie = "session_token=; Max-Age=0; path=/";
-      window.location.href = "/login";
+      window.location.replace("/login");
     } catch {
       setShowDeleteModal(false);
       setDeleteLoading(false);
