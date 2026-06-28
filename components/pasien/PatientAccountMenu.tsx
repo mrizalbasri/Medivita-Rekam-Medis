@@ -19,19 +19,6 @@ export function PatientAccountMenu({
   onLogout,
 }: PatientAccountMenuProps) {
   const [open, setOpen] = useState(false);
-  const rootRef = useRef<HTMLDivElement | null>(null);
-
-  useEffect(() => {
-    const onClickOutside = (event: MouseEvent) => {
-      if (!rootRef.current) return;
-      if (!rootRef.current.contains(event.target as Node)) {
-        setOpen(false);
-      }
-    };
-
-    window.addEventListener("mousedown", onClickOutside);
-    return () => window.removeEventListener("mousedown", onClickOutside);
-  }, []);
 
   const handleLogout = async () => {
     try {
@@ -48,11 +35,11 @@ export function PatientAccountMenu({
   };
 
   return (
-    <div ref={rootRef} className="relative">
+    <div className="relative">
       <button
         type="button"
         onClick={() => setOpen((v) => !v)}
-        className="flex items-center gap-2 rounded-full border border-line bg-white p-1 pr-2 hover:bg-gray-50"
+        className="flex items-center gap-2 rounded-full border border-line bg-white p-1 pr-2 hover:bg-gray-50 transition-all active:scale-95 cursor-pointer"
         aria-haspopup="menu"
         aria-expanded={open}
       >
@@ -71,31 +58,47 @@ export function PatientAccountMenu({
       </button>
 
       {open && (
-        <div className="absolute right-0 mt-2 w-56 overflow-hidden rounded-xl border border-line bg-white shadow-lg">
-          <div className="border-b border-line px-3 py-2">
-            <p className="truncate text-sm font-semibold text-primary-dark">{name || "Akun"}</p>
-            <p className="truncate text-xs text-ink-soft">{email || ""}</p>
-          </div>
+        <>
+          {/* Backdrop overlay untuk menangkap klik luar secara andal di mobile */}
+          <div className="fixed inset-0 z-40 cursor-default" onClick={() => setOpen(false)} />
+          
+          <div className="absolute right-0 mt-2 w-56 overflow-hidden rounded-xl border border-line bg-white shadow-lg z-50">
+            <div className="border-b border-line px-3 py-2">
+              <p className="truncate text-sm font-semibold text-primary-dark">{name || "Akun"}</p>
+              <p className="truncate text-xs text-ink-soft">{email || ""}</p>
+            </div>
 
-          <div className="p-1">
-            <Link href="/pasien/pengaturan-profil" className="flex items-center gap-2 rounded-lg px-3 py-2 text-sm text-ink-soft hover:bg-gray-50">
-              <Icons.SettingsIcon className="h-4 w-4" />
-              Pengaturan Profil
-            </Link>
-            <Link href="/pasien/pengaturan-privasi" className="flex items-center gap-2 rounded-lg px-3 py-2 text-sm text-ink-soft hover:bg-gray-50">
-              <Icons.ShieldCheckIcon className="h-4 w-4" />
-              Pengaturan Privasi
-            </Link>
-            <button
-              type="button"
-              onClick={handleLogout}
-              className="flex w-full items-center gap-2 rounded-lg px-3 py-2 text-left text-sm text-alert hover:bg-alert-soft"
-            >
-              <Icons.LogoutIcon className="h-4 w-4" />
-              Logout
-            </button>
+            <div className="p-1">
+              <Link 
+                href="/pasien/pengaturan-profil" 
+                onClick={() => setOpen(false)}
+                className="flex items-center gap-2 rounded-lg px-3 py-2.5 text-sm text-ink-soft hover:bg-gray-50 active:bg-gray-100 transition-colors cursor-pointer"
+              >
+                <Icons.SettingsIcon className="h-4 w-4" />
+                Pengaturan Profil
+              </Link>
+              <Link 
+                href="/pasien/pengaturan-privasi" 
+                onClick={() => setOpen(false)}
+                className="flex items-center gap-2 rounded-lg px-3 py-2.5 text-sm text-ink-soft hover:bg-gray-50 active:bg-gray-100 transition-colors cursor-pointer"
+              >
+                <Icons.ShieldCheckIcon className="h-4 w-4" />
+                Pengaturan Privasi
+              </Link>
+              <button
+                type="button"
+                onClick={() => {
+                  setOpen(false);
+                  handleLogout();
+                }}
+                className="flex w-full items-center gap-2 rounded-lg px-3 py-2.5 text-left text-sm text-alert hover:bg-alert-soft active:bg-alert-soft/80 transition-colors cursor-pointer"
+              >
+                <Icons.LogoutIcon className="h-4 w-4" />
+                Logout
+              </button>
+            </div>
           </div>
-        </div>
+        </>
       )}
     </div>
   );

@@ -62,19 +62,7 @@ export function Navbar() {
 
         {/* Desktop actions */}
         <div className="hidden items-center gap-2 md:flex">
-          <a
-            href="/login?role=pasien"
-            className="flex items-center gap-2 rounded-full border border-line bg-white px-4 py-2 text-sm font-medium text-ink hover:bg-paper transition-all hover:-translate-y-0.5 active:scale-95"
-          >
-            Masuk Akun
-          </a>
-          <a
-            href="/login?role=petugas"
-            className="flex items-center gap-1.5 rounded-full bg-primary px-4 py-2 text-sm font-semibold text-white hover:bg-primary/90 transition-all hover:-translate-y-0.5 active:scale-95 shadow-xs"
-          >
-            <ScanIcon className="h-4 w-4" />
-            Portal Petugas
-          </a>
+          <NavActions />
         </div>
 
         {/* Mobile menu toggle */}
@@ -106,24 +94,124 @@ export function Navbar() {
             </a>
           ))}
           <div className="mt-3 flex flex-col gap-2 border-t border-line pt-3">
-            <a
-              href="/login?role=pasien"
-              onClick={() => setOpen(false)}
-              className="flex items-center justify-center gap-2 rounded-full border border-line bg-white px-4 py-2.5 text-sm font-medium text-ink transition-all active:scale-95"
-            >
-              Masuk Akun
-            </a>
-            <a
-              href="/login?role=petugas"
-              onClick={() => setOpen(false)}
-              className="flex items-center justify-center gap-2 rounded-full bg-primary px-4 py-2.5 text-sm font-semibold text-white hover:bg-primary/90 transition-all active:scale-95"
-            >
-              <ScanIcon className="h-4 w-4" />
-              Portal Petugas
-            </a>
+            <MobileNavActions onNavigate={() => setOpen(false)} />
           </div>
         </nav>
       </div>
     </header>
+  );
+}
+
+/* ── Helper: baca dan decode session cookie di client-side ── */
+function getSessionRole(): "pasien" | "petugas" | "admin" | null {
+  if (typeof document === "undefined") return null;
+  const match = document.cookie.match(/(?:^|;\s*)session_token=([^;]+)/);
+  if (!match) return null;
+  try {
+    const base64 = match[1].split(".")[1].replace(/-/g, "+").replace(/_/g, "/");
+    const payload = JSON.parse(atob(base64));
+    // Cek apakah token belum expired
+    if (payload?.exp && payload.exp * 1000 < Date.now()) return null;
+    return payload?.role ?? null;
+  } catch {
+    return null;
+  }
+}
+
+/* ── Desktop action buttons ── */
+function NavActions() {
+  const role = getSessionRole();
+
+  if (role === "pasien") {
+    return (
+      <a
+        href="/pasien/dashboard"
+        className="flex items-center gap-2 rounded-full bg-primary px-4 py-2 text-sm font-semibold text-white hover:bg-primary/90 transition-all hover:-translate-y-0.5 active:scale-95 shadow-xs"
+      >
+        Dashboard Saya
+      </a>
+    );
+  }
+
+  if (role === "petugas" || role === "admin") {
+    return (
+      <a
+        href="/petugas/dashboard"
+        className="flex items-center gap-1.5 rounded-full bg-primary px-4 py-2 text-sm font-semibold text-white hover:bg-primary/90 transition-all hover:-translate-y-0.5 active:scale-95 shadow-xs"
+      >
+        <ScanIcon className="h-4 w-4" />
+        Dashboard Petugas
+      </a>
+    );
+  }
+
+  // Belum login — tampilkan tombol default
+  return (
+    <>
+      <a
+        href="/login?role=pasien"
+        className="flex items-center gap-2 rounded-full border border-line bg-white px-4 py-2 text-sm font-medium text-ink hover:bg-paper transition-all hover:-translate-y-0.5 active:scale-95"
+      >
+        Masuk Akun
+      </a>
+      <a
+        href="/login?role=petugas"
+        className="flex items-center gap-1.5 rounded-full bg-primary px-4 py-2 text-sm font-semibold text-white hover:bg-primary/90 transition-all hover:-translate-y-0.5 active:scale-95 shadow-xs"
+      >
+        <ScanIcon className="h-4 w-4" />
+        Portal Petugas
+      </a>
+    </>
+  );
+}
+
+/* ── Mobile action buttons ── */
+function MobileNavActions({ onNavigate }: { onNavigate: () => void }) {
+  const role = getSessionRole();
+
+  if (role === "pasien") {
+    return (
+      <a
+        href="/pasien/dashboard"
+        onClick={onNavigate}
+        className="flex items-center justify-center gap-2 rounded-full bg-primary px-4 py-2.5 text-sm font-semibold text-white hover:bg-primary/90 transition-all active:scale-95"
+      >
+        Dashboard Saya
+      </a>
+    );
+  }
+
+  if (role === "petugas" || role === "admin") {
+    return (
+      <a
+        href="/petugas/dashboard"
+        onClick={onNavigate}
+        className="flex items-center justify-center gap-2 rounded-full bg-primary px-4 py-2.5 text-sm font-semibold text-white hover:bg-primary/90 transition-all active:scale-95"
+      >
+        <ScanIcon className="h-4 w-4" />
+        Dashboard Petugas
+      </a>
+    );
+  }
+
+  // Belum login — tampilkan tombol default
+  return (
+    <>
+      <a
+        href="/login?role=pasien"
+        onClick={onNavigate}
+        className="flex items-center justify-center gap-2 rounded-full border border-line bg-white px-4 py-2.5 text-sm font-medium text-ink transition-all active:scale-95"
+      >
+        Masuk Akun
+      </a>
+      <a
+        href="/login?role=petugas"
+        onClick={onNavigate}
+        className="flex items-center justify-center gap-2 rounded-full bg-primary px-4 py-2.5 text-sm font-semibold text-white hover:bg-primary/90 transition-all active:scale-95"
+      >
+        <ScanIcon className="h-4 w-4" />
+        Portal Petugas
+      </a>
+    </>
   );
 }

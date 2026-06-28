@@ -3,9 +3,7 @@
 import { useEffect, useState, useRef } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import Image from "next/image";
-
-import { ArrowLeftIcon, ScanIcon, CheckIcon } from "@/components/ui/icons";
+import { ArrowLeftIcon, ScanIcon, CheckIcon, FilePlusIcon } from "@/components/ui/icons";
 
 export default function ScanPage() {
   const router = useRouter();
@@ -13,63 +11,114 @@ export default function ScanPage() {
   const [loading, setLoading] = useState(false);
   const [successData, setSuccessData] = useState<{ id: string; name: string } | null>(null);
   const [simulatedToken, setSimulatedToken] = useState("");
-  const scannerRef = useRef<any>(null);
+  
+  const videoRef = useRef<HTMLVideoElement | null>(null);
+  const canvasRef = useRef<HTMLCanvasElement | null>(null);
+  const streamRef = useRef<MediaStream | null>(null);
+  const animationFrameId = useRef<number | null>(null);
 
   useEffect(() => {
-    // Dinonaktifkan untuk SSR
+    // Jalankan hanya di client
     if (typeof window === "undefined") return;
 
-    // Load library secara dinamis
-    import("html5-qrcode")
-      .then((module) => {
-        const Html5QrcodeScanner = module.Html5QrcodeScanner;
-        
-        // Buat instance scanner
-        const scannerInstance = new Html5QrcodeScanner(
-          "reader",
-          {
-            fps: 10,
-            qrbox: (width, height) => {
-              const minDimension = Math.min(width, height);
-              return {
-                width: Math.floor(minDimension * 0.7),
-                height: Math.floor(minDimension * 0.7)
-              };
-            },
-            aspectRatio: 1.0,
-            showTorchButtonIfSupported: true,
-          },
-          /* verbose= */ false
-        );
+    let active = true;
 
-        scannerInstance.render(
-          async (decodedText) => {
-            // Hentikan scan jika sedang loading atau sudah sukses
-            if (loading || successData) return;
-            await handleProcessQr(decodedText, scannerInstance);
+    async function startCamera() {
+      try {
+        // Ambil jsQR secara dinamis atau statis
+        const jsQR = (await import("jsqr")).default;
+
+        const stream = await navigator.mediaDevices.getUserMedia({
+          video: {
+            facingMode: "environment", // Paksa kamera belakang
+            width: { ideal: 640 },
+            height: { ideal: 640 },
           },
-          (errorMessage) => {
-            // Error biasa jika tidak menemukan QR di frame, tidak perlu ditampilkan di UI
+          audio: false,
+        });
+
+        if (!active) {
+          stream.getTracks().forEach((track) => track.stop());
+          return;
+        }
+
+        streamRef.current = stream;
+        if (videoRef.current) {
+          videoRef.current.srcObject = stream;
+          videoRef.current.setAttribute("playsinline", "true"); // Penting untuk iOS
+          videoRef.current.play().catch((err) => {
+            console.error("Gagal memutar video:", err);
+          });
+        }
+
+        // Loop untuk memindai frame
+        const scanFrame = () => {
+          if (!active) return;
+
+          const video = videoRef.current;
+          const canvas = canvasRef.current;
+
+          if (video && canvas && video.readyState === video.HAVE_ENOUGH_DATA) {
+            const ctx = canvas.getContext("2d", { willReadFrequently: true });
+            if (ctx) {
+              // Set ukuran canvas sesuai video
+              canvas.width = video.videoWidth;
+              canvas.height = video.videoHeight;
+
+              // Gambar frame video ke canvas
+              ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+              // Ambil pixel data
+              const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+
+              // Pindai dengan jsQR
+              const code = jsQR(imageData.data, imageData.width, imageData.height, {
+                inversionAttempts: "dontInvert",
+              });
+
+              if (code && code.data) {
+                // QR code terdeteksi!
+                handleProcessQr(code.data);
+                return; // Stop scan loop
+              }
+            }
           }
-        );
 
-        scannerRef.current = scannerInstance;
-      })
-      .catch((err) => {
-        console.error("Gagal memuat html5-qrcode:", err);
-        setScanError("Kamera pemindai gagal diinisialisasi.");
-      });
+          // Lanjutkan loop jika belum ketemu/sedang memindai
+          animationFrameId.current = requestAnimationFrame(scanFrame);
+        };
+
+        animationFrameId.current = requestAnimationFrame(scanFrame);
+      } catch (err: any) {
+        console.error("Gagal mengakses kamera:", err);
+        setScanError(
+          "Gagal mengakses kamera belakang. Pastikan izin kamera sudah diberikan dan tidak sedang digunakan oleh aplikasi lain."
+        );
+      }
+    }
+
+    startCamera();
 
     return () => {
-      if (scannerRef.current) {
-        scannerRef.current
-          .clear()
-          .catch((err: any) => console.error("Gagal menghentikan scanner kamera:", err));
+      active = false;
+      if (animationFrameId.current) {
+        cancelAnimationFrame(animationFrameId.current);
+      }
+      if (streamRef.current) {
+        streamRef.current.getTracks().forEach((track) => track.stop());
       }
     };
   }, []);
 
-  const handleProcessQr = async (token: string, scannerToClear?: any) => {
+  const handleProcessQr = async (token: string) => {
+    // Stop camera stream saat memproses agar tidak menembak API berkali-kali
+    if (animationFrameId.current) {
+      cancelAnimationFrame(animationFrameId.current);
+    }
+    if (streamRef.current) {
+      streamRef.current.getTracks().forEach((track) => track.stop());
+    }
+
     setLoading(true);
     setScanError(null);
 
@@ -90,12 +139,6 @@ export default function ScanPage() {
 
       setSuccessData(data.pasien);
 
-      // Bersihkan scanner kamera
-      const scanner = scannerToClear || scannerRef.current;
-      if (scanner) {
-        await scanner.clear().catch((err: any) => console.error("Gagal membersihkan scanner:", err));
-      }
-
       // Simpan accessToken di sessionStorage untuk query data pasien selanjutnya
       if (data.accessToken) {
         sessionStorage.setItem(`access_token_${data.pasien.id}`, data.accessToken);
@@ -110,6 +153,116 @@ export default function ScanPage() {
       console.error("Gagal memindai QR:", err);
       setScanError(err.message || "Terjadi kesalahan saat memproses QR Code.");
       setLoading(false);
+      
+      // Jika gagal, restart scanner agar petugas bisa coba lagi
+      restartScanner();
+    }
+  };
+
+  const restartScanner = async () => {
+    try {
+      const jsQR = (await import("jsqr")).default;
+      const stream = await navigator.mediaDevices.getUserMedia({
+        video: {
+          facingMode: "environment",
+          width: { ideal: 640 },
+          height: { ideal: 640 },
+        },
+        audio: false,
+      });
+
+      streamRef.current = stream;
+      if (videoRef.current) {
+        videoRef.current.srcObject = stream;
+        videoRef.current.play().catch((err) => console.error(err));
+      }
+
+      const scanFrame = () => {
+        const video = videoRef.current;
+        const canvas = canvasRef.current;
+
+        if (video && canvas && video.readyState === video.HAVE_ENOUGH_DATA) {
+          const ctx = canvas.getContext("2d", { willReadFrequently: true });
+          if (ctx) {
+            canvas.width = video.videoWidth;
+            canvas.height = video.videoHeight;
+            ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+            const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+            const code = jsQR(imageData.data, imageData.width, imageData.height, {
+              inversionAttempts: "dontInvert",
+            });
+
+            if (code && code.data) {
+              handleProcessQr(code.data);
+              return;
+            }
+          }
+        }
+        animationFrameId.current = requestAnimationFrame(scanFrame);
+      };
+
+      animationFrameId.current = requestAnimationFrame(scanFrame);
+    } catch (err) {
+      console.error("Gagal me-restart kamera:", err);
+    }
+  };
+
+  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    setLoading(true);
+    setScanError(null);
+
+    // Hentikan kamera stream jika sedang berjalan
+    if (animationFrameId.current) {
+      cancelAnimationFrame(animationFrameId.current);
+    }
+    if (streamRef.current) {
+      streamRef.current.getTracks().forEach((track) => track.stop());
+    }
+
+    try {
+      const jsQR = (await import("jsqr")).default;
+      const reader = new FileReader();
+
+      reader.onload = (event) => {
+        const image = new Image();
+        image.onload = () => {
+          const canvas = document.createElement("canvas");
+          const ctx = canvas.getContext("2d");
+          if (!ctx) {
+            setScanError("Gagal memproses gambar.");
+            setLoading(false);
+            restartScanner();
+            return;
+          }
+
+          canvas.width = image.width;
+          canvas.height = image.height;
+          ctx.drawImage(image, 0, 0);
+
+          const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+          const code = jsQR(imageData.data, imageData.width, imageData.height, {
+            inversionAttempts: "dontInvert",
+          });
+
+          if (code && code.data) {
+            handleProcessQr(code.data);
+          } else {
+            setScanError("QR Code tidak ditemukan dalam gambar. Coba gambar lain.");
+            setLoading(false);
+            restartScanner();
+          }
+        };
+        image.src = event.target?.result as string;
+      };
+      reader.readAsDataURL(file);
+    } catch (err) {
+      console.error("Gagal membaca file gambar:", err);
+      setScanError("Gagal membaca file gambar.");
+      setLoading(false);
+      restartScanner();
     }
   };
 
@@ -161,15 +314,56 @@ export default function ScanPage() {
             </div>
           ) : (
             /* Webcam QR Container */
-            <div className="relative my-6 overflow-hidden rounded-2xl border border-line bg-black max-w-[320px] mx-auto shadow-inner">
-              <div id="reader" className="w-full bg-black aspect-square"></div>
+            <div className="relative my-6 overflow-hidden rounded-2xl border border-line bg-black max-w-[320px] mx-auto shadow-inner aspect-square">
+              {/* Element video untuk camera stream */}
+              <video
+                ref={videoRef}
+                className="w-full h-full object-cover rounded-2xl"
+                muted
+                playsInline
+              />
+              
+              {/* Canvas tersembunyi untuk mengambil data frame */}
+              <canvas ref={canvasRef} className="hidden" />
+
+              {/* Laser / Scanner Target Reticle Effect */}
+              <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+                <div className="w-48 h-48 border-2 border-accent/40 rounded-xl relative">
+                  {/* Pojok-pojok target border tebal */}
+                  <div className="absolute -top-[2px] -left-[2px] w-6 h-6 border-t-4 border-l-4 border-accent rounded-tl-lg" />
+                  <div className="absolute -top-[2px] -right-[2px] w-6 h-6 border-t-4 border-r-4 border-accent rounded-tr-lg" />
+                  <div className="absolute -bottom-[2px] -left-[2px] w-6 h-6 border-b-4 border-l-4 border-accent rounded-bl-lg" />
+                  <div className="absolute -bottom-[2px] -right-[2px] w-6 h-6 border-b-4 border-r-4 border-accent rounded-br-lg" />
+                  
+                  {/* Laser line animation */}
+                  <div className="absolute left-0 right-0 h-[2px] bg-accent/80 shadow-[0_0_8px_#2aacab] animate-[scanLaser_2s_infinite]" />
+                </div>
+              </div>
               
               {loading && (
-                <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/60 backdrop-blur-xs text-white">
+                <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/60 backdrop-blur-xs text-white rounded-2xl">
                   <div className="h-10 w-10 animate-spin rounded-full border-4 border-white/20 border-t-white"></div>
                   <span className="mt-3 text-xs font-semibold tracking-wider">Memproses QR...</span>
                 </div>
               )}
+            </div>
+          )}
+
+          {/* Upload Image Option */}
+          {!successData && (
+            <div className="mt-4 border-t border-line pt-4 text-center">
+              <p className="text-[11px] text-ink-soft mb-2">Atau gunakan file gambar QR Code jika kamera bermasalah:</p>
+              <label className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl border border-line bg-white hover:bg-paper cursor-pointer text-xs font-semibold text-ink-soft transition-all active:scale-95 shadow-xs">
+                <FilePlusIcon className="h-4 w-4 text-accent" />
+                <span>Unggah Gambar QR Code</span>
+                <input
+                  type="file"
+                  accept="image/*"
+                  className="hidden"
+                  onChange={handleImageUpload}
+                  disabled={loading}
+                />
+              </label>
             </div>
           )}
 
@@ -207,6 +401,14 @@ export default function ScanPage() {
           </form>
         </div>
       </main>
+
+      <style jsx global>{`
+        @keyframes scanLaser {
+          0% { top: 0%; opacity: 0.3; }
+          50% { top: 100%; opacity: 1; }
+          100% { top: 0%; opacity: 0.3; }
+        }
+      `}</style>
     </div>
   );
 }
