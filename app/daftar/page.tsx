@@ -187,7 +187,7 @@ export default function DaftarPasien() {
     const err = errors[field];
     const ok = touched[field] && !err && form[field];
     return {
-      border: `1.5px solid ${err ? "#ef4444" : ok ? "#2B5BA8" : "#e2e8f0"}`,
+      border: `1.5px solid ${err ? "#ef4444" : ok ? "#4fa0e0" : "#e2e8f0"}`,
       boxShadow: err
         ? "0 0 0 3px #fef2f2"
         : ok
@@ -248,8 +248,8 @@ export default function DaftarPasien() {
           </p>
 
           <div className="flex flex-col gap-5">
-            <div className="flex items-start gap-4 rounded-2xl border border-line bg-white p-5 shadow-sm transition-all hover:-translate-y-1 hover:border-[#2B5BA8]/40 hover:shadow-md cursor-pointer animate-fade-in-up [animation-delay:200ms]">
-              <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-lg bg-primary-soft text-[#2B5BA8]">
+            <div className="flex items-start gap-4 rounded-2xl border border-line bg-white p-5 shadow-sm transition-all hover:-translate-y-1 hover:border-[#4fa0e0]/40 hover:shadow-md cursor-pointer animate-fade-in-up [animation-delay:200ms]">
+              <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-lg bg-primary-soft text-[#4fa0e0]">
                 <ShieldCheckIcon className="h-5 w-5" />
               </div>
               <div>
@@ -298,7 +298,7 @@ export default function DaftarPasien() {
               
               {/* Section 1: Kredensial Akun */}
               <div className="space-y-4">
-                <h3 className="text-sm font-bold text-[#2B5BA8] uppercase tracking-wider border-b border-line pb-1.5">
+                <h3 className="text-sm font-bold text-[#4fa0e0] uppercase tracking-wider border-b border-line pb-1.5">
                   1. Kredensial Akun
                 </h3>
                 
@@ -362,7 +362,7 @@ export default function DaftarPasien() {
 
               {/* Section 2: Identitas Diri */}
               <div className="space-y-4 pt-2">
-                <h3 className="text-sm font-bold text-[#2B5BA8] uppercase tracking-wider border-b border-line pb-1.5">
+                <h3 className="text-sm font-bold text-[#4fa0e0] uppercase tracking-wider border-b border-line pb-1.5">
                   2. Identitas Diri
                 </h3>
 
@@ -449,7 +449,7 @@ export default function DaftarPasien() {
 
               {/* Section 3: Informasi Medis */}
               <div className="space-y-4 pt-2">
-                <h3 className="text-sm font-bold text-[#2B5BA8] uppercase tracking-wider border-b border-line pb-1.5">
+                <h3 className="text-sm font-bold text-[#4fa0e0] uppercase tracking-wider border-b border-line pb-1.5">
                   3. Informasi Medis (Terinkripsi)
                 </h3>
 
@@ -503,7 +503,7 @@ export default function DaftarPasien() {
                     Alergi & Peringatan
                   </label>
                   <div className="relative">
-                    <div className="absolute left-0 top-0 h-full w-1 rounded-l-lg bg-[#2B5BA8]"></div>
+                    <div className="absolute left-0 top-0 h-full w-1 rounded-l-lg bg-[#4fa0e0]"></div>
                     <textarea
                       id="allergies"
                       name="allergies"
@@ -548,7 +548,7 @@ export default function DaftarPasien() {
                 <button
                   type="submit"
                   disabled={isLoading || isSuccess}
-                  className="flex items-center justify-center gap-2 rounded-xl bg-[#2B5BA8] px-6 py-2.5 text-sm font-semibold text-white transition-all hover:shadow-[0_4px_20px_rgba(43,91,168,0.38)] hover:opacity-90 active:scale-95 disabled:opacity-75 disabled:cursor-not-allowed"
+                  className="flex items-center justify-center gap-2 rounded-xl bg-[#4fa0e0] px-6 py-2.5 text-sm font-semibold text-white transition-all hover:shadow-[0_4px_20px_rgba(79,160,224,0.38)] hover:opacity-90 active:scale-95 disabled:opacity-75 disabled:cursor-not-allowed"
                 >
                   {isLoading && (
                     <svg className="h-4 w-4 animate-spin text-white" fill="none" viewBox="0 0 24 24">
@@ -569,11 +569,11 @@ export default function DaftarPasien() {
       <footer className="border-t border-line bg-[#e8f1f5] px-6 py-8 md:px-12">
         <div className="mx-auto flex max-w-[1100px] flex-col items-center justify-between gap-4 sm:flex-row">
           <div className="flex flex-col gap-1">
-            <span className="font-display font-bold tracking-widest text-[#2B5BA8]">
+            <span className="font-display font-bold tracking-widest text-[#4fa0e0]">
               MEDIVITA
             </span>
             <span className="text-xs text-ink-soft">
-              &copy; 2026 Rekam Medis Jalan (Medivita). PekanIT 2026 Credits.
+              &copy; 2026 Rekam Medis Jalan (Medivita). Hak cipta dilindungi.
             </span>
           </div>
           <div className="flex items-center gap-6 text-[11px] font-semibold text-ink-soft">

@@ -758,7 +758,7 @@ export default function ProfilMedisPage() {
       {/* ── FOOTER ── */}
       <footer className="mt-12 border-t border-line bg-primary-soft/30 py-6 px-4 text-center">
         <p className="text-xs text-ink-soft">
-          © 2026 <span className="font-semibold text-primary-dark">Medivita · Rekam Medis Jalan</span> — PekanIT 2026
+          © 2026 <span className="font-semibold text-primary-dark">Medivita · Rekam Medis Jalan</span> — Hak cipta dilindungi.
         </p>
       </footer>
 
