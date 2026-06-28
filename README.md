@@ -14,7 +14,7 @@ Platform rekam medis digital portable berbasis QR code yang aman, terenkripsi, d
 
 ## Fitur Utama
 
-### 1. Portal Pasien (Soft Blue Theme 💙)
+### 1. Portal Pasien (Soft Blue Theme )
 * **Pendaftaran Pasien Baru**: Registrasi akun terenkripsi dengan menyertakan kredensial akun dan data medis esensial (golongan darah, alergi, riwayat penyakit kronis, obat rutin).
 * **QR Code Dinamis**: Pembuatan QR code pasien secara real-time berbasis JWT token bertanda tangan kriptografis.
 * **Unduh QR Code**: Mengunduh file QR code sebagai berkas gambar PNG secara lokal untuk dicetak atau disimpan di galeri handphone.
@@ -22,7 +22,7 @@ Platform rekam medis digital portable berbasis QR code yang aman, terenkripsi, d
 * **Log Akses Transparan (Audit Trail)**: Riwayat lengkap siapa, kapan, dan dari instansi mana data rekam medis pasien diakses.
 * **Riwayat Kunjungan**: Lini masa lengkap catatan pengobatan pasien di berbagai faskes.
 
-### 2. Portal Petugas Medis / Tim Medis (Teal/Green Theme 💚)
+### 2. Portal Petugas Medis / Tim Medis (Teal/Green Theme )
 * **Pemindai QR Code**: Menggunakan kamera perangkat untuk memindai QR code pasien secara instan.
 * **Lookup Pasien Manual**: Pencarian alternatif menggunakan nomor NIK dan PIN Cadangan 6-digit jika pasien tidak membawa QR code.
 * **Tampilan Dekripsi Medis**: Informasi detail mengenai riwayat penyakit kronis, alergi obat, dan kontak darurat pasien.
