@@ -36,7 +36,7 @@ export function Navbar({ onScanClick, doctorInitials = "DR", doctorName = "Dokte
 
   const navLinks = [
     { href: "/petugas/dashboard", label: "Dashboard" },
-    { href: "/petugas/workers", label: "Tenaga Kesehatan" },
+    { href: "/petugas/workers", label: "Tim Medis" },
     { href: "/petugas/history", label: "Riwayat Medis" },
   ];
 
@@ -63,8 +63,8 @@ export function Navbar({ onScanClick, doctorInitials = "DR", doctorName = "Dokte
               href={link.href}
               className={`text-sm font-semibold transition-colors ${
                 pathname === link.href
-                  ? "text-primary border-b-2 border-primary pb-1"
-                  : "text-ink-soft hover:text-primary"
+                  ? "text-accent border-b-2 border-accent pb-1"
+                  : "text-ink-soft hover:text-accent"
               }`}
             >
               {link.label}
@@ -77,14 +77,14 @@ export function Navbar({ onScanClick, doctorInitials = "DR", doctorName = "Dokte
           {/* Scan QR — full text on desktop, icon only on mobile */}
           <button
             onClick={onScanClick}
-            className="flex items-center gap-2 rounded-xl bg-primary px-3 md:px-4 py-2.5 text-sm font-bold text-white hover:bg-primary/95 transition-all shadow-sm cursor-pointer"
+            className="flex items-center gap-2 rounded-xl bg-accent px-3 md:px-4 py-2.5 text-sm font-bold text-white hover:bg-accent/95 transition-all shadow-sm cursor-pointer"
           >
             <ScanIcon className="h-4 w-4 flex-shrink-0" />
             <span className="hidden sm:inline">Scan QR</span>
           </button>
 
           {/* Bell */}
-          <button className="rounded-full p-2 text-ink-soft hover:bg-primary-soft transition-colors relative cursor-pointer" aria-label="Notifikasi">
+          <button className="rounded-full p-2 text-ink-soft hover:bg-accent-soft transition-colors relative cursor-pointer" aria-label="Notifikasi">
             <BellIcon className="h-5 w-5" />
             <span className="absolute top-1.5 right-1.5 h-2 w-2 rounded-full bg-alert"></span>
           </button>
@@ -94,7 +94,7 @@ export function Navbar({ onScanClick, doctorInitials = "DR", doctorName = "Dokte
             <button
               onClick={() => !isLoading && setIsDropdownOpen(!isDropdownOpen)}
               className={`h-9 w-9 rounded-full overflow-hidden flex items-center justify-center border border-line transition-all shadow-xs active:scale-95 ${
-                isLoading ? "bg-line/40 animate-pulse cursor-not-allowed" : "bg-primary-soft hover:border-primary/50 cursor-pointer"
+                isLoading ? "bg-line/40 animate-pulse cursor-not-allowed" : "bg-accent-soft hover:border-accent/50 cursor-pointer"
               }`}
               aria-label="Menu Profil"
               disabled={isLoading}
@@ -102,7 +102,7 @@ export function Navbar({ onScanClick, doctorInitials = "DR", doctorName = "Dokte
               {isLoading ? (
                 <UserIcon className="h-4 w-4 text-ink-soft/40" />
               ) : (
-                <span className="text-xs font-bold text-primary">{doctorInitials}</span>
+                <span className="text-xs font-bold text-accent">{doctorInitials}</span>
               )}
             </button>
 
@@ -121,7 +121,7 @@ export function Navbar({ onScanClick, doctorInitials = "DR", doctorName = "Dokte
                   <Link
                     href="/petugas/settings"
                     onClick={() => setIsDropdownOpen(false)}
-                    className="w-full flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-left text-sm font-semibold text-ink-soft hover:bg-primary-soft hover:text-primary transition-colors cursor-pointer"
+                    className="w-full flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-left text-sm font-semibold text-ink-soft hover:bg-accent-soft hover:text-accent transition-colors cursor-pointer"
                   >
                     <SettingsIcon className="h-4 w-4" />
                     Pengaturan Akun
@@ -141,7 +141,7 @@ export function Navbar({ onScanClick, doctorInitials = "DR", doctorName = "Dokte
 
           {/* Mobile Hamburger */}
           <button
-            className="md:hidden rounded-full p-2 text-ink-soft hover:bg-primary-soft transition-colors cursor-pointer"
+            className="md:hidden rounded-full p-2 text-ink-soft hover:bg-accent-soft transition-colors cursor-pointer"
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
             aria-label="Buka Menu"
           >
@@ -158,15 +158,39 @@ export function Navbar({ onScanClick, doctorInitials = "DR", doctorName = "Dokte
               key={link.href}
               href={link.href}
               onClick={() => setIsMobileMenuOpen(false)}
-              className={`px-4 py-3 rounded-xl text-sm font-semibold transition-colors ${
+              className={`px-4 py-2.5 rounded-xl text-sm font-semibold transition-colors ${
                 pathname === link.href
-                  ? "bg-primary-soft text-primary"
-                  : "text-ink-soft hover:bg-primary-soft hover:text-primary"
+                  ? "bg-accent-soft text-accent"
+                  : "text-ink-soft hover:bg-accent-soft hover:text-accent"
               }`}
             >
               {link.label}
             </Link>
           ))}
+          <div className="border-t border-line my-1.5" />
+          <Link
+            href="/petugas/settings"
+            onClick={() => setIsMobileMenuOpen(false)}
+            className={`px-4 py-2.5 rounded-xl text-sm font-semibold transition-colors flex items-center gap-2 ${
+              pathname === "/petugas/settings"
+                ? "bg-accent-soft text-accent"
+                : "text-ink-soft hover:bg-accent-soft hover:text-accent"
+            }`}
+          >
+            <SettingsIcon className="h-4 w-4" />
+            Pengaturan Akun
+          </Link>
+          <button
+            type="button"
+            onClick={() => {
+              setIsMobileMenuOpen(false);
+              handleLogout();
+            }}
+            className="px-4 py-2.5 rounded-xl text-sm font-semibold text-alert hover:bg-alert-soft transition-colors flex items-center gap-2 text-left cursor-pointer"
+          >
+            <LogoutIcon className="h-4 w-4" />
+            Keluar Sesi
+          </button>
         </div>
       )}
     </header>
