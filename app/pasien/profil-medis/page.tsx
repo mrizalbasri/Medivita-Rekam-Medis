@@ -430,13 +430,6 @@ export default function ProfilMedisPage() {
           {/* Controls */}
           <div className="flex items-center gap-4">
             <button
-              onClick={() => setSavedToast(true)}
-              className="flex items-center gap-2 rounded-xl bg-[#0b3c5d] px-4 py-2.5 text-sm font-semibold text-white transition-all hover:bg-primary active:scale-95 shadow-sm"
-            >
-              <Icons.ScanIcon className="h-4 w-4 stroke-[2.5]" />
-              Scan QR
-            </button>
-            <button
               onClick={() => { setShowNotification(true); setTimeout(() => setShowNotification(false), 3000); }}
               aria-label="Notification"
               className="relative rounded-full p-2 text-ink-soft hover:bg-primary-soft hover:text-primary transition-all"
