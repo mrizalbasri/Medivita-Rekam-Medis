@@ -236,7 +236,7 @@ export default function PengaturanProfilPage() {
       <header className="sticky top-0 z-50 w-full border-b border-line bg-paper/90 backdrop-blur-sm">
         <div className="mx-auto flex max-w-[1280px] items-center justify-between px-4 py-3.5 md:px-10">
           {/* Logo */}
-          <Link href="/" className="flex items-center gap-2">
+          <Link href="/pasien/dashboard" className="flex items-center gap-2">
             <div className="relative h-9 w-14 flex-shrink-0 overflow-hidden">
               <Image
                 src="/logo.webp"

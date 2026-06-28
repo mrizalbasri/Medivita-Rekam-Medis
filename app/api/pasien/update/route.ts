@@ -12,6 +12,12 @@ const updateMedicalDataSchema = z.object({
   allergies: z.array(z.string()).optional().default([]),
   chronicConditions: z.string().trim().optional().default("Tidak ada"),
   routineMedications: z.array(z.string()).optional().default([]),
+  telepon: z.string().optional().default(""),
+  alamat: z.string().optional().default(""),
+  tinggiBadan: z.string().optional().default(""),
+  beratBadan: z.string().optional().default(""),
+  tekananDarah: z.string().optional().default(""),
+  catatanTambahan: z.string().optional().default(""),
 });
 
 export async function PUT(request: Request) {
@@ -43,7 +49,18 @@ export async function PUT(request: Request) {
       );
     }
 
-    const { bloodType, allergies, chronicConditions, routineMedications } = parsed.data;
+    const {
+      bloodType,
+      allergies,
+      chronicConditions,
+      routineMedications,
+      telepon,
+      alamat,
+      tinggiBadan,
+      beratBadan,
+      tekananDarah,
+      catatanTambahan,
+    } = parsed.data;
 
     // 3. Enkripsi ulang data medis
     const medicalData = {
@@ -51,6 +68,12 @@ export async function PUT(request: Request) {
       allergies,
       chronicConditions,
       routineMedications,
+      telepon,
+      alamat,
+      tinggiBadan,
+      beratBadan,
+      tekananDarah,
+      catatanTambahan,
     };
     const encryptedMedicalData = encrypt(JSON.stringify(medicalData));
 

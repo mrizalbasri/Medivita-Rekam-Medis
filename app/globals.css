@@ -171,23 +171,71 @@ body {
   body {
     background: white !important;
     color: black !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
   }
+  
   header, footer, aside, button, form, .no-print {
     display: none !important;
   }
-  main {
-    max-width: 100% !important;
-    padding: 0 !important;
-    margin: 0 !important;
+
+  /* Mode Cetak Kartu ID (Landscape Premium) */
+  body.print-card-mode {
+    background: #ffffff !important;
   }
-  .lg\:col-span-8 {
-    width: 100% !important;
+  body.print-card-mode * {
+    visibility: hidden !important;
   }
-  .grid {
-    display: block !important;
+  body.print-card-mode .printable-card,
+  body.print-card-mode .printable-card * {
+    visibility: visible !important;
   }
-  .shadow-sm, .shadow-xs, .shadow-md, .shadow-lg, .border {
+  body.print-card-mode .printable-card {
+    position: absolute !important;
+    left: 3mm !important;
+    top: 3mm !important;
+    width: 146mm !important;
+    height: 90mm !important;
+    border: none !important;
+    border-radius: 6mm !important;
+    padding: 20px !important;
+    background: linear-gradient(135deg, #0b3c5d 0%, #104e7a 50%, #0d6e4a 100%) !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
     box-shadow: none !important;
-    border-color: #cbd5e1 !important;
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: space-between !important;
+  }
+  body.print-card-mode .printable-card .no-print {
+    display: none !important;
+    height: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  /* Mode Cetak Riwayat Medis */
+  body.print-history-mode {
+    background: #ffffff !important;
+  }
+  body.print-history-mode * {
+    visibility: hidden !important;
+  }
+  body.print-history-mode .printable-history,
+  body.print-history-mode .printable-history * {
+    visibility: visible !important;
+  }
+  body.print-history-mode .printable-history {
+    position: absolute !important;
+    left: 0 !important;
+    top: 0 !important;
+    width: 100% !important;
+    border: none !important;
+    box-shadow: none !important;
+    padding: 0 !important;
+  }
+  body.print-history-mode .printable-history .no-print,
+  body.print-history-mode .printable-history button {
+    display: none !important;
   }
 }

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import * as Icons from "@/components/ui/icons";
 import Image from "next/image";
 import Link from "next/link";
@@ -328,29 +328,155 @@ export default function ProfilMedisPage() {
   const [newPenyakit, setNewPenyakit] = useState("");
   const [savedToast, setSavedToast] = useState(false);
   const [showNotification, setShowNotification] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [pasienId, setPasienId] = useState<string | null>(null);
 
   function showToast() {
     setSavedToast(true);
     setTimeout(() => setSavedToast(false), 3000);
   }
 
-  // Profil handlers
-  function handleSaveProfil() {
-    setProfil(draftProfil);
-    setEditingProfil(false);
-    showToast();
+  // Muat data dari database saat halaman dipasang (mount)
+  useEffect(() => {
+    async function loadData() {
+      try {
+        const userRes = await fetch("/api/users/me");
+        if (!userRes.ok) return;
+        const userData = await userRes.json();
+        const user = userData.user;
+        const pasien = user?.pasien;
+        
+        if (pasien) {
+          setPasienId(pasien.id);
+          const birthDateStr = pasien.birthDate ? new Date(pasien.birthDate).toISOString().split("T")[0] : "";
+          const med = pasien.medicalData ?? {};
+          const golDarah = med.bloodType ?? "-";
+          const alergiList = med.allergies ?? [];
+          const chronic = med.chronicConditions ? med.chronicConditions.split(",").map((s: string) => s.trim()).filter(Boolean) : [];
+          
+          const routine = (med.routineMedications ?? []).map((m: string) => {
+            const parts = m.trim().split(" ");
+            const nama = parts[0] || "";
+            const dosis = parts[1] || "";
+            const frekuensi = parts.slice(2).join(" ") || "";
+            return { nama, dosis, frekuensi };
+          });
+
+          const dbProfil = {
+            nama: user.name ?? "",
+            nik: pasien.nik ?? "",
+            tanggalLahir: birthDateStr,
+            jenisKelamin: pasien.gender ?? "P",
+            email: user.email ?? "",
+            telepon: med.telepon ?? "+62 812-3456-7890",
+            alamat: med.alamat ?? "Jl. Raya Kebayoran Baru No. 12, Jakarta Selatan",
+          };
+
+          const dbMedical = {
+            golonganDarah: golDarah,
+            alergi: alergiList,
+            penyakitKronis: chronic,
+            obatRutin: routine.length ? routine : [],
+            tinggiBadan: med.tinggiBadan ?? "162",
+            beratBadan: med.beratBadan ?? "55",
+            tekananDarah: med.tekananDarah ?? "130/85",
+            catatanTambahan: med.catatanTambahan ?? "Tidak ada catatan tambahan.",
+          };
+
+          setProfil(dbProfil);
+          setDraftProfil(dbProfil);
+          setMedical(dbMedical);
+          setDraftMedical(dbMedical);
+        }
+      } catch (err) {
+        console.error("Gagal memuat profil medis:", err);
+      } finally {
+        setLoading(false);
+      }
+    }
+    loadData();
+  }, []);
+
+  // Profil handlers (Simpan data pribadi ke database)
+  async function handleSaveProfil() {
+    try {
+      // 1. Update Nama & Email di tabel User
+      const userRes = await fetch("/api/users/profile", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: draftProfil.nama,
+          email: draftProfil.email,
+        })
+      });
+
+      // 2. Update Telepon & Alamat (disimpan di data medis terenkripsi)
+      const medRes = await fetch("/api/pasien/update", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          bloodType: medical.golonganDarah,
+          allergies: medical.alergi,
+          chronicConditions: medical.penyakitKronis.join(", "),
+          routineMedications: medical.obatRutin.map(o => `${o.nama} ${o.dosis} ${o.frekuensi}`.trim()),
+          telepon: draftProfil.telepon,
+          alamat: draftProfil.alamat,
+          tinggiBadan: medical.tinggiBadan,
+          beratBadan: medical.beratBadan,
+          tekananDarah: medical.tekananDarah,
+          catatanTambahan: medical.catatanTambahan,
+        })
+      });
+
+      if (userRes.ok && medRes.ok) {
+        setProfil(draftProfil);
+        setEditingProfil(false);
+        showToast();
+      } else {
+        alert("Gagal memperbarui profil di server.");
+      }
+    } catch (err) {
+      console.error("Gagal memperbarui profil:", err);
+    }
   }
+
   function handleCancelProfil() {
     setDraftProfil(profil);
     setEditingProfil(false);
   }
 
-  // Medical handlers
-  function handleSaveMedical() {
-    setMedical(draftMedical);
-    setEditingMedical(false);
-    showToast();
+  // Medical handlers (Simpan data rekam medis ke database)
+  async function handleSaveMedical() {
+    try {
+      const res = await fetch("/api/pasien/update", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          bloodType: draftMedical.golonganDarah,
+          allergies: draftMedical.alergi,
+          chronicConditions: draftMedical.penyakitKronis.join(", "),
+          routineMedications: draftMedical.obatRutin.map(o => `${o.nama} ${o.dosis} ${o.frekuensi}`.trim()),
+          telepon: profil.telepon,
+          alamat: profil.alamat,
+          tinggiBadan: draftMedical.tinggiBadan,
+          beratBadan: draftMedical.beratBadan,
+          tekananDarah: draftMedical.tekananDarah,
+          catatanTambahan: draftMedical.catatanTambahan,
+        })
+      });
+
+      if (res.ok) {
+        setMedical(draftMedical);
+        setEditingMedical(false);
+        showToast();
+      } else {
+        alert("Gagal memperbarui data medis di server.");
+      }
+    } catch (err) {
+      console.error("Gagal memperbarui data medis:", err);
+    }
   }
+
   function handleCancelMedical() {
     setDraftMedical(medical);
     setNewAlergi("");
@@ -412,6 +538,33 @@ export default function ProfilMedisPage() {
 
   const bmiInfo = bmi ? bmiLabel(parseFloat(bmi)) : null;
 
+  if (loading) {
+    return (
+      <div className="flex min-h-screen flex-col bg-paper">
+        <header className="sticky top-0 z-50 w-full border-b border-line bg-paper/90 backdrop-blur-sm">
+          <div className="mx-auto flex max-w-[1280px] items-center justify-between px-4 py-3.5 md:px-10">
+            <div className="flex items-center gap-3">
+              <div className="relative h-9 w-9 overflow-hidden rounded-lg">
+                <Image src="/logo.webp" alt="Medivita Logo" fill sizes="36px" className="object-cover object-top scale-[1.3] -translate-y-[8%]" priority />
+              </div>
+              <span className="font-display text-lg font-bold tracking-tight text-primary-dark">Rekam Medis Jalan</span>
+            </div>
+            <PatientPrimaryNav />
+            <div className="flex items-center gap-4">
+              <div className="h-8 w-8 animate-pulse rounded-full bg-gray-200" />
+            </div>
+          </div>
+        </header>
+        <main className="mx-auto w-full max-w-[1280px] flex-1 px-4 py-8 md:px-10 flex flex-col items-center justify-center min-h-[50vh]">
+          <div className="flex flex-col items-center gap-3">
+            <div className="h-8 w-8 animate-spin rounded-full border-2 border-primary border-t-transparent" />
+            <p className="text-sm font-semibold text-ink-soft">Memuat data rekam medis...</p>
+          </div>
+        </main>
+      </div>
+    );
+  }
+
   return (
     <div className="flex min-h-screen flex-col bg-paper">
 
@@ -419,7 +572,7 @@ export default function ProfilMedisPage() {
       {/* ── HEADER ── */}
       <header className="sticky top-0 z-50 w-full border-b border-line bg-paper/90 backdrop-blur-sm">
         <div className="mx-auto flex max-w-[1280px] items-center justify-between px-4 py-3.5 md:px-10">
-          <Link href="/" className="flex items-center gap-3">
+          <Link href="/pasien/dashboard" className="flex items-center gap-3">
             <div className="relative h-9 w-9 overflow-hidden rounded-lg">
               <Image src="/logo.webp" alt="Medivita Logo" fill sizes="36px" className="object-cover object-top scale-[1.3] -translate-y-[8%]" priority />
             </div>
@@ -462,7 +615,7 @@ export default function ProfilMedisPage() {
 
         {/* Page heading */}
         <div className="mb-8">
-          <p className="font-mono text-xs font-semibold uppercase tracking-widest text-primary">Pasien · Sarah Az-Zahra</p>
+          <p className="font-mono text-xs font-semibold uppercase tracking-widest text-primary">Pasien · {profil.nama}</p>
           <h1 className="mt-1 font-display text-2xl font-bold tracking-tight text-primary-dark">Profil Medis</h1>
           <p className="mt-1 text-sm text-ink-soft">Kelola data pribadi dan rekam medis kamu secara aman.</p>
         </div>

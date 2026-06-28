@@ -68,7 +68,7 @@ export function LoginForm() {
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
   const [serverMsg, setServerMsg] = useState<string | null>(null);
 
-  // Sync role with query parameters (?role=pasien or ?role=petugas)
+  // Sync role with query parameters (?role=pasien or ?role=petugas) and auto-redirect if already logged in
   useEffect(() => {
     if (typeof window !== "undefined") {
       const params = new URLSearchParams(window.location.search);
@@ -77,6 +77,22 @@ export function LoginForm() {
         setRole(r);
       }
     }
+
+    async function checkActiveSession() {
+      try {
+        const res = await fetch("/api/users/me");
+        if (res.ok) {
+          const data = await res.json();
+          if (data.user && data.user.role) {
+            const targetPath = data.user.role === "pasien" ? "/pasien/dashboard" : "/petugas/dashboard";
+            window.location.replace(targetPath);
+          }
+        }
+      } catch (err) {
+        console.error("Gagal mendeteksi sesi aktif:", err);
+      }
+    }
+    checkActiveSession();
   }, []);
 
   /* Derived errors — hanya muncul setelah field di-touch */
@@ -130,7 +146,7 @@ export function LoginForm() {
       setResolvedRole(data.user.role);
       setStatus("success");
       const targetPath = data.user.role === "pasien" ? "/pasien/dashboard" : "/petugas/dashboard";
-      setTimeout(() => { window.location.href = targetPath; }, 1200);
+      setTimeout(() => { window.location.replace(targetPath); }, 1200);
     } catch {
       setStatus("error");
       setServerMsg("Tidak dapat terhubung ke server. Coba lagi.");

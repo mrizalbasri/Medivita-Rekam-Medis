@@ -1,3 +1,7 @@
+"use client";
+
+import { useEffect, useState } from "react";
+import Image from "next/image";
 import {
   ClinicIcon,
   HospitalIcon,
@@ -9,7 +13,28 @@ import {
 } from "./icons";
 import { ScrollReveal } from "../ui/ScrollReveal";
 
+/* Helper: baca dan decode session cookie di client-side */
+function getSessionRole(): "pasien" | "petugas" | "admin" | null {
+  if (typeof document === "undefined") return null;
+  const match = document.cookie.match(/(?:^|;\s*)session_token=([^;]+)/);
+  if (!match) return null;
+  try {
+    const base64 = match[1].split(".")[1].replace(/-/g, "+").replace(/_/g, "/");
+    const payload = JSON.parse(atob(base64));
+    if (payload?.exp && payload.exp * 1000 < Date.now()) return null;
+    return payload?.role ?? null;
+  } catch {
+    return null;
+  }
+}
+
 export function Hero() {
+  const [role, setRole] = useState<"pasien" | "petugas" | "admin" | null>(null);
+
+  useEffect(() => {
+    setRole(getSessionRole());
+  }, []);
+
   return (
     <section className="relative overflow-hidden bg-paper pt-8 pb-16 md:pt-12 md:pb-20">
       {/* Dynamic Background Blobs */}
@@ -40,19 +65,40 @@ export function Hero() {
         {/* CTA Buttons */}
         <ScrollReveal variant="zoom" delay={300} className="w-full">
           <div className="flex flex-col gap-3 sm:flex-row justify-center items-center w-full">
-            <a
-              href="/daftar"
-              className="w-full sm:w-auto flex items-center justify-center gap-2 rounded-full bg-primary px-6 py-3.5 font-semibold text-white shadow-md hover:shadow-lg transition-all hover:bg-primary/95 hover:-translate-y-0.5 active:translate-y-0 active:scale-95 cursor-pointer text-sm"
-            >
-              Daftar Gratis Sekarang
-              <ScanIcon className="h-4 w-4" />
-            </a>
-            <a
-              href="/login?role=petugas"
-              className="w-full sm:w-auto flex items-center justify-center gap-2 rounded-full border border-line bg-white px-6 py-3.5 font-semibold text-ink transition-all hover:bg-paper hover:-translate-y-0.5 active:translate-y-0 active:scale-95 cursor-pointer text-sm hover:border-ink/20"
-            >
-              Portal Petugas Faskes
-            </a>
+            {role === "pasien" ? (
+              <a
+                href="/pasien/dashboard"
+                className="w-full sm:w-auto flex items-center justify-center gap-2 rounded-full bg-primary px-6 py-3.5 font-semibold text-white shadow-md hover:shadow-lg transition-all hover:bg-primary/95 hover:-translate-y-0.5 active:translate-y-0 active:scale-95 cursor-pointer text-sm"
+              >
+                Masuk Dashboard Saya
+                <ScanIcon className="h-4 w-4" />
+              </a>
+            ) : role === "petugas" ? (
+              <a
+                href="/petugas/dashboard"
+                className="w-full sm:w-auto flex items-center justify-center gap-2 rounded-full bg-primary px-6 py-3.5 font-semibold text-white shadow-md hover:shadow-lg transition-all hover:bg-primary/95 hover:-translate-y-0.5 active:translate-y-0 active:scale-95 cursor-pointer text-sm"
+              >
+                Masuk Dashboard Faskes
+                <ScanIcon className="h-4 w-4" />
+              </a>
+            ) : (
+              <a
+                href="/daftar"
+                className="w-full sm:w-auto flex items-center justify-center gap-2 rounded-full bg-primary px-6 py-3.5 font-semibold text-white shadow-md hover:shadow-lg transition-all hover:bg-primary/95 hover:-translate-y-0.5 active:translate-y-0 active:scale-95 cursor-pointer text-sm"
+              >
+                Daftar Gratis Sekarang
+                <ScanIcon className="h-4 w-4" />
+              </a>
+            )}
+            
+            {role ? null : (
+              <a
+                href="/login?role=petugas"
+                className="w-full sm:w-auto flex items-center justify-center gap-2 rounded-full border border-line bg-white px-6 py-3.5 font-semibold text-ink transition-all hover:bg-paper hover:-translate-y-0.5 active:translate-y-0 active:scale-95 cursor-pointer text-sm hover:border-ink/20"
+              >
+                Portal Petugas Faskes
+              </a>
+            )}
           </div>
         </ScrollReveal>
 
@@ -64,30 +110,57 @@ export function Hero() {
             {/* Column 1 (span 5): Stacks Patient Card + Action Shortcuts */}
             <div className="col-span-12 lg:col-span-5 flex flex-col gap-4">
               
-              {/* Card 1: Patient Card */}
+              {/* Card 1: Patient Card (Mockup Premium) */}
               <div 
-                className="rounded-3xl border border-line bg-white p-5 text-left shadow-[0_8px_30px_rgba(0,0,0,0.02)] hover:shadow-[0_15px_40px_rgba(0,0,0,0.06)] transition-all duration-300 flex flex-col justify-between relative overflow-hidden group animate-float"
+                className="rounded-3xl border border-white/10 bg-gradient-to-br from-[#0b3c5d] via-[#104e7a] to-[#0d6e4a] p-5 text-white text-left shadow-[0_15px_40px_rgba(11,60,93,0.15)] hover:shadow-[0_20px_50px_rgba(11,60,93,0.25)] transition-all duration-300 flex flex-col justify-between relative overflow-hidden group animate-float"
               >
-                <div className="absolute top-0 left-0 h-[3px] w-full bg-gradient-to-r from-primary to-accent opacity-75" />
+                {/* Premium Glossy Reflection Line */}
+                <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/5 to-transparent rotate-12 -translate-y-1/2 scale-150 pointer-events-none" />
                 
-                <div className="space-y-4">
+                {/* Security Guilloche Wave Patterns */}
+                <div className="absolute inset-0 opacity-[0.08] mix-blend-overlay pointer-events-none">
+                  <svg className="w-full h-full" viewBox="0 0 100 100" preserveAspectRatio="none">
+                    <path d="M0,30 Q25,10 50,30 T100,30" fill="none" stroke="white" strokeWidth="0.4" />
+                    <path d="M0,45 Q25,25 50,45 T100,45" fill="none" stroke="white" strokeWidth="0.3" />
+                    <path d="M0,60 Q25,40 50,60 T100,60" fill="none" stroke="white" strokeWidth="0.4" />
+                  </svg>
+                </div>
+
+                <div className="space-y-4 relative z-10">
                   {/* Card Header */}
-                  <div className="flex justify-between items-center border-b border-line pb-3">
-                    <span className="inline-flex items-center gap-1.5 rounded-full bg-primary-soft px-2 py-0.5 text-[9.5px] font-bold uppercase tracking-wider text-primary border border-primary/10">
-                      <QrIcon className="h-3.5 w-3.5 text-primary" />
-                      Kartu Medivita
-                    </span>
-                    <span className="text-[10px] font-mono text-ink-soft/60 font-bold">MED-99201</span>
+                  <div className="flex justify-between items-center border-b border-white/10 pb-3">
+                    <div className="flex items-center gap-2">
+                      <div className="relative h-6.5 w-10 overflow-hidden flex-shrink-0 bg-white rounded-md shadow-sm border border-white/10">
+                        <Image src="/logo.webp" alt="Medivita Logo" fill sizes="40px" className="object-cover object-left scale-[1.05]" />
+                      </div>
+                      <span className="font-display text-[10px] font-black uppercase tracking-wider text-white">Medivita Health ID</span>
+                    </div>
+                    
+                    <div className="flex items-center gap-1.5">
+                      {/* Hologram Badge */}
+                      <div className="h-4 w-4 rounded-full bg-gradient-to-tr from-cyan-300 via-[#42b783] to-amber-300 opacity-80 flex items-center justify-center p-0.5 shadow-inner border border-white/20">
+                        <svg className="h-2 w-2 text-white" fill="currentColor" viewBox="0 0 20 20">
+                          <path fillRule="evenodd" d="M2.166 4.9L10 1.154l7.834 3.746A2 2 0 0119 6.705v4.582a10 10 0 01-5.69 9.006L10 20l-3.31-1.707a10 10 0 01-5.69-9.006V6.705a2 2 0 011.166-1.805zM10 12a2 2 0 100-4 2 2 0 000 4z" clipRule="evenodd" />
+                        </svg>
+                      </div>
+                      
+                      {/* Gold Smart Card Chip */}
+                      <div className="h-4 w-6 rounded-xs bg-gradient-to-br from-amber-300 via-yellow-400 to-amber-500 border border-amber-200/50 flex flex-col justify-between p-0.5 shadow-md flex-shrink-0">
+                        <div className="h-[1.5px] bg-amber-600/30 w-full rounded-sm" />
+                        <div className="h-[1.5px] bg-amber-600/30 w-full rounded-sm" />
+                        <div className="h-[1.5px] bg-amber-600/30 w-full rounded-sm" />
+                      </div>
+                    </div>
                   </div>
 
                   {/* Patient Profile */}
                   <div className="flex items-center gap-3.5">
                     {/* QR Code with scanning laser effect */}
-                    <div className="w-14 h-14 rounded-xl border border-line bg-white p-1 flex items-center justify-center shrink-0 shadow-xs relative overflow-hidden group-hover:border-primary/45 transition-colors">
+                    <div className="w-14 h-14 rounded-xl border border-white/10 bg-white p-1.5 flex items-center justify-center shrink-0 shadow-lg relative overflow-hidden transition-transform duration-300">
                       {/* Laser scanner element */}
-                      <div className="absolute left-0 w-full h-[2px] bg-emerald-500/80 shadow-[0_0_8px_#10b981] animate-scan-laser pointer-events-none" />
+                      <div className="absolute left-0 w-full h-[1.5px] bg-emerald-500/80 shadow-[0_0_8px_#10b981] animate-scan-laser pointer-events-none" />
                       
-                      <svg viewBox="0 0 100 100" className="h-full w-full text-primary-dark" fill="currentColor">
+                      <svg viewBox="0 0 100 100" className="h-full w-full text-slate-855" fill="currentColor">
                         <rect x="0" y="0" width="30" height="30" rx="3" />
                         <rect x="5" y="5" width="20" height="20" fill="white" rx="2" />
                         <rect x="10" y="10" width="10" height="10" rx="1" />
@@ -119,18 +192,19 @@ export function Hero() {
                       </svg>
                     </div>
                     <div className="min-w-0 text-left">
-                      <h4 className="text-sm font-bold text-ink truncate group-hover:text-primary transition-colors">Budi Santoso</h4>
-                      <p className="text-[10px] text-ink-soft mt-0.5">Bisa dicetak kertas / simpan HP</p>
+                      <h4 className="text-xs font-bold text-white truncate leading-none uppercase">Budi Santoso</h4>
+                      <p className="text-[10px] font-mono mt-1 text-blue-100/60 tracking-wider">317305******4012</p>
+                      <p className="text-[8px] text-emerald-300 font-bold uppercase tracking-wider mt-0.5">Gol. Darah: O+</p>
                     </div>
                   </div>
                 </div>
 
                 {/* Pulsating Active Status dot */}
-                <div className="mt-4 border-t border-line/60 pt-3 flex justify-between items-center text-[10px] text-ink-soft/70 font-mono">
-                  <span className="flex items-center gap-1.5">
-                    <span className="relative flex h-2 w-2">
+                <div className="mt-4 border-t border-white/10 pt-3 flex justify-between items-center text-[9px] text-blue-100/50 font-mono relative z-10">
+                  <span className="flex items-center gap-1.5 text-emerald-400 font-extrabold uppercase">
+                    <span className="relative flex h-1.5 w-1.5">
                       <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                      <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+                      <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-emerald-400"></span>
                     </span>
                     Kartu Aktif
                   </span>

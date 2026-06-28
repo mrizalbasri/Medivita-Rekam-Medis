@@ -17,11 +17,20 @@ interface VisitHistoryProps {
 export function VisitHistory({ history }: VisitHistoryProps) {
   const handlePrint = (e: React.MouseEvent) => {
     e.preventDefault();
+    document.body.classList.add("print-history-mode");
     window.print();
   };
 
+  React.useEffect(() => {
+    const handleAfterPrint = () => {
+      document.body.classList.remove("print-history-mode");
+    };
+    window.addEventListener("afterprint", handleAfterPrint);
+    return () => window.removeEventListener("afterprint", handleAfterPrint);
+  }, []);
+
   return (
-    <div className="bg-white rounded-2xl border border-line p-6 shadow-sm">
+    <div className="printable-history bg-white rounded-2xl border border-line p-6 shadow-sm">
       <div className="flex justify-between items-center mb-6">
         <h2 className="font-display text-lg font-bold text-ink flex items-center gap-2">
           <span className="text-accent">

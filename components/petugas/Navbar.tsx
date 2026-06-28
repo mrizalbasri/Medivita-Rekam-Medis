@@ -44,7 +44,7 @@ export function Navbar({ onScanClick, doctorInitials = "DR", doctorName = "Dokte
     <header className="sticky top-0 z-40 bg-white border-b border-line shadow-xs">
       <div className="mx-auto max-w-[1280px] px-4 md:px-6 py-3.5 flex items-center justify-between">
         {/* Logo */}
-        <Link href="/" className="flex items-center gap-2">
+        <Link href="/petugas/dashboard" className="flex items-center gap-2">
           <div className="relative h-9 w-14 flex-shrink-0 overflow-hidden">
             <Image src="/logo.webp" alt="Medivita Logo" fill sizes="56px" className="object-cover object-left" priority />
           </div>

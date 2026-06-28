@@ -881,7 +881,7 @@ export default function RiwayatKunjunganPage() {
         {/* HEADER */}
         <header className="sticky top-0 z-50 w-full border-b border-line bg-paper/90 backdrop-blur-sm">
           <div className="mx-auto flex max-w-[1280px] items-center justify-between px-4 py-3.5 md:px-10">
-            <Link href="/" className="flex items-center gap-3">
+            <Link href="/pasien/dashboard" className="flex items-center gap-3">
               <div className="relative h-9 w-9 overflow-hidden rounded-lg">
                 <Image
                   src="/logo.webp"
@@ -947,7 +947,7 @@ export default function RiwayatKunjunganPage() {
         {/* HEADER */}
         <header className="sticky top-0 z-50 w-full border-b border-line bg-paper/90 backdrop-blur-sm">
           <div className="mx-auto flex max-w-[1280px] items-center justify-between px-4 py-3.5 md:px-10">
-            <Link href="/" className="flex items-center gap-3">
+            <Link href="/pasien/dashboard" className="flex items-center gap-3">
               <div className="relative h-9 w-9 overflow-hidden rounded-lg">
                 <Image
                   src="/logo.webp"
@@ -1028,7 +1028,7 @@ export default function RiwayatKunjunganPage() {
       {/* ── HEADER ── */}
       <header className="sticky top-0 z-50 w-full border-b border-line bg-paper/90 backdrop-blur-sm">
         <div className="mx-auto flex max-w-[1280px] items-center justify-between px-4 py-3.5 md:px-10">
-          <Link href="/" className="flex items-center gap-3">
+          <Link href="/pasien/dashboard" className="flex items-center gap-3">
             <div className="relative h-9 w-9 overflow-hidden rounded-lg">
               <Image
                 src="/logo.webp"
