@@ -160,7 +160,7 @@ export function Hero() {
                       {/* Laser scanner element */}
                       <div className="absolute left-0 w-full h-[1.5px] bg-emerald-500/80 shadow-[0_0_8px_#10b981] animate-scan-laser pointer-events-none" />
                       
-                      <svg viewBox="0 0 100 100" className="h-full w-full text-slate-855" fill="currentColor">
+                      <svg viewBox="0 0 100 100" className="h-full w-full text-slate-900" fill="currentColor">
                         <rect x="0" y="0" width="30" height="30" rx="3" />
                         <rect x="5" y="5" width="20" height="20" fill="white" rx="2" />
                         <rect x="10" y="10" width="10" height="10" rx="1" />
